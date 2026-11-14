@@ -1,0 +1,489 @@
+// Photos from the NASA Image and Video Library (images.nasa.gov). `art` marks artist illustrations.
+export const IMAGES = {
+ "surveyor1": [
+  {
+   "f": "img/surveyor1_1.jpg",
+   "id": "PIA02976",
+   "credit": "NASA/JPL",
+   "w": 1100,
+   "h": 1093,
+   "art": false,
+   "cap": {
+    "es": "La sombra de Surveyor 1 sobre el suelo lunar, fotografiada por su propia cámara.",
+    "en": "The shadow of Surveyor 1 on the lunar surface, photographed by its own camera."
+   }
+  },
+  {
+   "f": "img/surveyor1_2.jpg",
+   "id": "PIA12910",
+   "credit": "NASA/GSFC/Arizona State University",
+   "w": 640,
+   "h": 640,
+   "art": false,
+   "cap": {
+    "es": "Surveyor 1 visto desde la órbita por la sonda LRO en 2009: sigue en Oceanus Procellarum.",
+    "en": "Surveyor 1 seen from orbit by the LRO probe in 2009: still on Oceanus Procellarum."
+   }
+  }
+ ],
+ "apollo11": [
+  {
+   "f": "img/apollo11_1.jpg",
+   "id": "as11-40-5902",
+   "credit": "NASA",
+   "w": 1066,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Buzz Aldrin camina junto a una pata del módulo Eagle. La foto la tomó Neil Armstrong.",
+    "en": "Buzz Aldrin walks near a leg of the lunar module Eagle. Neil Armstrong took the photo."
+   }
+  },
+  {
+   "f": "img/apollo11_2.jpg",
+   "id": "as11-40-5951",
+   "credit": "NASA or National Aeronautics and Space Administration",
+   "w": 1100,
+   "h": 888,
+   "art": false,
+   "cap": {
+    "es": "Aldrin instala el sismómetro, que quedó en la Luna.",
+    "en": "Aldrin sets up the seismometer, which stayed on the Moon."
+   }
+  },
+  {
+   "f": "img/apollo11_3.jpg",
+   "id": "KSC-as11-40-5964",
+   "credit": "NASA",
+   "w": 877,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Aldrin arma un experimento de viento solar cerca de Eagle, rodeado de pisadas.",
+    "en": "Aldrin erects a solar wind experiment near Eagle, surrounded by footprints."
+   }
+  }
+ ],
+ "apollo15": [
+  {
+   "f": "img/apollo15_1.jpg",
+   "id": "as15-88-11901",
+   "credit": "NASA",
+   "w": 1052,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "El auto lunar de Apollo 15, solo, en Hadley-Apeninos.",
+    "en": "The Apollo 15 lunar rover, alone, at Hadley-Apennine."
+   }
+  },
+  {
+   "f": "img/apollo15_2.jpg",
+   "id": "as15-86-11603",
+   "credit": "NASA",
+   "w": 1100,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "James Irwin trabaja junto al auto lunar. Adelante, la sombra del módulo Falcon.",
+    "en": "James Irwin works at the lunar rover. In the foreground, the shadow of the lunar module Falcon."
+   }
+  }
+ ],
+ "apollo17": [
+  {
+   "f": "img/apollo17_1.jpg",
+   "id": "S72-55421",
+   "credit": "NASA",
+   "w": 1100,
+   "h": 872,
+   "art": false,
+   "cap": {
+    "es": "La etapa de ascenso de Challenger despega de la Luna, vista por la cámara de TV del auto lunar.",
+    "en": "The ascent stage of Challenger lifts off the Moon, seen by the TV camera on the lunar rover."
+   }
+  },
+  {
+   "f": "img/apollo17_2.jpg",
+   "id": "as17-149-22857",
+   "credit": "NASA",
+   "w": 1100,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "El módulo Challenger en órbita lunar, antes de reunirse con la nave principal.",
+    "en": "The lunar module Challenger in lunar orbit, before rejoining the main ship."
+   }
+  },
+  {
+   "f": "img/apollo17_3.jpg",
+   "id": "PIA12920",
+   "credit": "NASA/GSFC/Arizona State University",
+   "w": 640,
+   "h": 640,
+   "art": false,
+   "cap": {
+    "es": "La etapa de descenso de Challenger, que sigue en la Luna, vista desde la órbita por LRO.",
+    "en": "The descent stage of Challenger, still on the Moon, seen from orbit by LRO."
+   }
+  }
+ ],
+ "pioneer10": [
+  {
+   "f": "img/pioneer10_1.jpg",
+   "id": "ARC-1973-AC73-9019",
+   "credit": "NASA/Ames · TRW",
+   "w": 733,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Pioneer 10 durante su armado final en TRW, California.",
+    "en": "Pioneer 10 during final assembly at TRW, California."
+   }
+  },
+  {
+   "f": "img/pioneer10_2.jpg",
+   "id": "ARC-1972-A72-2137",
+   "credit": "NASA/Ames · TRW",
+   "w": 1100,
+   "h": 733,
+   "art": false,
+   "cap": {
+    "es": "La placa con el mensaje, ya colocada en la nave.",
+    "en": "The message plaque, already mounted on the spacecraft."
+   }
+  },
+  {
+   "f": "img/pioneer10_3.jpg",
+   "id": "ARC-1973-AC73-4247",
+   "credit": "NASA/Ames · Rick Guidice",
+   "w": 1100,
+   "h": 733,
+   "art": true,
+   "cap": {
+    "es": "Pioneer 10 pasando por Júpiter, pintado por Rick Guidice.",
+    "en": "Pioneer 10 passing Jupiter, painted by Rick Guidice."
+   }
+  }
+ ],
+ "viking1": [
+  {
+   "f": "img/viking1_1.jpg",
+   "id": "PIA00563",
+   "credit": "NASA/JPL",
+   "w": 563,
+   "h": 512,
+   "art": false,
+   "cap": {
+    "es": "La primera imagen en color que Viking 1 tomó en Marte.",
+    "en": "The first colour image Viking 1 took on Mars."
+   }
+  },
+  {
+   "f": "img/viking1_2.jpg",
+   "id": "PIA01881",
+   "credit": "NASA/JPL-Caltech/University of Arizona",
+   "w": 1100,
+   "h": 916,
+   "art": false,
+   "cap": {
+    "es": "El lugar donde quedó Viking 1, visto desde la órbita en 2006.",
+    "en": "The spot where Viking 1 remains, seen from orbit in 2006."
+   }
+  }
+ ],
+ "near": [
+  {
+   "f": "img/near_1.jpg",
+   "id": "9701593",
+   "credit": "NASA",
+   "w": 444,
+   "h": 640,
+   "art": false,
+   "cap": {
+    "es": "NEAR en preparación antes del lanzamiento, en el Centro Espacial Kennedy.",
+    "en": "NEAR in preflight preparation at Kennedy Space Center."
+   }
+  },
+  {
+   "f": "img/near_2.jpg",
+   "id": "PIA03139",
+   "credit": "NASA/JPL/JHUAPL",
+   "w": 766,
+   "h": 532,
+   "art": false,
+   "cap": {
+    "es": "El asteroide Eros en color, fotografiado por NEAR Shoemaker.",
+    "en": "Asteroid Eros in colour, photographed by NEAR Shoemaker."
+   }
+  }
+ ],
+ "pathfinder": [
+  {
+   "f": "img/pathfinder_1.jpg",
+   "id": "PIA04318",
+   "credit": "NASA/JPL-Caltech",
+   "w": 819,
+   "h": 415,
+   "art": false,
+   "cap": {
+    "es": "El rover Sojourner acercándose a una roca, visto desde el módulo Pathfinder.",
+    "en": "The Sojourner rover nearing a rock, seen from the Pathfinder lander."
+   }
+  },
+  {
+   "f": "img/pathfinder_2.jpg",
+   "id": "PIA00621",
+   "credit": "NASA/JPL",
+   "w": 640,
+   "h": 306,
+   "art": false,
+   "cap": {
+    "es": "Sojourner todavía sobre el módulo, el día del aterrizaje.",
+    "en": "Sojourner still on the lander, on landing day."
+   }
+  },
+  {
+   "f": "img/pathfinder_3.jpg",
+   "id": "PIA01121",
+   "credit": "NASA/JPL",
+   "w": 411,
+   "h": 190,
+   "art": false,
+   "cap": {
+    "es": "El módulo Pathfinder visto por Sojourner.",
+    "en": "The Pathfinder lander seen by Sojourner."
+   }
+  }
+ ],
+ "spirit": [
+  {
+   "f": "img/spirit_1.jpg",
+   "id": "PIA16440",
+   "credit": "NASA/JPL-Caltech/Cornell Univ./Arizona State Univ.",
+   "w": 1100,
+   "h": 311,
+   "art": false,
+   "cap": {
+    "es": "Panorama de 360° tomado por Spirit en 2006, con su propia cubierta en primer plano.",
+    "en": "360-degree panorama taken by Spirit in 2006, with its own deck in the foreground."
+   }
+  },
+  {
+   "f": "img/spirit_2.jpg",
+   "id": "PIA12007",
+   "credit": "NASA/JPL-Caltech",
+   "w": 640,
+   "h": 640,
+   "art": false,
+   "cap": {
+    "es": "Las ruedas de Spirit hundidas en suelo blando, mayo de 2009.",
+    "en": "Spirit’s wheels dug into soft ground, May 2009."
+   }
+  }
+ ],
+ "opportunity": [
+  {
+   "f": "img/opportunity_1.jpg",
+   "id": "PIA22222",
+   "credit": "NASA/JPL-Caltech",
+   "w": 1100,
+   "h": 895,
+   "art": false,
+   "cap": {
+    "es": "Autorretrato de Opportunity en el Valle de la Perseverancia, en su día marciano 5000 (2018).",
+    "en": "Self-portrait of Opportunity in Perseverance Valley on its 5,000th Martian day (2018)."
+   }
+  },
+  {
+   "f": "img/opportunity_2.jpg",
+   "id": "PIA05513",
+   "credit": "NASA/JPL/Cornell",
+   "w": 799,
+   "h": 565,
+   "art": false,
+   "cap": {
+    "es": "En rojo, los agujeros que hizo en la roca con la herramienta de su brazo (2004).",
+    "en": "In red, the holes it ground into the rock with the tool on its arm (2004)."
+   }
+  },
+  {
+   "f": "img/opportunity_3.jpg",
+   "id": "PIA08812",
+   "credit": "NASA/JPL/University of Arizona",
+   "w": 640,
+   "h": 512,
+   "art": false,
+   "cap": {
+    "es": "Opportunity al borde del cráter Victoria, visto desde la órbita (2006).",
+    "en": "Opportunity at the rim of Victoria crater, seen from orbit (2006)."
+   }
+  },
+  {
+   "f": "img/opportunity_4.jpg",
+   "id": "PIA23246",
+   "credit": "NASA/JPL-Caltech",
+   "w": 640,
+   "h": 384,
+   "art": false,
+   "cap": {
+    "es": "Sus huellas en el Valle de la Perseverancia.",
+    "en": "Its tracks in Perseverance Valley."
+   }
+  }
+ ],
+ "phoenix": [
+  {
+   "f": "img/phoenix_1.jpg",
+   "id": "PIA11719",
+   "credit": "NASA/JPL-Caltech/University of Arizona/Texas A&M University",
+   "w": 1100,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Autorretrato de Phoenix en Marte, visto desde arriba.",
+    "en": "Self-portrait of Phoenix on Mars, seen from above."
+   }
+  },
+  {
+   "f": "img/phoenix_2.jpg",
+   "id": "PIA10910",
+   "credit": "NASA/JPL-Caltech/University of Arizona/Texas A&M University",
+   "w": 512,
+   "h": 1024,
+   "art": false,
+   "cap": {
+    "es": "Trozos de hielo en una zanja que cavó Phoenix (junio de 2008).",
+    "en": "Lumps of ice in a trench dug by Phoenix (June 2008)."
+   }
+  },
+  {
+   "f": "img/phoenix_3.jpg",
+   "id": "KSC-07PD-1085",
+   "credit": "NASA",
+   "w": 731,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Phoenix antes del lanzamiento, en el Centro Espacial Kennedy.",
+    "en": "Phoenix before launch, at Kennedy Space Center."
+   }
+  }
+ ],
+ "dawn": [
+  {
+   "f": "img/dawn_1.jpg",
+   "id": "PIA19889",
+   "credit": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA",
+   "w": 640,
+   "h": 640,
+   "art": false,
+   "cap": {
+    "es": "El cráter Occator de Ceres y sus manchas brillantes, visto por Dawn.",
+    "en": "Occator crater on Ceres and its bright spots, seen by Dawn."
+   }
+  },
+  {
+   "f": "img/dawn_2.jpg",
+   "id": "PIA19167",
+   "credit": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA",
+   "w": 500,
+   "h": 500,
+   "art": false,
+   "cap": {
+    "es": "Ceres visto por Dawn mientras se acercaba, enero de 2015.",
+    "en": "Ceres seen by Dawn on approach, January 2015."
+   }
+  },
+  {
+   "f": "img/dawn_3.jpg",
+   "id": "PIA12031",
+   "credit": "NASA/JPL",
+   "w": 640,
+   "h": 360,
+   "art": true,
+   "cap": {
+    "es": "Dawn en órbita de Ceres.",
+    "en": "Dawn orbiting Ceres."
+   }
+  }
+ ],
+ "kepler": [
+  {
+   "f": "img/kepler_1.jpg",
+   "id": "PIA11733",
+   "credit": "NASA/JPL-Caltech/Ball",
+   "w": 736,
+   "h": 1100,
+   "art": false,
+   "cap": {
+    "es": "Kepler en la fábrica de Ball Aerospace, antes del lanzamiento.",
+    "en": "Kepler at Ball Aerospace, before launch."
+   }
+  },
+  {
+   "f": "img/kepler_2.jpg",
+   "id": "PIA11825",
+   "credit": "NASA/Ames/JPL-Caltech",
+   "w": 360,
+   "h": 640,
+   "art": true,
+   "cap": {
+    "es": "El telescopio Kepler.",
+    "en": "The Kepler telescope."
+   }
+  }
+ ],
+ "insight": [
+  {
+   "f": "img/insight_1.jpg",
+   "id": "PIA22876",
+   "credit": "NASA/JPL-Caltech",
+   "w": 1100,
+   "h": 626,
+   "art": false,
+   "cap": {
+    "es": "Primera selfie de InSight en Marte, diciembre de 2018.",
+    "en": "InSight’s first selfie on Mars, December 2018."
+   }
+  },
+  {
+   "f": "img/insight_2.jpg",
+   "id": "PIA25287",
+   "credit": "NASA/JPL-Caltech",
+   "w": 1100,
+   "h": 660,
+   "art": false,
+   "cap": {
+    "es": "Su última selfie, abril de 2022: cubierto de polvo.",
+    "en": "Its final selfie, April 2022: covered in dust."
+   }
+  }
+ ],
+ "ingenuity": [
+  {
+   "f": "img/ingenuity_1.jpg",
+   "id": "PIA23882",
+   "credit": "NASA/JPL-Caltech",
+   "w": 1100,
+   "h": 733,
+   "art": false,
+   "cap": {
+    "es": "El modelo de vuelo de Ingenuity, antes de viajar a Marte.",
+    "en": "The flight model of Ingenuity, before travelling to Mars."
+   }
+  },
+  {
+   "f": "img/ingenuity_2.jpg",
+   "id": "PIA24542",
+   "credit": "NASA/JPL-Caltech/MSSS",
+   "w": 1100,
+   "h": 809,
+   "art": false,
+   "cap": {
+    "es": "Selfie del rover Perseverance con Ingenuity, abril de 2021.",
+    "en": "Selfie of the Perseverance rover with Ingenuity, April 2021."
+   }
+  }
+ ]
+};

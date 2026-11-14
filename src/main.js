@@ -7,6 +7,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
 import { MISSIONS, STORIES, SITES, TYPES, SOURCES } from './data.js';
+import { IMAGES } from './images.js';
 
 const $ = s => document.querySelector(s), V3 = THREE.Vector3;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -37,6 +38,7 @@ const UI = {
     deep: ['Sondas y un telescopio que siguen viajando o dando vueltas, en silencio. Tocá una luz.', 'Probes and a telescope still travelling or orbiting, in silence. Tap a light.']
   },
   all: ['Todas las máquinas', 'All machines'], parts: ['Piezas', 'Parts'], seeParts: ['Ver sus piezas', 'See its parts'], goThere: ['clic para ver qué quedó ahí', 'click to see what was left there'], tapPart: ['clic para ver qué hizo', 'click to see what it did'], tapPin: ['clic para ver su ficha', 'click to open its card'],
+  photos: ['Fotos de NASA', 'NASA photos'], art: ['Ilustración', 'Illustration'], photo: ['Foto real', 'Real photo'], credit: ['Crédito', 'Credit'], close: ['Cerrar', 'Close'], openImg: ['Ver en la biblioteca de NASA ↗', 'View in the NASA library ↗'],
   inApp: ['máquinas en esta app', 'machines in this app'], first: ['la primera en llegar', 'first to arrive'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -346,9 +348,21 @@ function nav(on) {
   return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Still There</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}</a>`).join('')}
   <button class="tab sm" data-act="lite" aria-pressed="${state.lite}">${t('lite')}: ${state.lite ? 'on' : 'off'}</button><button class="tab sm keep" data-act="lang" aria-label="Idioma / Language">${state.lang === 'es' ? 'ES · en' : 'EN · es'}</button></nav>`;
 }
+function gallery(id, big) {
+  const im = IMAGES[id]; if (!im || !im.length) return '';
+  const th = (x, i) => `<button class="shot" data-act="img" data-m="${id}" data-i="${i}" aria-label="${esc(L(x.cap))}"><img src="${x.f}" alt="${esc(L(x.cap))}" loading="lazy">${x.art ? `<em>${t('art')}</em>` : ''}</button>`;
+  return big ? `<div class="gal big">${th(im[0], 0)}<div class="thumbs">${im.slice(1).map((x, i) => th(x, i + 1)).join('')}</div></div><div class="capt">${L(im[0].cap)} <span>${esc(im[0].credit)}</span></div>`
+    : `<div class="sub">${t('photos')}</div><div class="gal">${im.map(th).join('')}</div>`;
+}
+function lightbox(id, i) {
+  const im = IMAGES[id], n = im.length; i = (i + n) % n; const x = im[i], lb = $('#lb');
+  lb.dataset.m = id; lb.dataset.i = i; lb.classList.add('on');
+  lb.innerHTML = `<button class="x" data-lb="close" aria-label="${t('close')}">✕</button>${n > 1 ? `<button class="ar l" data-lb="-1" aria-label="‹">‹</button><button class="ar r" data-lb="1" aria-label="›">›</button>` : ''}
+    <figure><img src="${x.f}" alt="${esc(L(x.cap))}"><figcaption><b>${x.art ? t('art') : t('photo')} · ${i + 1}/${n}</b>${L(x.cap)}<small>${t('credit')}: ${esc(x.credit)} · <a href="https://images.nasa.gov/details/${encodeURIComponent(x.id)}" target="_blank" rel="noopener">${t('openImg')}</a></small></figcaption></figure>`;
+}
 function missionCard(m, extra = '') {
   const st = m.story;
-  return `<span class="eyebrow">${L(TYPES[m.type])}</span><h2>${esc(m.name)}</h2><p class="lead">${L(m.line)}</p>
+  return `<span class="eyebrow">${L(TYPES[m.type])}</span><h2>${esc(m.name)}</h2>${gallery(m.id, true)}<p class="lead" style="margin-top:14px">${L(m.line)}</p>
   <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)} · ${m.rocket} · ${L(SITES[m.site])}</dd>
   <dt>${L(m.arriveLabel) || t('arrive')}</dt><dd>${fmt(m.arrive)}</dd>${m.end ? `<dt>${L(m.endLabel) || t('last')}</dt><dd>${fmt(m.end)}</dd>` : ''}
   <dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
@@ -361,7 +375,7 @@ function render() {
   if (r.view === 'inicio') {
     h = nav('historias') + `<section class="hero"><span class="eyebrow" style="--acc:var(--c)">NASA · ${t('moon')} · ${t('mars')} · ${t('deep')}</span><h1>${t('h1')}</h1><p class="lead">${t('lead')}</p><p style="margin-top:10px;font-size:14px">${t('age')}</p>
       <div class="row"><a class="btn" href="#/explorar">${t('timeline')}</a></div></section>
-      <div class="panel picks">${Object.entries(STORIES).map(([id, s]) => `<div class="pick" style="--acc:${s.color}"><span class="eyebrow">${L(s.tag)}</span><h3>${esc(byId(s.mission).short || byId(s.mission).name)}</h3><div class="say">«${L(s.hook)}»</div><div class="links"><a href="#/historia/${id}/1">${t('follow')}</a><a href="#/maquina/${id}">${t('seeParts')}</a></div></div>`).join('')}</div>
+      <div class="panel picks">${Object.entries(STORIES).map(([id, s]) => `<div class="pick" style="--acc:${s.color}"><button class="shot pk" data-act="img" data-m="${s.mission}" data-i="0"><img src="${IMAGES[s.mission][0].f}" alt="" loading="lazy"></button><span class="eyebrow">${L(s.tag)}</span><h3>${esc(byId(s.mission).short || byId(s.mission).name)}</h3><div class="say">«${L(s.hook)}»</div><div class="links"><a href="#/historia/${id}/1">${t('follow')}</a><a href="#/maquina/${id}">${t('seeParts')}</a></div></div>`).join('')}</div>
       <div class="note">${t('noteScale')}</div>`;
   } else if (r.view === 'historia' && st) {
     const i = Math.min(Math.max(+r.b - 1 || 0, 0), 4), sc = st.scenes[i], m = byId(st.mission), name = m.short || m.name, steps = t('steps');
@@ -371,7 +385,7 @@ function render() {
       ${sc.facts.map(f => `<div class="found"><b>${L(f.h)}</b><span>${L(f.p)}</span>${srcLink(f.src)}</div>`).join('')}
       ${i === 1 ? `<div class="bar"><i id="fbar"></i></div><div class="row" style="align-items:center"><button class="btn" data-act="replay">${t('replay')}</button><span id="fphase" style="color:var(--dim);font-size:14px"></span></div>` : ''}
       ${i >= 2 ? `<div class="row"><a class="btn" href="#/maquina/${r.a}${sc.part ? '/' + sc.part : ''}">${t('inside')}</a></div>` : ''}
-      <div class="rec">${t('rec')}</div></section>
+      ${gallery(st.mission)}<div class="rec">${t('rec')}</div></section>
       <div class="steps" style="--acc:${st.color}">${steps.map((s, k) => `<a class="step ${k === i ? 'on' : k < i ? 'done' : ''}" href="#/historia/${r.a}/${k + 1}" aria-label="${s}">${k + 1} · ${s}</a>`).join('')}
       <a class="btn" href="${i ? `#/historia/${r.a}/${i}` : '#/inicio'}">${t('prev')}</a><a class="btn pri" href="${i < 4 ? `#/historia/${r.a}/${i + 2}` : '#/inicio'}">${i < 4 ? t('next') : t('end')}</a></div>`;
   } else if (r.view === 'maquina' && st) {
@@ -380,7 +394,7 @@ function render() {
       <section class="panel" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${L(st.tag)}</span><h2>${p ? L(p.name) : esc(m.name)}</h2>
       ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p><p style="margin-top:10px">${t('pickPart')}</p>`}
       <div class="sub">${t('parts')}</div><div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
-      <div class="row"><a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
+      ${gallery(st.mission)}<div class="row"><a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
       <div class="note">${t('noteModel')}</div>`;
   } else if (r.view === 'explorar') {
     const sel = state.sel && byId(state.sel);
@@ -397,7 +411,7 @@ function render() {
       <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
       <div class="note">${d === 'deep' ? t('noteScale') + ' ' + t('noteDrawn') : t('noteScale')}</div>`;
   } else if (r.view === 'maquinas') {
-    h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}"><span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
+    h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}">${IMAGES[m.id] ? `<button class="shot cover" data-act="img" data-m="${m.id}" data-i="0"><img src="${IMAGES[m.id][0].f}" alt="${esc(L(IMAGES[m.id][0].cap))}" loading="lazy"><em>${IMAGES[m.id].length} ${t('photos').toLowerCase()}</em></button>` : ''}<span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
       <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
       <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
   } else {
@@ -420,10 +434,14 @@ $('#ui').addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act;
   if (a === 'lang') { state.lang = state.lang === 'es' ? 'en' : 'es'; localStorage.setItem('lang', state.lang); setup(state.route, false); render(); }
   if (a === 'lite') { localStorage.setItem('lite', state.lite ? '0' : '1'); location.reload(); }
+  if (a === 'img') lightbox(b.dataset.m, +b.dataset.i);
   if (a === 'replay') cur.u = 0;
   if (a === 'play') { if (state.time >= NOW - .05) state.time = T0; state.playing = !state.playing; }
 });
+$('#lb').addEventListener('click', e => { const lb = $('#lb'), b = e.target.closest('[data-lb]');
+  if (b && b.dataset.lb !== 'close') lightbox(lb.dataset.m, +lb.dataset.i + +b.dataset.lb); else if (b || e.target === lb) lb.classList.remove('on'); });
 addEventListener('keydown', e => {
+  const lb = $('#lb'); if (lb.classList.contains('on')) { if (e.key === 'Escape') lb.classList.remove('on'); if (e.key === 'ArrowRight') lightbox(lb.dataset.m, +lb.dataset.i + 1); if (e.key === 'ArrowLeft') lightbox(lb.dataset.m, +lb.dataset.i - 1); return; }
   const r = state.route; if (r.view !== 'historia' || e.target.matches('input')) return; const i = +r.b || 1;
   if (e.key === 'ArrowRight' && i < 5) go(`#/historia/${r.a}/${i + 1}`); if (e.key === 'ArrowLeft' && i > 1) go(`#/historia/${r.a}/${i - 1}`);
 });

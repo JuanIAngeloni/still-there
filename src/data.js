@@ -190,6 +190,7 @@ export const STORIES = {
 export const SOURCES = [
   { h: { es: 'Catálogo de naves', en: 'Spacecraft catalog' }, items: [
     ['NASA Space Science Data Coordinated Archive (NSSDCA) Master Catalog', 'https://nssdc.gsfc.nasa.gov/nmc/'],
+    ['NASA Image and Video Library (fotos de cada máquina / photos of each machine)', 'https://images.nasa.gov/'],
     ['NASA Science · Opportunity', S.oppy], ['NASA Mars Exploration Rovers · Science results', S.berries], ['NASA Science · Pioneer 10', S.p10],
     ['NASA · Laser Beams Reflected Between Earth and Moon Boost Science', S.laser], ['NASA Science · Kepler', 'https://science.nasa.gov/mission/kepler/'],
     ['NASA Science · Ingenuity Mars Helicopter', 'https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/']] },
