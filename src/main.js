@@ -7,6 +7,8 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import TRAJ from './trajectories.json';
+import { makeHelio, HELIO, BODY_COL } from './helio.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
 import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE, SOUNDS, GLB } from './data.js';
 import { IMAGES } from './images.js';
@@ -53,6 +55,8 @@ const UI = {
   snd: ['Voz', 'Voice'], sndTip: ['Lee en voz alta cada escena de las historias', 'Reads each story scene aloud'], listen: ['Escuchar esta escena', 'Listen to this scene'], stopL: ['■ Parar', '■ Stop'], playClip: ['▶ Escuchar', '▶ Listen'], sounds: ['Sonido real de NASA', 'Real NASA sound'],
   ttsNote: ['La lectura usa la voz sintética de tu navegador.', 'Reading uses your browser’s synthetic voice.'], noTts: ['Tu navegador no tiene lectura por voz.', 'Your browser has no speech reading.'],
   see3d: ['Ver modelo 3D', 'See 3D model'], noteGlb: ['Modelo 3D oficial de NASA (NASA 3D Resources). Los modelos no están a escala entre sí.', 'Official NASA 3D model (NASA 3D Resources). Models are not to scale with each other.'], glbH: ['Modelo oficial de NASA', 'Official NASA model'], glbP: ['Girá y acercá el modelo. Es el que publica NASA, no uno armado por nosotros.', 'Rotate and zoom the model. It is the one NASA publishes, not one we built.'], glbSrc: ['Modelo en NASA 3D Resources', 'Model at NASA 3D Resources'], loadingM: ['Cargando modelo…', 'Loading model…'], ours: ['Con piezas', 'With parts'], official: ['Oficiales de NASA', 'Official NASA'],
+  traj: ['Trayectoria real', 'Real trajectory'], trajLead: ['El camino que hizo de verdad, visto desde arriba del sistema solar. Las posiciones las calculó JPL Horizons, el sistema de NASA que sigue a cada nave y cada planeta.', 'The path it really took, seen from above the solar system. Positions were computed by JPL Horizons, the NASA system that tracks every spacecraft and planet.'],
+  trajNote: ['Distancias y posiciones reales, a escala. El Sol, los planetas y la nave están agrandados para que se vean.', 'Real distances and positions, to scale. The Sun, the planets and the spacecraft are enlarged so they can be seen.'], trajFrom: ['Datos desde', 'Data from'], trajTo: ['hasta', 'to'], trajDay: ['Fecha', 'Date'], craft: ['Nave', 'Spacecraft'], sun: ['Sol', 'Sun'], eros: ['Eros', 'Eros'], vesta: ['Vesta', 'Vesta'], ceres: ['Ceres', 'Ceres'], trajSrc: ['JPL Horizons ↗', 'JPL Horizons ↗'], trajPause: ['❚❚ Pausa', '❚❚ Pause'], trajPlay: ['▶ Reproducir', '▶ Play'], trajGap: ['Horizons no tiene datos de los primeros dos meses de este viaje; el trazo empieza cuando empiezan los datos.', 'Horizons has no data for the first two months of this trip; the line starts where the data starts.'], trajNone: ['Sin trayectoria en JPL Horizons: Surveyor 1, Apollo 11, 15 y 17, y Viking 1.', 'No trajectory in JPL Horizons: Surveyor 1, Apollo 11, 15 and 17, and Viking 1.'], sheet: ['Ficha', 'Fact card'],
   followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -110,6 +114,7 @@ const camera = new THREE.PerspectiveCamera(42, 1, .05, 3000);
 const W = makeWorld(scene, renderer, state.lite), stage = makeStage(scene, state.lite);
 const fogMars = new THREE.FogExp2(0xb98660, .006);
 const envTex = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
+const helio = makeHelio(scene, TRAJ); const hel = { on: false, u: 0, play: true, hold: 0, m: null };
 const models = {};
 const gltf = new GLTFLoader(); gltf.setDRACOLoader(new DRACOLoader().setDecoderPath('draco/'));
 function makeGlb(id) {
@@ -315,6 +320,7 @@ function setup(r, snap) {
   labels.forEach(l => l.el.remove()); labels = [];
   for (const k in flights) flights[k].group.visible = false;
   for (const k in sitePins) sitePins[k].visible = false;
+  helio.group.visible = hel.on = false; W.farSun.forEach(o => o.visible = true);
   aim.earth = aim.mars = aim.moon = null; W.spin = reduced ? 0 : 1; resetFx(); cur.flight = null; cur.u = 0; state.part = null;
   const st = viewOf(r), idx = +r.b - 1, m = st && byId(st.mission);
   const useStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
@@ -341,6 +347,15 @@ function setup(r, snap) {
     }
     else cam({ ...o, focus: base, r: md.radius }, snap);
     if (fx === 'dust') stage.dustTarget = 1;
+    return;
+  }
+  if (r.view === 'trayectoria' && TRAJ.missions[r.a]) {
+    const mm = byId(r.a); hel.m = helio.show(r.a, mm.col); Object.assign(hel, { on: true, u: reduced ? 1 : 0, play: !reduced, hold: 0 });
+    helio.group.visible = true; W.group.visible = false; W.farSun.forEach(o => o.visible = false);
+    cam({ focus: () => HELIO, r: helio.maxR * 2.9, th: 1.57, ph: .5, sx: .17, minR: 6, maxR: helio.maxR * 7, maxPh: 1.5 }, snap);
+    addLabel(t('sun'), 'body', v => v.copy(HELIO), { dy: -22 });
+    addLabel('<i></i>' + esc(mm.short || mm.name), '', v => helio.pos('craft', v), { k: mm.col, dy: -22 });
+    for (const b in hel.m.bodies) addLabel(t(b), 'body', v => helio.pos(b, v), { dy: 20 });
     return;
   }
   if (r.view === 'inicio') { cam({ r: 5.4, th: AZ + .75, ph: 1.32, sx: .04, sy: .06, minR: 1.6, maxR: 40 }, snap); aim.moon = AZ + 1.9; bodyLabels(['moon']); }
@@ -426,7 +441,7 @@ function missionCard(m, extra = '') {
   <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)} · ${m.rocket} · ${L(SITES[m.site])}</dd>
   <dt>${L(m.arriveLabel) || t('arrive')}</dt><dd>${fmt(m.arrive)}</dd>${m.end ? `<dt>${L(m.endLabel) || t('last')}</dt><dd>${fmt(m.end)}</dd>` : ''}
   <dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
-  <div class="row">${st ? `<a class="btn pri" href="#/historia/${st}/1">${t('story')}</a><a class="btn" href="#/maquina/${st}">${t('insideOf')}</a>` : ''}${GLB[m.id] ? `<a class="btn pri" href="#/maquina/${m.id}">${t('see3d')}</a>` : ''}${extra}<a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div>`;
+  <div class="row">${st ? `<a class="btn pri" href="#/historia/${st}/1">${t('story')}</a><a class="btn" href="#/maquina/${st}">${t('insideOf')}</a>` : ''}${GLB[m.id] ? `<a class="btn pri" href="#/maquina/${m.id}">${t('see3d')}</a>` : ''}${TRAJ.missions[m.id] ? `<a class="btn" href="#/trayectoria/${m.id}">${t('traj')}</a>` : ''}${extra}<a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div>`;
 }
 function stampEl(m, on, gold) {
   return `<a class="stamp ${on ? 'on' : ''} ${gold ? 'gold' : ''}" href="#/destinos/${m.dest}/${m.id}" style="--acc:${m.col}"><span class="ring">${on && IMAGES[m.id] ? `<img src="${IMAGES[m.id][0].f}" alt="">` : '?'}</span><b>${esc(m.short || m.name)}</b><small>${on ? m.launch.slice(0, 4) + ' · ' + t(m.dest) : t('notYet')}</small></a>`;
@@ -490,6 +505,16 @@ function render() {
         <div class="row"><a class="btn pri" href="#/pasaporte">${t('seePass')}</a><button class="btn" data-act="qretry">${t('qRetry')}</button><a class="btn" href="#/inicio">${t('end')}</a></div>`;
     }
     h += `</div></div>`;
+  } else if (r.view === 'trayectoria' && TRAJ.missions[r.a]) {
+    const m = byId(r.a), tj = TRAJ.missions[r.a];
+    h = nav('explorar') + `<div class="seg">${Object.keys(TRAJ.missions).map(id => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/trayectoria/${id}">${esc(byId(id).short || byId(id).name)}</a>`).join('')}</div>
+      <section class="panel" style="--acc:${m.col}"><span class="eyebrow">${t('traj')} · JPL Horizons</span><h2>${esc(m.name)}</h2><p class="lead">${t('trajLead')}</p>
+      <dl class="kv"><dt>${t('trajDay')}</dt><dd><b id="hdate"></b></dd><dt>${t('trajFrom')}</dt><dd>${fmt(tj.start.slice(0, 10))} ${t('trajTo')} ${fmt(tj.stop.slice(0, 10))}</dd>
+      <dt style="color:${m.col}">━</dt><dd>${t('craft')}: ${esc(tj.horizons)}</dd>${Object.keys(tj.bodies).map(b => `<dt style="color:${BODY_COL[b]}">━</dt><dd>${t(b)}</dd>`).join('')}</dl>
+      ${r.a === 'pathfinder' ? `<div class="found"><span>${t('trajGap')}</span></div>` : ''}
+      <div class="found"><span>${t('trajNote')} ${t('trajNone')}</span> <a class="src" href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">${t('trajSrc')}</a></div>
+      <div class="row"><button class="btn pri" data-act="trajplay">${t(hel.play ? 'trajPause' : 'trajPlay')}</button><a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('sheet')}</a></div></section>
+      <div class="note">${t('chip')}</div>`;
   } else if (r.view === 'pasaporte') {
     const nq = Object.keys(PASS.quiz).length;
     h = nav('pasaporte') + `<div class="grid"><div class="doc wide"><h1 style="margin-top:6px">${t('pasaporte')}</h1><p class="lead">${t('passLead')}</p>
@@ -527,6 +552,7 @@ $('#ui').addEventListener('click', e => {
   if (a === 'qnext') { quiz.i++; quiz.pick = null; if (quiz.i >= QUIZ[quiz.id].length) { PASS.quiz[quiz.id] = Math.max(PASS.quiz[quiz.id] || 0, quiz.score); savePass(); } render(); }
   if (a === 'qretry') { quiz.id = null; render(); }
   if (a === 'passreset') { PASS.seen = []; PASS.done = []; PASS.quiz = {}; savePass(); render(); }
+  if (a === 'trajplay') { hel.play = !hel.play; if (hel.play && hel.u >= 1) hel.u = 0; render(); }
   if (a === 'clip') playClip(b.dataset.s);
   if (a === 'listen') { if (speaking) { stopSound(); syncSound(); } else speak(sceneText()); }
   if (a === 'voice') { state.voice = !state.voice; localStorage.setItem('voice', state.voice ? '1' : '0'); stopSound(); render(); if (state.voice && sceneText()) speak(sceneText()); }
@@ -647,6 +673,11 @@ function frame() {
   exhaust.update(dt); if (!(v === 'explorar' && cur.padOn) && (v !== 'historia' || !cur.flight || cur.static)) pad.visible = false;
   rigUpdate(dt); W.stars.position.copy(camera.position);
   if (cur.stage) { stage.light.target.position.copy(cur.model.center); }
+  if (hel.on) {
+    if (hel.play) { if (hel.u >= 1) { hel.hold += dt; if (hel.hold > 3) { hel.u = 0; hel.hold = 0; } } else hel.u = Math.min(1, hel.u + dt / 16); }
+    helio.update(hel.u, rig.r * .028);
+    const el = $('#hdate'); if (el) { const a = Date.parse(hel.m.start.replace(' ', 'T') + (hel.m.start.length > 10 ? 'Z' : 'T00:00Z')), z = Date.parse(hel.m.stop.replace(' ', 'T') + (hel.m.stop.length > 10 ? 'Z' : 'T00:00Z')); const d = new Date(a + (z - a) * hel.u).toISOString().slice(0, 10); if (el.dataset.d !== d) { el.dataset.d = d; el.textContent = fmt(d); } }
+  }
   for (const k in sitePins) if (sitePins[k].visible) sitePins[k].children[0].scale.setScalar(.16 * (1 + .25 * Math.sin(time * 3)));
   pinsUpdate(); labelsUpdate(); hoverUpdate();
   renderer.render(scene, camera);

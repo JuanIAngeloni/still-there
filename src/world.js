@@ -74,7 +74,7 @@ export function makeWorld(scene, renderer, lite) {
     stars.add(new THREE.Points(g, new THREE.PointsMaterial({ size, sizeAttenuation: false, vertexColors: true, transparent: true, opacity: op, depthWrite: false, fog: false })));
   });
   const sun = glowSprite(0xfff1d6, 150); sun.position.copy(SUN).multiplyScalar(800); sun.material.fog = false; stars.add(sun);
-  const sun2 = glowSprite(0xffffff, 40); sun2.position.copy(sun.position); sun2.material.fog = false; stars.add(sun2);
+  const sun2 = glowSprite(0xffffff, 40); sun2.position.copy(sun.position); sun2.material.fog = false; stars.add(sun2); W.farSun = [sun, sun2];
 
   W.sunLight = new THREE.DirectionalLight(0xfff4e6, 3.1); W.sunLight.position.copy(SUN).multiplyScalar(50); scene.add(W.sunLight);
   W.fill = new THREE.AmbientLight(0x8090c0, 0.035); scene.add(W.fill);

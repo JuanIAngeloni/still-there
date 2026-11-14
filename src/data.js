@@ -197,6 +197,8 @@ export const SOURCES = [
   { h: { es: 'Modelos 3D oficiales', en: 'Official 3D models' }, items: [
     ['NASA 3D Resources · Viking Lander, InSight, Ingenuity, NEAR Shoemaker, Dawn, Kepler (glTF)', 'https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models'],
     ['NASA 3D Resources · pautas de uso / usage guidelines', 'https://www.nasa.gov/nasa-brand-center/images-and-media/']] },
+  { h: { es: 'Trayectorias reales', en: 'Real trajectories' }, items: [
+    ['NASA/JPL Horizons System · posiciones de 10 naves y de los planetas, calculadas una vez (scripts/horizons.py)', 'https://ssd.jpl.nasa.gov/horizons/']] },
   { h: { es: 'Sonidos', en: 'Sounds' }, items: [
     ['Apollo 11 · «The Eagle has landed» · NASA Audio and Ringtones', 'https://www.nasa.gov/audio-and-ringtones/'],
     ['Marte / Mars · First Audio Recording of Sounds on Mars (Perseverance, SuperCam) · NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaéro', 'https://science.nasa.gov/resource/first-audio-recording-of-sounds-on-mars/']] },
