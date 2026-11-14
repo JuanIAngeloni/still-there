@@ -154,18 +154,18 @@ export const STORIES = {
       { title: { es: 'Nadie había ido tan lejos', en: 'Nobody had gone that far' },
         say: { es: 'Fui la primera misión de NASA a los planetas de afuera. Nadie sabía si una nave podía cruzar el cinturón de asteroides sin romperse.', en: "I was NASA's first mission to the outer planets. Nobody knew whether a spacecraft could cross the asteroid belt in one piece." },
         facts: [
-          { h: { es: '2 de marzo de 1972', en: 'March 2, 1972' }, p: { es: 'Despegué de Cabo Cañaveral en un cohete Atlas-Centaur.', en: 'I lifted off from Cape Canaveral on an Atlas-Centaur rocket.' }, src: S.p },
-          { h: { es: 'Plan: 21 meses', en: 'Plan: 21 months' }, p: { es: 'Era lo que tenía que durar mi misión.', en: 'That is how long my mission was meant to last.' }, src: S.p }] },
+          { h: { es: '2 de marzo de 1972', en: 'March 2, 1972' }, p: { es: 'Despegué de Cabo Cañaveral en un cohete Atlas-Centaur.', en: 'I lifted off from Cape Canaveral on an Atlas-Centaur rocket.' }, src: S.p10 },
+          { h: { es: 'Plan: 21 meses', en: 'Plan: 21 months' }, p: { es: 'Era lo que tenía que durar mi misión.', en: 'That is how long my mission was meant to last.' }, src: S.p10 }] },
       { title: { es: 'Crucé el cinturón de asteroides', en: 'I crossed the asteroid belt' },
         say: { es: 'Entré al cinturón en julio de 1972 y salí siete meses después. Recibí algunos golpes, menos de los esperados. Después vino Júpiter.', en: 'I entered the belt in July 1972 and came out seven months later. I took a few hits, fewer than expected. Then came Jupiter.' },
         facts: [
-          { h: { es: '15 de julio de 1972', en: 'July 15, 1972' }, p: { es: 'Entré al cinturón de asteroides. Salí en febrero de 1973.', en: 'I entered the asteroid belt. I came out in February 1973.' }, src: S.p },
+          { h: { es: '15 de julio de 1972', en: 'July 15, 1972' }, p: { es: 'Entré al cinturón de asteroides. Salí en febrero de 1973.', en: 'I entered the asteroid belt. I came out in February 1973.' }, src: S.p10 },
           { h: { es: '4 de diciembre de 1973', en: 'December 4, 1973' }, p: { es: 'Mi punto más cercano a Júpiter: unos 200.000 km.', en: 'My closest point to Jupiter: about 200,000 km.' }, src: S.p10N }] },
       { title: { es: 'Fui la primera en estudiar Júpiter', en: 'I was the first to study Jupiter' }, part: 'mag',
         say: { es: 'Fotografié a Júpiter y a sus lunas, y medí su campo magnético y su radiación. Mi sensor magnético va en la punta de un brazo de 6,6 metros.', en: 'I photographed Jupiter and its moons, and measured its magnetic field and radiation. My magnetic sensor sits at the tip of a 6.6-metre boom.' },
         facts: [
           { h: { es: 'Quince experimentos', en: 'Fifteen experiments' }, p: { es: 'Para medir campos magnéticos, viento solar, polvo, radiación y la atmósfera de Júpiter.', en: "To measure magnetic fields, solar wind, dust, radiation and Jupiter's atmosphere." }, src: S.p10N },
-          { h: { es: 'Se puede cruzar', en: 'It can be crossed' }, p: { es: 'Demostré que una nave puede atravesar el cinturón de asteroides.', en: 'I showed that a spacecraft can pass through the asteroid belt.' }, src: S.p }] },
+          { h: { es: 'Se puede cruzar', en: 'It can be crossed' }, p: { es: 'Demostré que una nave puede atravesar el cinturón de asteroides.', en: 'I showed that a spacecraft can pass through the asteroid belt.' }, src: S.p10 }] },
       { title: { es: 'Mi señal se apagó', en: 'My signal faded out' }, fx: 'fade',
         say: { es: 'Mi energía viene de cuatro generadores nucleares que se gastan de a poco. Treinta años después del despegue, ya no alcanzó para mi transmisor.', en: 'My power comes from four nuclear generators that slowly run down. Thirty years after launch, it was no longer enough for my transmitter.' },
         facts: [
@@ -227,12 +227,32 @@ export const QUIZ = {
   pioneer: [
     { q: { es: '¿Qué hizo Pioneer 10 antes que ninguna otra nave?', en: 'What did Pioneer 10 do before any other spacecraft?' },
       o: [{ es: 'Aterrizar en Marte', en: 'Land on Mars' }, { es: 'Cruzar el cinturón de asteroides', en: 'Cross the asteroid belt' }, { es: 'Dar la vuelta a la Luna', en: 'Fly around the Moon' }], a: 1,
-      why: { es: 'Entró al cinturón en julio de 1972 y salió siete meses después. Demostró que se podía cruzar.', en: 'It entered the belt in July 1972 and left seven months later. It proved the belt could be crossed.' }, src: S.p },
+      why: { es: 'Entró al cinturón en julio de 1972 y salió siete meses después. Demostró que se podía cruzar.', en: 'It entered the belt in July 1972 and left seven months later. It proved the belt could be crossed.' }, src: S.p10 },
     { q: { es: '¿De dónde sacaba la energía?', en: 'Where did its power come from?' },
       o: [{ es: 'De cuatro generadores nucleares', en: 'From four nuclear generators' }, { es: 'De paneles solares', en: 'From solar panels' }, { es: 'De baterías que se recargaban en Júpiter', en: 'From batteries recharged at Jupiter' }], a: 0,
-      why: { es: 'Tan lejos del Sol los paneles solares no servían. Sus generadores daban 155 watts al despegar.', en: 'So far from the Sun, solar panels were no use. Its generators gave 155 watts at launch.' }, src: S.p },
+      why: { es: 'Tan lejos del Sol los paneles solares no servían. Sus generadores daban 155 watts al despegar.', en: 'So far from the Sun, solar panels were no use. Its generators gave 155 watts at launch.' }, src: S.p10 },
     { q: { es: '¿Hacia qué estrella viaja?', en: 'Which star is it heading for?' },
       o: [{ es: 'La estrella Polar', en: 'Polaris' }, { es: 'Sirio', en: 'Sirius' }, { es: 'Aldebarán', en: 'Aldebaran' }], a: 2,
-      why: { es: 'Va hacia Aldebarán, a 68 años luz. Tardaría unos dos millones de años en llegar.', en: 'It is heading for Aldebaran, 68 light-years away. It would take about two million years to get there.' }, src: S.p }
+      why: { es: 'Va hacia Aldebarán, a 68 años luz. Tardaría unos dos millones de años en llegar.', en: 'It is heading for Aldebaran, 68 light-years away. It would take about two million years to get there.' }, src: S.p10 }
   ]
+};
+
+// Scale with everyday things. `fig` is the NASA figure (source in `src`). `like` is the everyday comparison:
+// when `nasa` is true the comparison itself is NASA's wording; otherwise it was written for this app.
+export const SCALE = {
+  surveyor1: { fig: { es: 'Unos 3 m de alto', en: 'About 3 m tall' }, like: { es: 'Casi la altura de un aro de básquet (3,05 m).', en: 'Almost as tall as a basketball hoop (3.05 m).' }, src: N('1966-045A') },
+  apollo11: { fig: { es: '9,4 m de pata a pata', en: '9.4 m from leg to leg' }, like: { es: 'Un poco más que el ancho de una cancha de vóley (9 m).', en: 'A little wider than a volleyball court (9 m).' }, src: N('1969-059C') },
+  apollo15: { fig: { es: '27,9 km recorridos con el rover lunar', en: '27.9 km driven with the lunar rover' }, like: { es: 'Más que una media maratón (21,1 km), manejando sobre la Luna.', en: 'More than a half marathon (21.1 km), driving on the Moon.' }, src: N('1971-063C') },
+  apollo17: { fig: { es: '30 km recorridos y 110,5 kg de rocas', en: '30 km driven and 110.5 kg of rocks' }, like: { es: 'Unas tres cuartas partes de una maratón (42,2 km).', en: 'About three quarters of a marathon (42.2 km).' }, src: N('1972-096C') },
+  pioneer10: { fig: { es: '155 watts al despegar', en: '155 watts at launch' }, like: { es: 'Más o menos la décima parte de lo que gasta un secador de pelo.', en: 'Roughly a tenth of what a hair dryer uses.' }, src: S.p10N },
+  viking1: { fig: { es: '3.530 kg con su orbitador y el combustible', en: '3,530 kg with its orbiter and fuel' }, like: { es: 'Más o menos lo que pesan dos autos grandes.', en: 'Roughly the weight of two large cars.' }, src: N('1975-075C') },
+  near: { fig: { es: 'Eros mide unos 33 km de largo', en: 'Eros is about 33 km long' }, like: { es: 'Caminando sin parar, tardarías casi 7 horas en cruzarlo.', en: 'Walking non-stop, it would take you almost 7 hours to cross it.' }, src: N('1996-008A') },
+  pathfinder: { fig: { es: 'Sojourner pesaba 10,5 kg', en: 'Sojourner weighed 10.5 kg' }, like: { es: 'Casi lo mismo que un bidón de agua de 10 litros.', en: 'About the same as a 10-litre jug of water.' }, src: N('MESURPR') },
+  spirit: { fig: { es: '185 kg', en: '185 kg' }, like: { es: 'Del tamaño de un carrito de golf.', en: 'About the size of a golf cart.' }, nasa: true, src: S.oppy },
+  opportunity: { fig: { es: '185 kg', en: '185 kg' }, like: { es: 'Del tamaño de un carrito de golf.', en: 'About the size of a golf cart.' }, nasa: true, src: S.oppy },
+  phoenix: { fig: { es: '55 kg de instrumentos científicos', en: '55 kg of science instruments' }, like: { es: 'Más o menos lo que pesa un adolescente.', en: 'Roughly what a teenager weighs.' }, src: N('2007-034A') },
+  dawn: { fig: { es: '19,7 m de punta a punta de sus paneles', en: '19.7 m from tip to tip of its solar wings' }, like: { es: 'Un poco más que el largo de una cancha de vóley (18 m).', en: 'A little longer than a volleyball court (18 m).' }, src: N('2007-043A') },
+  kepler: { fig: { es: 'Un espejo de 1,4 m de diámetro', en: 'A mirror 1.4 m across' }, like: { es: 'Más o menos la altura de un chico de 10 años.', en: 'Roughly the height of a 10-year-old.' }, src: 'https://science.nasa.gov/mission/kepler/' },
+  insight: { fig: { es: 'Unos 6 m con los paneles abiertos', en: 'About 6 m with its panels open' }, like: { es: 'Más o menos el largo de una camioneta grande.', en: 'Roughly the length of a large pickup truck.' }, src: N('2018-042A') },
+  ingenuity: { fig: { es: '1,8 kg', en: '1.8 kg' }, like: { es: 'Menos que una botella de agua de 2 litros.', en: 'Less than a 2-litre bottle of water.' }, src: 'https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/' }
 };

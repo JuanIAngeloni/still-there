@@ -6,7 +6,7 @@ import './style.css';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
-import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ } from './data.js';
+import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE } from './data.js';
 import { IMAGES } from './images.js';
 import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
 
@@ -47,6 +47,7 @@ const UI = {
   qQ: ['Pregunta', 'Question'], qOk: ['¡Correcto!', 'Correct!'], qNo: ['No era esa.', 'Not that one.'], qNext: ['Siguiente ▶', 'Next ▶'], qSee: ['Ver resultado ▶', 'See result ▶'], qRetry: ['↺ Repetir el quiz', '↺ Retake the quiz'], qScore: ['respuestas correctas', 'correct answers'],
   qMsg: [['Volvé a leer la historia y probá de nuevo.', 'Casi. Una repasada y lo sacás.', 'Muy bien. Te faltó una sola.', 'Perfecto. Te ganaste el sello dorado.'], ['Read the story again and have another go.', 'Almost. One more read and you have it.', 'Well done. Just one missed.', 'Perfect. You earned the gold stamp.']],
   seePass: ['Ver mi pasaporte', 'See my passport'], passReset: ['Borrar mis sellos', 'Clear my stamps'], notYet: ['Sin visitar', 'Not visited'], notDone: ['Sin terminar', 'Not finished'], saved: ['Los sellos se guardan solo en este navegador.', 'Stamps are saved only in this browser.'],
+  scaleH: ['A escala', 'To scale'], scaleNasa: ['dato y comparación de NASA', 'figure and comparison by NASA'], scaleOurs: ['dato de NASA, comparación de esta app', 'NASA figure, comparison by this app'],
   followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -373,9 +374,13 @@ function lightbox(id, i) {
   lb.innerHTML = `<button class="x" data-lb="close" aria-label="${t('close')}">✕</button>${n > 1 ? `<button class="ar l" data-lb="-1" aria-label="‹">‹</button><button class="ar r" data-lb="1" aria-label="›">›</button>` : ''}
     <figure><img src="${x.f}" alt="${esc(L(x.cap))}"><figcaption><b>${x.art ? t('art') : t('photo')} · ${i + 1}/${n}</b>${L(x.cap)}<small>${t('credit')}: ${esc(x.credit)} · <a href="https://images.nasa.gov/details/${encodeURIComponent(x.id)}" target="_blank" rel="noopener">${t('openImg')}</a></small></figcaption></figure>`;
 }
+function scaleEl(id) {
+  const x = SCALE[id]; if (!x) return '';
+  return `<div class="found scale"><b><em>${t('scaleH')}</em>${L(x.like)}</b><span>${L(x.fig)} · ${t(x.nasa ? 'scaleNasa' : 'scaleOurs')}</span>${srcLink(x.src)}</div>`;
+}
 function missionCard(m, extra = '') {
   const st = m.story;
-  return `<span class="eyebrow">${L(TYPES[m.type])}</span><h2>${esc(m.name)}</h2>${gallery(m.id, true)}<p class="lead" style="margin-top:14px">${L(m.line)}</p>
+  return `<span class="eyebrow">${L(TYPES[m.type])}</span><h2>${esc(m.name)}</h2>${gallery(m.id, true)}<p class="lead" style="margin-top:14px">${L(m.line)}</p>${scaleEl(m.id)}
   <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)} · ${m.rocket} · ${L(SITES[m.site])}</dd>
   <dt>${L(m.arriveLabel) || t('arrive')}</dt><dd>${fmt(m.arrive)}</dd>${m.end ? `<dt>${L(m.endLabel) || t('last')}</dt><dd>${fmt(m.end)}</dd>` : ''}
   <dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
@@ -402,7 +407,7 @@ function render() {
       <span class="eyebrow">${esc(name)} · ${t('scene')} ${i + 1} ${t('of')} 5</span><h2>${L(sc.title)}</h2>
       <div class="who"><i></i>${esc(name)} ${t('tells')}</div><div class="say">${L(sc.say)}</div>
       ${sc.facts.map(f => `<div class="found"><b>${L(f.h)}</b><span>${L(f.p)}</span>${srcLink(f.src)}</div>`).join('')}
-      ${i === 1 ? `<div class="bar"><i id="fbar"></i></div><div class="row" style="align-items:center"><button class="btn" data-act="replay">${t('replay')}</button><span id="fphase" style="color:var(--dim);font-size:14px"></span></div>` : ''}
+      ${i === 0 ? scaleEl(st.mission) : ''}${i === 1 ? `<div class="bar"><i id="fbar"></i></div><div class="row" style="align-items:center"><button class="btn" data-act="replay">${t('replay')}</button><span id="fphase" style="color:var(--dim);font-size:14px"></span></div>` : ''}
       ${i >= 2 ? `<div class="row"><a class="btn" href="#/maquina/${r.a}${sc.part ? '/' + sc.part : ''}">${t('inside')}</a></div>` : ''}
       ${gallery(st.mission)}<div class="rec">${t('rec')}</div></section>
       <div class="steps" style="--acc:${st.color}">${steps.map((s, k) => `<a class="step ${k === i ? 'on' : k < i ? 'done' : ''}" href="#/historia/${r.a}/${k + 1}" aria-label="${s}">${k + 1} · ${s}</a>`).join('')}
@@ -411,7 +416,7 @@ function render() {
     const m = byId(st.mission), p = st.parts.find(x => x.id === r.b);
     h = nav('maquinas') + `<div class="chip">${t('chip')}</div><div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}<a class="tab sm" href="#/maquinas">${t('all')} ▦</a></div>
       <section class="panel" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${L(st.tag)}</span><h2>${p ? L(p.name) : esc(m.name)}</h2>
-      ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p><p style="margin-top:10px">${t('pickPart')}</p>`}
+      ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p>${scaleEl(m.id)}<p style="margin-top:10px">${t('pickPart')}</p>`}
       <div class="sub">${t('parts')}</div><div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
       ${gallery(st.mission)}<div class="row"><a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
       <div class="note">${t('noteModel')}</div>`;
@@ -452,7 +457,7 @@ function render() {
       <div class="row"><button class="btn" data-act="passreset">${t('passReset')}</button></div><p style="margin-top:12px;font-size:13px">${t('saved')}</p></div></div>`;
   } else if (r.view === 'maquinas') {
     h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}">${IMAGES[m.id] ? `<button class="shot cover" data-act="img" data-m="${m.id}" data-i="0"><img src="${IMAGES[m.id][0].f}" alt="${esc(L(IMAGES[m.id][0].cap))}" loading="lazy"><em>${IMAGES[m.id].length} ${t('photos').toLowerCase()}</em></button>` : ''}<span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
-      <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd>${m.end ? `<dt>${t('off')}</dt><dd>${fmt(m.end)}</dd>` : ''}</dl>
+      ${scaleEl(m.id)}<dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd>${m.end ? `<dt>${t('off')}</dt><dd>${fmt(m.end)}</dd>` : ''}</dl>
       <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
   } else {
     const es = state.lang === 'es';
