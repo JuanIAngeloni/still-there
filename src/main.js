@@ -8,6 +8,7 @@ import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
 import { MISSIONS, STORIES, SITES, TYPES, SOURCES } from './data.js';
 import { IMAGES } from './images.js';
+import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
 
 const $ = s => document.querySelector(s), V3 = THREE.Vector3;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -29,7 +30,7 @@ const UI = {
   scene: ['Escena', 'Scene'], of: ['de', 'of'], next: ['Siguiente ▶', 'Next ▶'], prev: ['◀ Anterior', '◀ Back'], end: ['Otra historia', 'Another story'],
   steps: [['Por qué me mandaron', 'Cómo llegué', 'Qué descubrí', 'Cómo terminé', 'Dónde estoy hoy'], ['Why I was sent', 'How I got there', 'What I found', 'How it ended', 'Where I am today']],
   inside: ['Verme por dentro', 'See my parts'], insideOf: ['Ver por dentro', 'See its parts'], story: ['Su historia', 'Its story'], source: ['Fuente NASA ↗', 'NASA source ↗'],
-  replay: ['↺ Repetir el viaje', '↺ Replay the trip'], phases: [['Despegue', 'En viaje', 'Llegada'], ['Liftoff', 'In flight', 'Arrival']],
+  replay: ['↺ Repetir el viaje', '↺ Replay the trip'], phases: [['Encendido', 'Despegue', 'Separación de etapa', 'En viaje', 'Llegada'], ['Ignition', 'Liftoff', 'Stage separation', 'In flight', 'Arrival']],
   launch: ['Despegue', 'Launch'], arrive: ['Llegada', 'Arrival'], last: ['Última señal', 'Last signal'], where: ['Dónde está', 'Where it is'], rocket: ['Cohete', 'Rocket'], from: ['Desde', 'From'],
   moon: ['Luna', 'Moon'], mars: ['Marte', 'Mars'], deep: ['Espacio profundo', 'Deep space'], earth: ['Tierra', 'Earth'], jupiter: ['Júpiter', 'Jupiter'], saturn: ['Saturno', 'Saturn'], venus: ['Venus', 'Venus'], eros: ['Eros', 'Eros'], ceres: ['Ceres', 'Ceres'],
   destLead: {
@@ -93,15 +94,10 @@ for (const k in SITES) { const g = new THREE.Group(); g.position.copy(latLon(SIT
 const wpos = (o, v = new V3()) => o.getWorldPosition(v);
 
 // ---------- flights
-function makeFlight(color) {
+function makeFlight(color, m) {
   const N = 90, mk = (op) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3)); return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity: op, fog: false, blending: THREE.AdditiveBlending, depthWrite: false })); };
   const F = { group: new THREE.Group(), trail: mk(.95), ghost: mk(.3), craft: glowSprite(color, .22), core: glowSprite(0xffffff, .07), pos: new V3(), tan: new V3() };
-  const rocket = new THREE.Group(), white = new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: .5 });
-  const bodyM = new THREE.Mesh(new THREE.CylinderGeometry(.008, .008, .075, 16), white), nose = new THREE.Mesh(new THREE.ConeGeometry(.008, .022, 16), white);
-  nose.position.y = .0485; const fl = new THREE.Mesh(new THREE.ConeGeometry(.011, .09, 16, 1, true), new THREE.MeshBasicMaterial({ color: 0xffb060, transparent: true, opacity: .85, blending: THREE.AdditiveBlending, depthWrite: false }));
-  fl.rotation.x = Math.PI; fl.position.y = -.082; const flg = glowSprite(0xffa050, .09); flg.position.y = -.05;
-  for (let i = 0; i < 2; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(.0035, .0035, .04, 10), white); b.position.set(i ? .011 : -.011, -.018, 0); rocket.add(b); }
-  rocket.add(bodyM, nose, fl, flg); F.rocket = rocket; F.flame = fl;
+  const R = makeRocket(rocketFamily(m)), rocket = R.group; F.rocket = rocket; F.R = R;
   F.group.add(F.ghost, F.trail, F.craft, F.core, rocket); F.group.visible = false; scene.add(F.group);
   const curve = new THREE.CatmullRomCurve3([new V3(), new V3(1, 0, 0)], false, 'centripetal');
   F.update = (pts, p, showRocket) => {
@@ -110,7 +106,7 @@ function makeFlight(color) {
     a.needsUpdate = g.needsUpdate = true; F.trail.geometry.computeBoundingSphere(); F.ghost.geometry.computeBoundingSphere();
     curve.getPoint(p, F.pos); curve.getTangent(Math.min(p, .999), F.tan);
     F.craft.position.copy(F.pos); F.core.position.copy(F.pos); rocket.position.copy(F.pos); rocket.quaternion.setFromUnitVectors(new V3(0, 1, 0), F.tan);
-    rocket.visible = !!showRocket; F.craft.visible = F.core.visible = !showRocket; F.flame.scale.y = .8 + Math.random() * .5;
+    rocket.visible = !!showRocket; F.craft.visible = F.core.visible = !showRocket;
   };
   return F;
 }
@@ -124,7 +120,8 @@ function pathFor(m) {
   if (d < 2.5) return [p0, p1, end];
   return [p0, p1, p2, mid, end];
 }
-const flights = {}; const flight = m => flights[m.id] || (flights[m.id] = makeFlight(m.col));
+const flights = {}; const flight = m => flights[m.id] || (flights[m.id] = makeFlight(m.col, m));
+const exhaust = makeExhaust(scene), pad = makePad(); pad.visible = false; W.bodies.earth.obj.add(pad);
 
 // ---------- camera rig
 const rig = { focus: new V3(), r: 7, th: 1.9, ph: 1.25, sx: 0, sy: 0, t: { focus: () => ZERO, r: 4, th: 1.9, ph: 1.25, minR: 1.5, maxR: 60, maxPh: 2.9, follow: null, sx: 0, sy: 0 }, moved: false, speed: 2.4 };
@@ -302,7 +299,7 @@ function setup(r, snap) {
       const s = SITES[m.site]; aimBody('earth', s.lat, s.lon); if (m.dest === 'moon') aimBody('moon', 0, 0, 1.15); if (m.dest === 'mars') aimBody('mars', m.lat, m.lon);
       W.spin = 0; cur.flight = flight(m); cur.flight.group.visible = true; cur.u = 0; cur.m = m;
       const d0 = wpos(sitePins[m.site], new V3()).normalize();
-      cam({ focus: () => cur.flight.pos, fk: 6, r: .8, th: Math.atan2(d0.z, d0.x) - .9, ph: 1.2, sx: .16, minR: .25, maxR: 120 }, snap);
+      cam({ focus: () => cur.flight.pos, fk: 6, r: .32, th: Math.atan2(d0.z, d0.x) - .9, ph: 1.2, sx: .16, minR: .12, maxR: 120 }, snap);
       bodyLabels(m.dest === 'moon' ? ['moon'] : m.dest === 'mars' ? ['mars'] : ['jupiter']);
     } else {
       if (m.dest !== 'deep') { aimBody(m.dest, m.lat, m.lon); W.spin = 0; }
@@ -438,7 +435,7 @@ $('#ui').addEventListener('click', e => {
   if (a === 'lang') { state.lang = state.lang === 'es' ? 'en' : 'es'; localStorage.setItem('lang', state.lang); setup(state.route, false); render(); }
   if (a === 'lite') { localStorage.setItem('lite', state.lite ? '0' : '1'); location.reload(); }
   if (a === 'img') lightbox(b.dataset.m, +b.dataset.i);
-  if (a === 'replay') cur.u = 0;
+  if (a === 'replay') { cur.u = 0; exhaust.clear(); }
   if (a === 'play') { if (state.time >= NOW - .05) state.time = T0; state.playing = !state.playing; }
 });
 $('#lb').addEventListener('click', e => { const lb = $('#lb'), b = e.target.closest('[data-lb]');
@@ -478,16 +475,30 @@ function explore(dt) {
   }
   exploreUI(false);
 }
+const UP = new V3(0, 1, 0), tq = new THREE.Quaternion();
 function storyFlight(dt) {
-  const m = cur.m, F = cur.flight; if (!reduced) cur.u = Math.min(1, cur.u + dt / 17); else cur.u = 1;
-  const u = cur.u, p = u < .22 ? .035 * (u / .22) ** 2 : .035 + .965 * ((x => x * x * (3 - 2 * x))((u - .22) / .78));
-  const pts = pathFor(m); F.update(pts, p, p < .05);
+  const m = cur.m, F = cur.flight, R = F.R, ss0 = THREE.MathUtils.smoothstep; if (!reduced) cur.u = Math.min(1, cur.u + dt / 24); else cur.u = 1;
+  // 0-.1 ignition on the pad, .1-.36 ascent and staging, then the cruise
+  const u = cur.u, IG = .1, AS = .4, PS = .3, asc = Math.max(0, (u - IG) / (AS - IG)), p = u < IG ? 0 : u < AS ? PS * asc * asc : PS + (1 - PS) * ((x => x * x * (3 - 2 * x))((u - AS) / (1 - AS)));
+  const pts = pathFor(m), close = p < PS; F.update(pts, p, close);
+  const s = SITES[m.site], n = tmpB.copy(pts[0]).sub(wpos(W.bodies.earth.obj, tmpA)).normalize();
+  pad.visible = u < .5; pad.position.copy(latLon(s.lat, s.lon, 1.0005)); pad.quaternion.setFromUnitVectors(UP, pad.position.clone().normalize());
+  if (close) {
+    const sepAt = .62, sep = asc > sepAt ? (asc - sepAt) * (AS - IG) * 24 : -1, power = u < IG ? ss0(u, .02, IG) : 1;
+    // stand upright on the pad, then lean into the trajectory
+    tq.setFromUnitVectors(UP, n); F.rocket.quaternion.slerp(tq, 1 - ss0(asc, .05, .5)); if (u < IG) F.rocket.position.copy(pts[0]);
+    R.set(power, sep);
+    if (!reduced) { const back = tmpA.copy(UP).applyQuaternion(F.rocket.quaternion).negate(), base = F.rocket.position;
+      if (sep < 0) exhaust.emit(base, back, .1 + .25 * power, .03, power > .05 ? 5 : 0, 1.1);
+      if (u < IG + .03 && power > .2) { const side = new V3().randomDirection().cross(n).normalize(); exhaust.emit(base, side, .12, .02, 4, 1.8); } }
+    if (!rig.moved && u < IG) { rig.t.th += Math.sin(clock.elapsedTime * 47) * .0012 * power; }
+  }
   const dist = pts[0].distanceTo(pts[pts.length - 1]), ss = THREE.MathUtils.smoothstep, br = pins[m.id].body.r;
   if (!rig.moved) { const dir = tmpA.copy(pts[pts.length - 1]).sub(pts[0]), n = tmpB.copy(pts[0]).normalize(); let th = Math.atan2(dir.z, dir.x) + Math.PI / 2;
     if (Math.cos(th) * n.x + Math.sin(th) * n.z < 0) th += Math.PI; rig.t.th = th; rig.t.ph = 1.2; }
-  if (!rig.zoomed) rig.t.r = THREE.MathUtils.lerp(THREE.MathUtils.lerp(.75, Math.max(2.2, Math.min(15, dist * .5)), ss(p, .02, .32)), Math.max(1.6, br * 6), ss(p, .72, 1));
+  if (!rig.zoomed) rig.t.r = THREE.MathUtils.lerp(THREE.MathUtils.lerp(.32 + .9 * ss(u, .1, .4), Math.max(2.2, Math.min(15, dist * .5)), ss(p, PS, .55)), Math.max(1.6, br * 6), ss(p, .72, 1));
   const b = $('#fbar'); if (b) b.style.width = (u * 100).toFixed(1) + '%';
-  const ph = $('#fphase'); if (ph) ph.textContent = t('phases')[p < .05 ? 0 : p < .97 ? 1 : 2];
+  const ph = $('#fphase'); if (ph) ph.textContent = t('phases')[u < IG ? 0 : asc < .62 ? 1 : p < PS ? 2 : p < .97 ? 3 : 4];
 }
 function highlight(time) {
   const md = cur.model; if (!md) return; const pulse = .1 + .07 * Math.sin(time * 4);
@@ -516,6 +527,7 @@ function frame() {
   if (v === 'explorar') explore(dt);
   if (cur.flight && v === 'historia') { if (cur.static) cur.flight.update(pathFor(byId(STORIES[state.route.a].mission)), 1, false); else storyFlight(dt); }
   if (cur.stage) { stage.update(dt); fx(dt); highlight(time); }
+  exhaust.update(dt); if (v !== 'historia' || !cur.flight || cur.static) pad.visible = false;
   rigUpdate(dt); W.stars.position.copy(camera.position);
   if (cur.stage) { stage.light.target.position.copy(cur.model.center); }
   for (const k in sitePins) if (sitePins[k].visible) sitePins[k].children[0].scale.setScalar(.16 * (1 + .25 * Math.sin(time * 3)));
