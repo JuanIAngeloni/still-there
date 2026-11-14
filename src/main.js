@@ -12,7 +12,9 @@ import { makeHelio, HELIO, BODY_COL } from './helio.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
 import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE, SOUNDS, GLB } from './data.js';
 import { IMAGES } from './images.js';
-import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
+import { makeRocket, makePad, rocketFamily } from './rockets.js';
+import gsap from 'gsap';
+import { makePost, makeExhaust, playStamp, TUNE } from './fx.js';
 
 const $ = s => document.querySelector(s), V3 = THREE.Vector3;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -80,7 +82,7 @@ const byId = id => MISSIONS.find(m => m.id === id);
 const PASS = (() => { try { return JSON.parse(localStorage.getItem('pass')) || {}; } catch { return {}; } })();
 PASS.seen = PASS.seen || []; PASS.done = PASS.done || []; PASS.quiz = PASS.quiz || {};
 const savePass = () => localStorage.setItem('pass', JSON.stringify(PASS));
-function stamp(kind, id, name) { if (!id || PASS[kind].includes(id)) return; PASS[kind].push(id); savePass(); toast(`✦ ${t('stampNew')}: ${name}`); }
+function stamp(kind, id, name) { if (!id || PASS[kind].includes(id)) return; PASS[kind].push(id); savePass(); toast(`${t('stampNew')}: ${name}`, byId(id) ? byId(id).col : STORIES[id] ? STORIES[id].color : '#ffd166'); }
 // ---------- sound: real NASA clips + scene narration with the browser voice
 const clip = new Audio(); let clipId = null; clip.addEventListener('ended', () => { clipId = null; syncSound(); });
 const synth = window.speechSynthesis; let speaking = false;
@@ -111,6 +113,8 @@ renderer.setPixelRatio(pr); renderer.outputColorSpace = THREE.SRGBColorSpace; re
 renderer.shadowMap.enabled = !state.lite; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x030208);
 const camera = new THREE.PerspectiveCamera(42, 1, .05, 3000);
+// lite mode keeps the plain renderer; otherwise bloom + filmic tone mapping run in an HDR composer
+const post = state.lite ? null : makePost(renderer, scene, camera);
 const W = makeWorld(scene, renderer, state.lite), stage = makeStage(scene, state.lite);
 const fogMars = new THREE.FogExp2(0xb98660, .006);
 const envTex = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
@@ -180,7 +184,7 @@ function pathFor(m) {
   return [p0, p1, p2, mid, end];
 }
 const flights = {}; const flight = m => flights[m.id] || (flights[m.id] = makeFlight(m.col, m));
-const exhaust = makeExhaust(scene), pad = makePad(); pad.visible = false; W.bodies.earth.obj.add(pad);
+const exhaust = makeExhaust(scene, state.lite), pad = makePad(); pad.visible = false; W.bodies.earth.obj.add(pad);
 
 // ---------- camera rig
 const rig = { focus: new V3(), r: 7, th: 1.9, ph: 1.25, sx: 0, sy: 0, t: { focus: () => ZERO, r: 4, th: 1.9, ph: 1.25, minR: 1.5, maxR: 60, maxPh: 2.9, follow: null, sx: 0, sy: 0 }, moved: false, speed: 2.4 };
@@ -287,6 +291,13 @@ const cur = { model: null, flight: null, fx: null, fxT: 0, u: 0, stage: false };
 function parse() { const [view = 'inicio', a, b] = (location.hash.replace(/^#\/?/, '') || 'inicio').split('/'); return { view, a, b }; }
 function go(h) { if (location.hash === h) onRoute(); else location.hash = h; }
 addEventListener('hashchange', () => onRoute());
+let introKey = '';
+function intro() {
+  const r = state.route, key = r.view === 'quiz' ? `quiz/${r.a}/${quiz.i}` : r.view; if (key === introKey) return; introKey = key; if (reduced) return;
+  const rings = document.querySelectorAll('#ui .stamp.on .ring');
+  if (rings.length && (r.view === 'pasaporte' || r.view === 'quiz')) gsap.from(rings, { scale: 1.7, autoAlpha: 0, rotation: '-=25', duration: .55, ease: 'back.out(2)', stagger: .045, clearProps: 'scale,opacity,visibility,rotation,transform' });
+  const sc = $('#qscore'); if (sc) { const o = { v: 0 }, n = +sc.dataset.n; gsap.to(o, { v: n, duration: .9, ease: 'power2.out', onUpdate: () => { sc.textContent = Math.round(o.v); } }); }
+}
 let first = true;
 function onRoute() {
   stopSound(); const rr = parse(); if (state.voice && rr.view === 'historia' && STORIES[rr.a]) setTimeout(() => { if (state.voice && location.hash.includes(`/${rr.a}/${rr.b}`)) speak(sceneText()); }, 900);
@@ -295,22 +306,28 @@ function onRoute() {
   const st = viewOf(r), idx = +r.b - 1;
   const needStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
   const hard = !first && (needStage !== wasStage || (needStage && prevModel !== model(st.model)));
-  if (first || reduced || !hard) { setup(r, hard || first); render(); first = false; return; }
+  if (first || reduced || !hard) {
+    if (flyTl && flyTl.isActive()) { flyTl.kill(); rig.speed = 2.4; gsap.to($('#veil'), { opacity: 0, duration: .3 }); gsap.to(camera, { fov: 42, duration: .5, onUpdate: () => camera.updateProjectionMatrix() }); }
+    setup(r, hard || first); render(); first = false; return; }
   // fly through a haze instead of cutting: dive in or pull away, swap the set while covered, then settle
-  const id = ++trans, veil = $('#veil'), T = rig.t;
+  const veil = $('#veil'), T = rig.t; if (flyTl) flyTl.kill();
   veil.style.background = VEIL[needStage ? st.ground : cur.ground] || VEIL.space;
   rig.speed = 3.4;
   if (wasStage) { T.maxR = 1e4; T.r *= 3; T.ph = Math.max(.35, T.ph - .5); } else { T.minR = 0; T.r *= .42; }
-  setTimeout(() => { if (id === trans) veil.classList.add('on'); }, 240);
-  setTimeout(() => {
-    if (id !== trans) return;
-    setup(r, true); render();
-    if (needStage) { rig.r = rig.t.r * 2.7; rig.ph = Math.max(.4, rig.t.ph - .55); rig.th = rig.t.th - .5; } else { rig.r = rig.t.r * .5; rig.th = rig.t.th - .15; }
-    rig.speed = 1.9; veil.classList.remove('on');
-    setTimeout(() => { if (id === trans) rig.speed = 2.4; }, 2200);
-  }, 600);
+  flyTl = gsap.timeline()
+    .to(camera, { fov: wasStage ? 50 : 34, duration: .6, ease: 'power2.in', onUpdate: () => camera.updateProjectionMatrix() }, 0)
+    .to(veil, { opacity: 1, duration: .36, ease: 'power2.in' }, .24)
+    .add(() => {
+      setup(r, true); render();
+      if (needStage) { rig.r = rig.t.r * 2.7; rig.ph = Math.max(.4, rig.t.ph - .55); rig.th = rig.t.th - .5; } else { rig.r = rig.t.r * .5; rig.th = rig.t.th - .15; }
+      rig.speed = 1.9; camera.fov = needStage ? 52 : 36;
+    })
+    .to(veil, { opacity: 0, duration: .5, ease: 'power2.out' })
+    .to(camera, { fov: 42, duration: 1.6, ease: 'power3.out', onUpdate: () => camera.updateProjectionMatrix() }, '<')
+    .to(rig, { speed: 2.4, duration: 1.2, ease: 'none' }, '>-.4');
 }
-let trans = 0;
+let flyTl = null;
+
 const VEIL = { mars: '#a5673f', moon: '#77777c', space: '#05040c' };
 function resetFx() {
   stage.dustTarget = 0; cur.fx = null; cur.fxT = 0;
@@ -501,7 +518,7 @@ function render() {
       h += `<h1>${L(q.q)}</h1><div class="qn">${t('qQ')} ${quiz.i + 1} ${t('of')} ${qs.length}</div><div class="opts">${q.o.map((o, k) => `<button class="opt ${done ? (k === q.a ? 'ok' : k === quiz.pick ? 'bad' : 'off') : ''}" data-act="ans" data-k="${k}" ${done ? 'disabled' : ''}><i>${'ABC'[k]}</i>${L(o)}</button>`).join('')}</div>
         ${done ? `<div class="found"><b>${quiz.pick === q.a ? t('qOk') : t('qNo')}</b><span>${L(q.why)}</span>${srcLink(q.src)}</div><div class="row"><button class="btn pri" data-act="qnext">${quiz.i < qs.length - 1 ? t('qNext') : t('qSee')}</button></div>` : ''}`;
     } else {
-      h += `<h1>${quiz.score}/${qs.length} ${t('qScore')}</h1><p class="lead">${t('qMsg')[quiz.score]}</p><div class="stamps one">${stampEl(m, true, quiz.score === qs.length)}</div>
+      h += `<h1><span id="qscore" data-n="${quiz.score}">${quiz.score}</span>/${qs.length} ${t('qScore')}</h1><p class="lead">${t('qMsg')[quiz.score]}</p><div class="stamps one">${stampEl(m, true, quiz.score === qs.length)}</div>
         <div class="row"><a class="btn pri" href="#/pasaporte">${t('seePass')}</a><button class="btn" data-act="qretry">${t('qRetry')}</button><a class="btn" href="#/inicio">${t('end')}</a></div>`;
     }
     h += `</div></div>`;
@@ -540,7 +557,7 @@ function render() {
       <h3>${es ? 'Uso de inteligencia artificial' : 'Use of artificial intelligence'}</h3><ul><li>${es ? 'El código, los textos y los modelos 3D de esta app se hicieron con ayuda de un asistente de IA (Devin, de Cognition) y fueron revisados por el equipo. Los datos se contrastaron con las páginas de NASA enlazadas.' : 'The code, texts and 3D models in this app were made with the help of an AI assistant (Devin, by Cognition) and reviewed by the team. Facts were checked against the linked NASA pages.'}</li></ul>
       <h3>${es ? 'Accesibilidad' : 'Accessibility'}</h3><ul><li>${es ? 'El «Modo liviano» baja la calidad gráfica para celulares y computadoras modestas. Toda la información está también en la sección Máquinas, sin necesidad del 3D.' : '“Light mode” lowers graphics quality for modest phones and computers. All information is also in the Machines section, with no need for 3D.'}</li></ul></div></div>`;
   }
-  ui.innerHTML = h;
+  ui.innerHTML = h; intro();
   if (r.view === 'explorar') { $('#slider').value = state.time; $('#slider').addEventListener('input', e => { state.time = +e.target.value; state.playing = false; }); exploreUI(true); }
 }
 $('#ui').addEventListener('click', e => {
@@ -567,7 +584,12 @@ addEventListener('keydown', e => {
   const r = state.route; if (r.view !== 'historia' || e.target.matches('input')) return; const i = +r.b || 1;
   if (e.key === 'ArrowRight' && i < 5) go(`#/historia/${r.a}/${i + 1}`); if (e.key === 'ArrowLeft' && i > 1) go(`#/historia/${r.a}/${i - 1}`);
 });
-let toastT = 0; function toast(s) { const el = $('#toast'); el.textContent = s; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2600); }
+let toastTl = null;
+function toast(s, stampCol) {
+  const el = $('#toast'); el.innerHTML = (stampCol ? '<i class="lt" aria-hidden="true"></i>' : '') + `<span>${esc(s)}</span>`; if (toastTl) toastTl.kill();
+  if (stampCol && !reduced) playStamp(el.firstChild, stampCol); else if (stampCol) el.firstChild.textContent = '✦';
+  toastTl = gsap.timeline().fromTo(el, { autoAlpha: 0, y: -14, xPercent: -50 }, { autoAlpha: 1, y: 0, xPercent: -50, duration: reduced ? 0 : .45, ease: 'back.out(1.6)' }).to(el, { autoAlpha: 0, y: -8, duration: reduced ? 0 : .35, ease: 'power2.in' }, stampCol ? 3.4 : 2.6);
+}
 
 // ---------- per-frame logic
 let lastYear = '', lastPlay = null;
@@ -599,7 +621,7 @@ function explore(dt) {
       const e = la < 1 ? ps * la * la : ps + (1 - ps) * ss((p - l0) / (1 - l0), 0, 1);
       f.group.visible = true; f.update(pts, e, la < 1); f.e = e; f.la = la; f.ps = ps; f.dist = dist; f.pts = pts;
       if (la < 1) { f.R.set(1, la > .62 ? (la - .62) * 9 : -1);
-        if (!reduced && la <= .62 && state.playing) exhaust.emit(f.rocket.position, tmpA.copy(UP).applyQuaternion(f.rocket.quaternion).negate(), .3, .03, 4, 1); }
+        if (!reduced && la <= .62 && state.playing) exhaust.fire(m.id, f.rocket.position, tmpA.copy(UP).applyQuaternion(f.rocket.quaternion).negate(), 1, la < .12); }
       if (!fm || m.tL > fm.tL) fm = m;
     }
     else if (flights[m.id]) flights[m.id].group.visible = false;
@@ -632,8 +654,7 @@ function storyFlight(dt) {
     tq.setFromUnitVectors(UP, n); F.rocket.quaternion.slerp(tq, 1 - ss0(asc, .05, .5)); if (u < IG) F.rocket.position.copy(pts[0]);
     R.set(power, sep);
     if (!reduced) { const back = tmpA.copy(UP).applyQuaternion(F.rocket.quaternion).negate(), base = F.rocket.position;
-      if (sep < 0) exhaust.emit(base, back, .1 + .25 * power, .03, power > .05 ? 5 : 0, 1.1);
-      if (u < IG + .03 && power > .2) { const side = new V3().randomDirection().cross(n).normalize(); exhaust.emit(base, side, .12, .02, 4, 1.8); } }
+      if (sep < 0 && power > .05) exhaust.fire(m.id, base, back, power, u < IG + .03 && power > .2); }
     if (!rig.moved && u < IG) { rig.t.th += Math.sin(clock.elapsedTime * 47) * .0012 * power; }
   }
   const dist = pts[0].distanceTo(pts[pts.length - 1]), ss = THREE.MathUtils.smoothstep, br = pins[m.id].body.r;
@@ -661,11 +682,11 @@ function fx(dt) {
 }
 
 // ---------- loop
-const clock = new THREE.Clock(); let slow = 0;
-function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+const clock = new THREE.Clock(); let slow = 0, lastDt = .016;
+function resize() { renderer.setSize(innerWidth, innerHeight, false); if (post) post.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
 function frame() {
-  const dt = Math.min(clock.getDelta(), .05), time = clock.elapsedTime, v = state.route.view;
+  const raw = clock.getDelta(); lastDt = raw; const dt = Math.min(raw, .05), time = clock.elapsedTime, v = state.route.view;
   W.update(dt, time); aimUpdate(dt);
   if (v === 'explorar') explore(dt);
   if (cur.flight && v === 'historia') { if (cur.static) cur.flight.update(pathFor(byId(STORIES[state.route.a].mission)), 1, false); else storyFlight(dt); }
@@ -680,7 +701,7 @@ function frame() {
   }
   for (const k in sitePins) if (sitePins[k].visible) sitePins[k].children[0].scale.setScalar(.16 * (1 + .25 * Math.sin(time * 3)));
   pinsUpdate(); labelsUpdate(); hoverUpdate();
-  renderer.render(scene, camera);
+  if (post) post.render(dt); else renderer.render(scene, camera);
   // adaptive resolution
   slow = dt > 1 / 32 ? slow + 1 : Math.max(0, slow - 2);
   if (slow > 120 && pr > .75) { pr = Math.max(.75, pr - .25); renderer.setPixelRatio(pr); resize(); slow = 0; }
@@ -691,3 +712,16 @@ THREE.DefaultLoadingManager.onLoad = () => $('#loading').classList.add('off');
 setTimeout(() => $('#loading').classList.add('off'), 6000);
 onRoute(); frame();
 window.__app = { state, rig, W, stage, cur, renderer, scene, camera };
+
+// tuning panel, dev server only: http://localhost:5173/?debug
+if (import.meta.env.DEV && new URLSearchParams(location.search).has('debug')) import('tweakpane').then(({ Pane }) => {
+  const pane = new Pane({ title: 'Still There · debug' }); pane.element.parentElement.style.zIndex = 20;
+  const stats = { fps: 0, calls: 0, particles: 0 };
+  setInterval(() => { stats.fps = Math.round(1 / Math.max(lastDt, .001)); stats.calls = renderer.info.render.calls; stats.particles = Object.values(exhaust.jets).reduce((n, j) => n + j.flame.particleNum + j.smoke.particleNum + j.pad.particleNum, 0); }, 250);
+  const mon = pane.addFolder({ title: 'Monitor' }); mon.addBinding(stats, 'fps', { readonly: true, view: 'graph', min: 0, max: 120 }); mon.addBinding(stats, 'calls', { readonly: true }); mon.addBinding(stats, 'particles', { readonly: true });
+  const look = pane.addFolder({ title: 'Look' });
+  look.addBinding(renderer, 'toneMappingExposure', { label: 'exposure', min: .3, max: 2.5 });
+  if (post) { for (const [k, o] of [['bloom', { min: 0, max: 3 }], ['threshold', { min: 0, max: 3 }], ['radius', { min: 0, max: 1 }], ['vignette', { min: 0, max: 1 }]]) look.addBinding(TUNE, k, o).on('change', post.sync); }
+  const fxf = pane.addFolder({ title: 'Exhaust' }); fxf.addBinding(TUNE, 'flame', { min: 0, max: 3 }); fxf.addBinding(TUNE, 'smoke', { min: 0, max: 3 });
+  const cf = pane.addFolder({ title: 'Camera' }); cf.addBinding(rig, 'speed', { min: .5, max: 8 }); cf.addBinding(rig, 'r', { readonly: true });
+});

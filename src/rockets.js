@@ -49,29 +49,12 @@ export function makeRocket(family) {
   R.set = (k, sep) => {
     const len = sp.stages[0][0] * (.5 + 1.9 * k) * (.9 + Math.random() * .2);
     flame.scale.y = len; flame.position.y = -len / 2; core.scale.y = len * .6; core.position.y = -len * .3;
-    const on = sep < 0; flame.visible = core.visible = on && k > .02; glow.visible = k > .02; glow.scale.setScalar((on ? .05 + .13 * k : .04) * (.9 + Math.random() * .2));
+    const on = sep < 0; flame.visible = core.visible = on && k > .02; glow.visible = k > .02; glow.scale.setScalar((on ? .02 + .035 * k : .025) * (.9 + Math.random() * .2));
     glow.position.y = on ? -.004 : y1 * S;
     uflame.visible = !on; if (!on) uflame.scale.y = .8 + Math.random() * .4;
     stage1.visible = sep < 6; stage1.position.y = on ? 0 : -sep * 9 - sep * sep * 5; stage1.rotation.x = on ? 0 : sep * .22; stage1.rotation.z = on ? 0 : sep * .09;
   };
   return R;
-}
-
-// exhaust and smoke particles in world space
-export function makeExhaust(scene, n = 260) {
-  const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), vel = new Float32Array(n * 3), life = new Float32Array(n), max = new Float32Array(n);
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  const pts = new THREE.Points(g, new THREE.PointsMaterial({ map: GLOW, size: .045, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: .55, blending: THREE.AdditiveBlending, depthWrite: false }));
-  pts.frustumCulled = false; scene.add(pts); let next = 0; const v = new THREE.Vector3();
-  const E = { pts };
-  E.emit = (p, dir, speed, spread, count, ttl) => { for (let i = 0; i < count; i++) { const k = next = (next + 1) % n; v.randomDirection().multiplyScalar(spread).addScaledVector(dir, speed);
-    pos.set([p.x, p.y, p.z], k * 3); vel.set([v.x, v.y, v.z], k * 3); life[k] = max[k] = ttl * (.6 + Math.random() * .8); } };
-  E.update = dt => { for (let k = 0; k < n; k++) { if (life[k] <= 0) { col.set([0, 0, 0], k * 3); continue; } life[k] -= dt; const a = Math.max(0, life[k] / max[k]), i = k * 3;
-    pos[i] += vel[i] * dt; pos[i + 1] += vel[i + 1] * dt; pos[i + 2] += vel[i + 2] * dt; vel[i] *= .985; vel[i + 1] *= .985; vel[i + 2] *= .985;
-    const hot = Math.max(0, a - .65) * 2.8; col.set([(.42 + hot) * a, (.4 + hot * .7) * a, (.42 + hot * .3) * a], i); }
-    g.attributes.position.needsUpdate = g.attributes.color.needsUpdate = true; };
-  E.clear = () => { life.fill(0); };
-  return E;
 }
 
 export function makePad() {

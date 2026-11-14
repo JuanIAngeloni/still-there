@@ -34,3 +34,11 @@ El código, los textos y los modelos 3D se hicieron con ayuda de un asistente de
 - **Trajectories:** `python3 scripts/horizons.py` queries NASA/JPL Horizons once and writes `src/trajectories.json` (heliocentric ecliptic positions, AU) for the 10 spacecraft Horizons has: Pioneer 10, NEAR Shoemaker, Mars Pathfinder, Spirit, Opportunity, Phoenix, Dawn, Kepler, InSight and Mars 2020 (Ingenuity's ride). The site only reads that file. Surveyor 1, Apollo 11/15/17 and Viking 1 are not in Horizons. The flights in the main 3D scene are still illustrative; the real paths are shown in the "Real trajectory" view.
 - **Official models:** `public/models/*.glb` come unmodified from [NASA 3D Resources](https://github.com/nasa/NASA-3D-Resources) (Viking Lander, InSight, Ingenuity, NEAR Shoemaker, Dawn, Kepler). Opportunity, Eagle and Pioneer 10 use simplified models built in code.
 - **Sound:** `public/audio/` holds two NASA recordings: Apollo 11 "The Eagle has landed" and the first sound recorded on Mars by Perseverance (2021). Scene narration uses the browser's speech synthesis.
+
+## Libraries
+
+- **postprocessing:** HDR composer with bloom, vignette and ACES tone mapping (`src/fx.js`). Off in lite mode.
+- **three.quarks:** rocket flame, smoke trail and pad cloud. Pinned to 0.16 because 0.17+ needs three >= 0.182.
+- **gsap:** camera dive between space and a machine, toasts, passport stamps and quiz score.
+- **lottie-web:** stamp animation shown when a stamp is earned; the Lottie document is generated in code and the player is loaded on demand.
+- **tweakpane (dev only):** tuning panel at `http://localhost:5173/?debug` while running `npm run dev`.
