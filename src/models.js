@@ -12,7 +12,41 @@ function noiseTex(size, base, amp, seed = 3, repeat = 1) {
   g.globalAlpha = .5; g.drawImage(c, 0, 0, size / 4, size / 4, 0, 0, size, size); g.globalAlpha = 1;
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat, repeat); return t;
 }
-const FOIL = () => noiseTex(256, 128, 200, 9, 3);
+const cache = {};
+const once = (k, f) => cache[k] || (cache[k] = f());
+function canvasTex(size, draw, srgb, rx = 1, ry = 1) {
+  const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+// crumpled foil: ridged noise gives sharp creases
+const FOIL = () => once('foil', () => canvasTex(256, (g, n) => {
+  const img = g.createImageData(n, n);
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+    const u = x / n * 9, v = y / n * 9, r = a => 1 - Math.abs(2 * a - 1);
+    const k = Math.pow(r(fb(u, v)) * .55 + r(fb(u * 2.3 + 7, v * 2.3)) * .3 + r(fb(u * 5.1, v * 5.1 + 3)) * .15, 1.6) * 255;
+    img.data.set([k, k, k, 255], (y * n + x) * 4);
+  }
+  g.putImageData(img, 0, 0);
+}, false, 2, 2));
+const BRUSHED = () => once('brushed', () => canvasTex(256, (g, n) => {
+  g.fillStyle = '#8a8a8a'; g.fillRect(0, 0, n, n); let s = 5; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 1400; i++) { const v = 90 + rnd() * 110; g.strokeStyle = `rgba(${v},${v},${v},.35)`; g.lineWidth = .6 + rnd(); const y = rnd() * n, x = rnd() * n; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 30 + rnd() * 120, y + (rnd() - .5) * 2); g.stroke(); }
+}, false, 2, 2));
+const PANELS = () => once('panels', () => canvasTex(512, (g, n) => {
+  g.fillStyle = '#b4b7bd'; g.fillRect(0, 0, n, n); let s = 23; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const cols = ['#a3a6ad', '#c6c9cf', '#8e9198', '#bfc2c8', '#2b2c31', '#d2d4d9', '#9a9da4', '#33343a'];
+  for (let i = 0; i < 70; i++) { const w = 40 + rnd() * 130, h = 40 + rnd() * 130, x = rnd() * n - 20, y = rnd() * n - 20;
+    g.fillStyle = cols[Math.floor(rnd() * cols.length)]; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(20,20,24,.55)'; g.lineWidth = 1.5; g.strokeRect(x, y, w, h);
+    g.fillStyle = 'rgba(30,30,34,.7)'; for (let k = 6; k < w - 4; k += 14) { g.fillRect(x + k, y + 3, 2, 2); g.fillRect(x + k, y + h - 5, 2, 2); } }
+  for (let i = 0; i < 300; i++) { g.fillStyle = `rgba(${rnd() > .5 ? 255 : 0},${rnd() > .5 ? 255 : 0},${rnd() > .5 ? 255 : 0},.03)`; g.fillRect(rnd() * n, rnd() * n, 20 + rnd() * 60, 2 + rnd() * 30); }
+}, true, 2, 1));
+const DISH = () => once('dish', () => canvasTex(512, (g, n) => {
+  g.fillStyle = '#eef0f3'; g.fillRect(0, 0, n, n);
+  for (let i = 0; i < 24; i++) { g.fillStyle = 'rgba(120,125,135,.5)'; g.fillRect(i * n / 24, 0, 2, n); }
+  for (let i = 1; i < 6; i++) { g.fillStyle = 'rgba(120,125,135,.35)'; g.fillRect(0, i * n / 6, n, 1.5); }
+  let s = 41; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 200; i++) { g.fillStyle = `rgba(90,95,110,${rnd() * .06})`; g.fillRect(rnd() * n, rnd() * n, 10 + rnd() * 40, 10 + rnd() * 40); }
+}, true));
 
 function strut(a, b, r, m) {
   const d = b.clone().sub(a), mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, d.length(), 8), m);
@@ -20,19 +54,26 @@ function strut(a, b, r, m) {
 }
 function part(root, parts, id) { const g = new THREE.Group(); g.userData.part = id; root.add(g); parts[id] = g; return g; }
 function finish(root, parts, anchors, info) {
-  root.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  const foil = FOIL(), br = BRUSHED();
+  root.traverse(o => { if (!o.isMesh) return; o.castShadow = true; o.receiveShadow = true; const m = o.material; if (!m.isMeshStandardMaterial) return;
+    if (m.bumpMap === foil) { m.roughnessMap = foil; m.roughness = .85; m.metalness = 1; m.bumpScale *= 2.2; }
+    else if (m.metalness >= .7 && !m.map && !m.bumpMap) { m.roughnessMap = br; m.roughness = Math.min(1, m.roughness * 1.7); m.bumpMap = br; m.bumpScale = .12; } });
   for (const id in parts) parts[id].traverse(o => { if (o.isMesh) { o.userData.part = id; o.userData.em0 = o.material.emissive ? o.material.emissive.clone() : null; } });
   return { group: root, parts, anchors, ...info };
 }
 
 function solarTex() {
-  const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
-  g.fillStyle = '#18224f'; g.fillRect(0, 0, 256, 256);
-  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
-    g.fillStyle = `hsl(${226 + (x * 7 + y * 3) % 12},60%,${30 + ((x + y) % 3) * 5}%)`; g.fillRect(x * 32 + 2, y * 32 + 2, 28, 28);
-  }
-  g.strokeStyle = 'rgba(200,210,255,.25)'; for (let i = 0; i < 256; i += 8) { g.beginPath(); g.moveTo(0, i); g.lineTo(256, i); g.stroke(); }
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  const t = canvasTex(512, (g, n) => {
+    g.fillStyle = '#0c1230'; g.fillRect(0, 0, n, n); const cw = n / 8, ch = n / 16;
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 8; x++) {
+      const gr = g.createLinearGradient(x * cw, y * ch, x * cw + cw, y * ch + ch), l = 22 + ((x * 5 + y * 3) % 7) * 2;
+      gr.addColorStop(0, `hsl(${228 + (x + y) % 3 * 4},62%,${l + 8}%)`); gr.addColorStop(1, `hsl(232,58%,${l}%)`);
+      g.fillStyle = gr; g.fillRect(x * cw + 1.5, y * ch + 1.5, cw - 3, ch - 3);
+      g.fillStyle = 'rgba(210,220,255,.28)'; for (let k = 1; k < 8; k++) g.fillRect(x * cw + 2, y * ch + k * ch / 8, cw - 4, .6);
+      g.fillStyle = 'rgba(225,230,245,.6)'; g.fillRect(x * cw + cw * .3, y * ch + 1.5, 1.4, ch - 3); g.fillRect(x * cw + cw * .7, y * ch + 1.5, 1.4, ch - 3);
+    }
+  }, true);
+  return t;
 }
 
 // ---------- Opportunity (Mars Exploration Rover), built from primitives; proportions approximate
@@ -100,7 +141,7 @@ export function makeOpportunity() {
 export function makeEagle() {
   const root = new THREE.Group(), parts = {};
   const gold = () => mat(0xc9962e, { metalness: .95, roughness: .42, bumpMap: FOIL(), bumpScale: 1.4 });
-  const grey = () => mat(0xb4b7bd, { metalness: .75, roughness: .45 }), dark = () => mat(0x1c1d22, { metalness: .4, roughness: .6 });
+  const grey = () => mat(0xffffff, { map: PANELS(), metalness: .6, roughness: .5, bumpMap: PANELS(), bumpScale: .5 }), dark = () => mat(0x1c1d22, { metalness: .4, roughness: .6 });
   const descent = part(root, parts, 'descent');
   const ds = new THREE.Mesh(new THREE.CylinderGeometry(2.25, 2.25, 1.7, 8), gold()); ds.position.y = 2.35; ds.rotation.y = Math.PI / 8; descent.add(ds);
   for (let i = 0; i < 4; i++) { const p = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.2, .04), dark()); const an = i * Math.PI / 2; p.position.set(Math.cos(an) * 2.09, 2.35, Math.sin(an) * 2.09); p.rotation.y = -an + Math.PI / 2; descent.add(p); }
@@ -161,7 +202,7 @@ export function makePioneer() {
   const alu = () => mat(0xc4c7ce, { metalness: .85, roughness: .32 }), gold = () => mat(0xc9962e, { metalness: .95, roughness: .42, bumpMap: FOIL(), bumpScale: 1 });
   const dish = part(spin, parts, 'dish');
   const pts = []; for (let i = 0; i <= 24; i++) { const r = 1.37 * i / 24; pts.push(new THREE.Vector2(r, .46 * (r / 1.37) ** 2)); }
-  const d = new THREE.Mesh(new THREE.LatheGeometry(pts, 64), mat(0xeceef2, { metalness: .55, roughness: .35, side: THREE.DoubleSide })); dish.add(d);
+  const d = new THREE.Mesh(new THREE.LatheGeometry(pts, 64), mat(0xffffff, { map: DISH(), metalness: .35, roughness: .45, side: THREE.DoubleSide })); dish.add(d);
   for (let i = 0; i < 3; i++) { const an = i * 2.094 + .5; dish.add(strut(V(Math.cos(an) * 1.2, .36, Math.sin(an) * 1.2), V(0, 1.2, 0), .015, alu())); }
   const feed = new THREE.Mesh(new THREE.CylinderGeometry(.08, .1, .22, 16), alu()); feed.position.y = 1.25; dish.add(feed);
 

@@ -16,7 +16,7 @@ export const MISSIONS = [
   { id: 'surveyor1', name: 'Surveyor 1', dest: 'moon', type: 'lander', launch: '1966-05-30', arrive: '1966-06-02', site: 'cape', rocket: 'Atlas-Centaur', lat: -2.4745, lon: -43.3398,
     place: { es: 'Oceanus Procellarum', en: 'Oceanus Procellarum' }, src: N('1966-045A'),
     line: { es: 'El primer aterrizaje suave de Estados Unidos en la Luna. Mandó 10.338 fotos antes de su primera noche lunar.', en: 'The first US soft landing on the Moon. It returned 10,338 photos before its first lunar night.' } },
-  { id: 'apollo11', name: 'Eagle · Apollo 11', short: 'Eagle', dest: 'moon', type: 'crew', launch: '1969-07-16', arrive: '1969-07-20', site: 'cape', rocket: 'Saturn V', lat: 0.67416, lon: 23.47314, story: 'eagle',
+  { id: 'apollo11', name: 'Eagle · Apollo 11', short: 'Eagle', dest: 'moon', type: 'crew', launch: '1969-07-16', arrive: '1969-07-20', site: 'cape', rocket: 'Saturn V', lat: 0.67416, lon: 23.47314, story: 'eagle', end: '1969-07-21', endLabel: { es: 'Quedó sola en la Luna', en: 'Left alone on the Moon' },
     place: { es: 'Mar de la Tranquilidad', en: 'Sea of Tranquility' }, src: N('1969-059C'),
     line: { es: 'El primer vehículo con tripulación que se posó en la Luna. Su mitad de abajo sigue ahí.', en: 'The first crewed vehicle to land on the Moon. Its lower half is still there.' } },
   { id: 'apollo15', name: 'Falcon y rover lunar · Apollo 15', short: 'Apollo 15', dest: 'moon', type: 'crew', launch: '1971-07-26', arrive: '1971-07-30', site: 'cape', rocket: 'Saturn V', lat: 26.13239, lon: 3.6333,

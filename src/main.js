@@ -39,6 +39,7 @@ const UI = {
   },
   all: ['Todas las máquinas', 'All machines'], parts: ['Piezas', 'Parts'], seeParts: ['Ver sus piezas', 'See its parts'], goThere: ['clic para ver qué quedó ahí', 'click to see what was left there'], tapPart: ['clic para ver qué hizo', 'click to see what it did'], tapPin: ['clic para ver su ficha', 'click to open its card'],
   photos: ['Fotos de NASA', 'NASA photos'], art: ['Ilustración', 'Illustration'], photo: ['Foto real', 'Real photo'], credit: ['Crédito', 'Credit'], close: ['Cerrar', 'Close'], openImg: ['Ver en la biblioteca de NASA ↗', 'View in the NASA library ↗'],
+  log: ['Historial', 'Event log'], logEmpty: ['Dale a Reproducir: acá se va anotando cada despegue, llegada y última señal.', 'Press Play: every launch, arrival and last signal gets logged here.'], off: ['Fuera de servicio', 'Out of service'], evLaunch: ['Despegó de', 'Lifted off from'], evArrive: ['Llegó a', 'Arrived at'], backLog: ['← Historial', '← Event log'], active: ['En servicio', 'In service'],
   inApp: ['máquinas en esta app', 'machines in this app'], first: ['la primera en llegar', 'first to arrive'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -54,7 +55,9 @@ const fmt = d => { const [y, m, dd] = d.split('-').map(Number); return state.lan
 const yr = d => { const [y, m, dd] = d.split('-').map(Number); return y + ((m - 1) * 30.44 + dd) / 365.25; };
 const DEST_COL = { moon: '#9d8cff', mars: '#ff8a4c', deep: '#3fe0c5' };
 const NOW = 2026.87, T0 = 1965;
-MISSIONS.forEach(m => { m.tL = yr(m.launch); m.dur = Math.max(.6, Math.min(yr(m.arrive) - m.tL, 1.5)); m.col = DEST_COL[m.dest]; });
+MISSIONS.forEach(m => { m.tL = yr(m.launch); m.dur = Math.max(.6, yr(m.arrive) - m.tL); m.tE = m.end ? Math.max(yr(m.end), m.tL + m.dur + .02) : Infinity; m.col = DEST_COL[m.dest]; });
+const EVENTS = MISSIONS.flatMap(m => [{ t: m.tL, k: 'launch', m, d: m.launch }, { t: m.tL + m.dur, k: 'arrive', m, d: m.arrive }, ...(m.end ? [{ t: m.tE, k: 'end', m, d: m.end }] : [])]).sort((a, b) => a.t - b.t);
+const OFFC = new THREE.Color(0x6f6f80);
 const byId = id => MISSIONS.find(m => m.id === id);
 
 // ---------- renderer
@@ -265,7 +268,7 @@ function setup(r, snap) {
   const useStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
   cur.stage = useStage; cur.ground = useStage ? st.ground : null; stage.group.visible = useStage; W.group.visible = !useStage; W.sunLight.visible = !useStage; W.fill.visible = !useStage;
   scene.fog = useStage && st.ground === 'mars' ? fogMars : null; cur.model = null;
-  for (const mm of MISSIONS) { const p = pins[mm.id]; p.on = true; p.s.scale.setScalar(p.base); }
+  for (const mm of MISSIONS) { const p = pins[mm.id]; p.on = true; p.s.scale.setScalar(p.base); p.s.material.color.set(mm.col); }
   document.body.classList.toggle('dim', r.view === 'maquinas' || r.view === 'fuentes');
   const bodyLabels = names => names.forEach(n => addLabel(t(n), 'body', v => wpos(W.bodies[n].obj, v), { dy: n === 'earth' || n === 'jupiter' ? -74 : -34 }));
 
@@ -399,8 +402,8 @@ function render() {
   } else if (r.view === 'explorar') {
     const sel = state.sel && byId(state.sel);
     h = nav('explorar') + `<aside class="panel left"><span class="eyebrow" style="--acc:var(--c)">${t('explorar')}</span>
-      <div class="list" id="mlist">${MISSIONS.map(m => `<a class="item" data-m="${m.id}" href="#/explorar/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.launch.slice(0, 4)}</span></a>`).join('')}</div></aside>
-      ${sel ? `<section class="panel over" aria-live="polite" style="--acc:${sel.col}">${missionCard(sel, `<a class="btn" href="#/destinos/${sel.dest}/${sel.id}">${t('seeOn')}</a>`)}</section>` : ''}
+      <div class="list" id="mlist">${MISSIONS.map(m => `<a class="item" data-m="${m.id}" href="#/explorar/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span data-y="${m.launch.slice(0, 4)}">${m.launch.slice(0, 4)}</span></a>`).join('')}</div></aside>
+      ${sel ? `<section class="panel over" aria-live="polite" style="--acc:${sel.col}">${missionCard(sel, `<a class="btn" href="#/destinos/${sel.dest}/${sel.id}">${t('seeOn')}</a><a class="btn" href="#/explorar">${t('backLog')}</a>`)}</section>` : `<section class="panel over" style="--acc:var(--c)"><span class="eyebrow">${t('log')}</span><div class="log" id="log" aria-live="polite"></div></section>`}
       <div class="time"><button class="btn pri" data-act="play" id="playb"></button><div class="year" id="year"></div>
       <div class="track">${MISSIONS.map(m => `<i class="tick" style="left:${((m.tL - T0) / (NOW - T0) * 100).toFixed(2)}%;--k:${m.col}"></i>`).join('')}<input id="slider" type="range" min="${T0}" max="${NOW}" step="0.01" aria-label="${state.lang === 'es' ? 'Año' : 'Year'}"></div></div>`;
   } else if (r.view === 'destinos') {
@@ -408,11 +411,11 @@ function render() {
     h = nav('destinos') + `<div class="chip">${t('chip')}</div><div class="seg">${['moon', 'mars', 'deep'].map(k => `<a class="tab ${k === d ? 'on' : ''}" href="#/destinos/${k}">${t(k)}</a>`).join('')}</div>
       <section class="panel" style="--acc:${DEST_COL[d]}" aria-live="polite">${sel ? missionCard(sel) : `<span class="eyebrow">${t('destinos')}</span><h1>${t(d)}</h1><p class="lead">${UI.destLead[d][state.lang === 'es' ? 0 : 1]}</p>
       <dl class="kv"><dt>${list.length}</dt><dd>${t('inApp')}</dd><dt>${firstM.arrive.slice(0, 4)}</dt><dd>${t('first')}: ${esc(firstM.short || firstM.name)}</dd></dl>`}
-      <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
+      <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.end ? `${t('off')} · ${m.end.slice(0, 4)}` : m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
       <div class="note">${d === 'deep' ? t('noteScale') + ' ' + t('noteDrawn') : t('noteScale')}</div>`;
   } else if (r.view === 'maquinas') {
     h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}">${IMAGES[m.id] ? `<button class="shot cover" data-act="img" data-m="${m.id}" data-i="0"><img src="${IMAGES[m.id][0].f}" alt="${esc(L(IMAGES[m.id][0].cap))}" loading="lazy"><em>${IMAGES[m.id].length} ${t('photos').toLowerCase()}</em></button>` : ''}<span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
-      <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
+      <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd>${m.end ? `<dt>${t('off')}</dt><dd>${fmt(m.end)}</dd>` : ''}</dl>
       <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
   } else {
     const es = state.lang === 'es';
@@ -453,12 +456,16 @@ function exploreUI(force) {
   const y = String(Math.floor(state.time)); if (force || y !== lastYear) { const el = $('#year'); if (el) el.textContent = y; lastYear = y; }
   if (force || lastPlay !== state.playing) { const b = $('#playb'); if (b) b.textContent = state.playing ? t('pause') : t('play'); lastPlay = state.playing; }
   const s = $('#slider'); if (s && document.activeElement !== s) s.value = state.time;
-  document.querySelectorAll('#mlist .item').forEach(el => { const m = byId(el.dataset.m), w = state.time < m.tL, f = !w && state.time < m.tL + m.dur; el.classList.toggle('wait', w); el.classList.toggle('fly', f); el.classList.toggle('on', m.id === state.sel); });
+  document.querySelectorAll('#mlist .item').forEach(el => { const m = byId(el.dataset.m), w = state.time < m.tL, f = !w && state.time < m.tL + m.dur; el.classList.toggle('wait', w); el.classList.toggle('fly', f); el.classList.toggle('on', m.id === state.sel);
+    const off = state.time >= m.tE; if (el.classList.contains('off') !== off) { el.classList.toggle('off', off); const sp = el.querySelector('span'); sp.textContent = off ? `${t('off')} · ${m.end.slice(0, 4)}` : sp.dataset.y; } });
+  const log = $('#log'); if (log) { const n = EVENTS.filter(e => e.t <= state.time).length;
+    if (force || +log.dataset.n !== n) { log.dataset.n = n;
+      log.innerHTML = n ? EVENTS.slice(0, n).reverse().map(e => `<a class="ev ${e.k}" href="#/explorar/${e.m.id}"><time>${fmt(e.d)}</time><b>${esc(e.m.short || e.m.name)}</b><span>${e.k === 'launch' ? `${t('evLaunch')} ${L(SITES[e.m.site])} · ${e.m.rocket}` : e.k === 'arrive' ? (L(e.m.arriveLabel) || `${t('evArrive')} ${L(e.m.place)}`) : `${L(e.m.endLabel) || t('last')} · ${t('off').toLowerCase()}`}</span></a>`).join('') : `<p>${t('logEmpty')}</p>`; } }
 }
 function explore(dt) {
   const prev = state.time;
   if (state.playing) {
-    const busy = MISSIONS.some(m => state.time >= m.tL - .02 && state.time < m.tL + m.dur);
+    const busy = MISSIONS.some(m => state.time >= m.tL - .02 && state.time < m.tL + Math.min(m.dur, .8)) || EVENTS.some(e => Math.abs(state.time - e.t) < .12);
     state.time = Math.min(NOW, state.time + dt * (busy ? .42 : 3.2)); if (state.time >= NOW) state.playing = false;
     for (const m of MISSIONS) if (prev < m.tL && state.time >= m.tL) toast(`${m.launch.slice(0, 4)} · ${m.short || m.name} ${t('lifts')} ${L(SITES[m.site])}`);
   }
@@ -466,6 +473,7 @@ function explore(dt) {
     const p = (state.time - m.tL) / m.dur, pin = pins[m.id]; pin.on = p >= 1;
     if (p >= 0 && p < 1) { const f = flight(m); f.group.visible = true; const e = p * p * (3 - 2 * p); f.update(pathFor(m), e, false); }
     else if (flights[m.id]) flights[m.id].group.visible = false;
+    pin.s.material.color.set(state.time >= m.tE ? OFFC : m.col);
     if (p >= 1) { const pulse = m.id === state.sel ? 1.5 + .5 * Math.sin(clock.elapsedTime * 4) : Math.max(1, 2.2 - (p - 1) * 2); pin.s.scale.setScalar(pin.base * (pin.surf ? (state.sel ? 1.6 : 6) : 1.6) * pulse); }
   }
   exploreUI(false);
@@ -482,7 +490,7 @@ function storyFlight(dt) {
   const ph = $('#fphase'); if (ph) ph.textContent = t('phases')[p < .05 ? 0 : p < .97 ? 1 : 2];
 }
 function highlight(time) {
-  const md = cur.model; if (!md) return; const pulse = .28 + .18 * Math.sin(time * 4);
+  const md = cur.model; if (!md) return; const pulse = .1 + .07 * Math.sin(time * 4);
   md.group.traverse(o => { if (!o.isMesh || !o.material.emissive) return; const on = state.part && o.userData.part === state.part; if (on) o.material.emissive.setRGB(.25 * pulse, 1 * pulse, .85 * pulse); else if (hoverPart && o.userData.part === hoverPart) o.material.emissive.setRGB(.05, .2, .17); else if (o.userData.em0) o.material.emissive.copy(o.userData.em0); });
 }
 const dusty = new THREE.Color(0x9a6a48), white = new THREE.Color(0xffffff);
