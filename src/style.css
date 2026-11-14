@@ -74,7 +74,7 @@ p{margin:0;color:var(--dim);line-height:1.45;font-size:16px}
 .pick .links a{color:var(--acc);text-decoration:none}.pick .links a+a{color:var(--dim)}
 .pick .links a:hover{text-decoration:underline;color:var(--ink)}
 .note{position:absolute;left:28px;bottom:10px;font-size:11.5px;color:rgba(170,164,200,.7);max-width:52vw}
-.chip{position:absolute;left:50%;transform:translateX(-50%);top:74px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(170,164,200,.75);white-space:nowrap}
+.chip{position:absolute;right:calc(min(540px,43vw) + 12px);top:82px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(170,164,200,.75);white-space:nowrap}
 
 .lbl{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap;padding:4px 9px 4px 6px;background:rgba(var(--scrim),.7);border:1px solid var(--ln);text-decoration:none;will-change:transform;transition:opacity .25s,background .2s,color .2s}
 .lbl i{width:8px;height:8px;border-radius:50%;background:var(--k,var(--v));box-shadow:0 0 10px var(--k,var(--v))}
