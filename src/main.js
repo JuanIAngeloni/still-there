@@ -42,6 +42,7 @@ const UI = {
   photos: ['Fotos de NASA', 'NASA photos'], art: ['Ilustración', 'Illustration'], photo: ['Foto real', 'Real photo'], credit: ['Crédito', 'Credit'], close: ['Cerrar', 'Close'], openImg: ['Ver en la biblioteca de NASA ↗', 'View in the NASA library ↗'],
   log: ['Historial', 'Event log'], logEmpty: ['Dale a Reproducir: acá se va anotando cada despegue, llegada y última señal.', 'Press Play: every launch, arrival and last signal gets logged here.'], off: ['Fuera de servicio', 'Out of service'], evLaunch: ['Despegó de', 'Lifted off from'], evArrive: ['Llegó a', 'Arrived at'], backLog: ['← Historial', '← Event log'], active: ['En servicio', 'In service'],
   inApp: ['máquinas en esta app', 'machines in this app'], first: ['la primera en llegar', 'first to arrive'],
+  followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
   allTitle: ['Las máquinas', 'The machines'], allLead: ['Tres tienen su historia completa. El resto, su ficha con la fuente de NASA.', 'Three have a full story. The rest have a fact card with its NASA source.'],
@@ -318,7 +319,8 @@ function setup(r, snap) {
     if (sm) { const pb = pins[sm.id].body; if (sm.dest !== 'deep') { aimBody(sm.dest, sm.lat, sm.lon); }
       cam({ focus: () => wpos(sm.dest === 'deep' ? pins[sm.id].g : pb.obj, tmpB), r: sm.dest === 'deep' ? 9 : pb.r * 5.5, th: 1.95, ph: 1.12, sx: .05, sy: .04, minR: 1, maxR: 140,
         follow: sm.dest === 'deep' ? null : () => wpos(pins[sm.id].g, new V3()).sub(wpos(pb.obj, tmpA)).normalize() }, snap); }
-    else cam({ focus: () => tmpB.set(6.5, .2, -3), r: 21, th: 1.95, ph: 1.12, sx: -.1, sy: .06, minR: 4, maxR: 140 }, snap);
+    else overviewCam(snap);
+    cur.followId = null;
     bodyLabels(['earth', 'moon', 'mars', 'jupiter', 'eros', 'ceres'].filter(n => !(r.a && byId(r.a) && byId(r.a).dest === n)));
     
   }
@@ -401,7 +403,7 @@ function render() {
     h = nav('explorar') + `<aside class="panel left"><span class="eyebrow" style="--acc:var(--c)">${t('explorar')}</span>
       <div class="list" id="mlist">${MISSIONS.map(m => `<a class="item" data-m="${m.id}" href="#/explorar/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span data-y="${m.launch.slice(0, 4)}">${m.launch.slice(0, 4)}</span></a>`).join('')}</div></aside>
       ${sel ? `<section class="panel over" aria-live="polite" style="--acc:${sel.col}">${missionCard(sel, `<a class="btn" href="#/destinos/${sel.dest}/${sel.id}">${t('seeOn')}</a><a class="btn" href="#/explorar">${t('backLog')}</a>`)}</section>` : `<section class="panel over" style="--acc:var(--c)"><span class="eyebrow">${t('log')}</span><div class="log" id="log" aria-live="polite"></div></section>`}
-      <div class="time"><button class="btn pri" data-act="play" id="playb"></button><div class="year" id="year"></div>
+      <div class="time"><span id="ftag"></span><button class="btn pri" data-act="play" id="playb"></button><button class="btn tog" data-act="follow" id="followb" aria-pressed="${!!state.follow}" title="${t('followTip')}">◎ ${t('followB')}</button><div class="year" id="year"></div>
       <div class="track">${MISSIONS.map(m => `<i class="tick" style="left:${((m.tL - T0) / (NOW - T0) * 100).toFixed(2)}%;--k:${m.col}"></i>`).join('')}<input id="slider" type="range" min="${T0}" max="${NOW}" step="0.01" aria-label="${state.lang === 'es' ? 'Año' : 'Year'}"></div></div>`;
   } else if (r.view === 'destinos') {
     const d = ['moon', 'mars', 'deep'].includes(r.a) ? r.a : 'moon', list = MISSIONS.filter(m => m.dest === d), sel = state.sel && byId(state.sel), firstM = list.reduce((a, b) => a.arrive < b.arrive ? a : b);
@@ -436,6 +438,7 @@ $('#ui').addEventListener('click', e => {
   if (a === 'lite') { localStorage.setItem('lite', state.lite ? '0' : '1'); location.reload(); }
   if (a === 'img') lightbox(b.dataset.m, +b.dataset.i);
   if (a === 'replay') { cur.u = 0; exhaust.clear(); }
+  if (a === 'follow') { state.follow = !state.follow; b.setAttribute('aria-pressed', state.follow); if (state.follow && !state.playing && state.time < NOW - .05) state.playing = true; }
   if (a === 'play') { if (state.time >= NOW - .05) state.time = T0; state.playing = !state.playing; }
 });
 $('#lb').addEventListener('click', e => { const lb = $('#lb'), b = e.target.closest('[data-lb]');
@@ -459,20 +462,41 @@ function exploreUI(force) {
     if (force || +log.dataset.n !== n) { log.dataset.n = n;
       log.innerHTML = n ? EVENTS.slice(0, n).reverse().map(e => `<a class="ev ${e.k}" href="#/explorar/${e.m.id}"><time>${fmt(e.d)}</time><b>${esc(e.m.short || e.m.name)}</b><span>${e.k === 'launch' ? `${t('evLaunch')} ${L(SITES[e.m.site])} · ${e.m.rocket}` : e.k === 'arrive' ? (L(e.m.arriveLabel) || `${t('evArrive')} ${L(e.m.place)}`) : `${L(e.m.endLabel) || t('last')} · ${t('off').toLowerCase()}`}</span></a>`).join('') : `<p>${t('logEmpty')}</p>`; } }
 }
+function overviewCam(snap) { cam({ focus: () => tmpB.set(6.5, .2, -3), r: 21, th: 1.95, ph: 1.12, sx: -.1, sy: .06, minR: 4, maxR: 140 }, snap); }
+const LAUNCH = .05; // years of timeline shown as the close-up launch
 function explore(dt) {
   const prev = state.time;
   if (state.playing) {
     const busy = MISSIONS.some(m => state.time >= m.tL - .02 && state.time < m.tL + Math.min(m.dur, .8)) || EVENTS.some(e => Math.abs(state.time - e.t) < .12);
-    state.time = Math.min(NOW, state.time + dt * (busy ? .42 : 3.2)); if (state.time >= NOW) state.playing = false;
+    const lifting = state.follow && !state.sel && MISSIONS.some(m => state.time >= m.tL - .004 && state.time < m.tL + LAUNCH);
+    state.time = Math.min(NOW, state.time + dt * (lifting ? .011 : cur.followId ? Math.max(.07, byId(cur.followId).dur / 9) : busy ? .42 : 3.2)); if (state.time >= NOW) state.playing = false;
     for (const m of MISSIONS) if (prev < m.tL && state.time >= m.tL) toast(`${m.launch.slice(0, 4)} · ${m.short || m.name} ${t('lifts')} ${L(SITES[m.site])}`);
   }
+  let fm = null; const ss = THREE.MathUtils.smoothstep;
   for (const m of MISSIONS) {
     const p = (state.time - m.tL) / m.dur, pin = pins[m.id]; pin.on = p >= 1;
-    if (p >= 0 && p < 1) { const f = flight(m); f.group.visible = true; const e = p * p * (3 - 2 * p); f.update(pathFor(m), e, false); }
+    if (p >= 0 && p < 1) {
+      const f = flight(m), pts = pathFor(m), dist = pts[0].distanceTo(pts[pts.length - 1]), ps = THREE.MathUtils.clamp(.4 / dist, .004, .3), la = Math.min(1, (state.time - m.tL) / LAUNCH), l0 = LAUNCH / m.dur;
+      const e = la < 1 ? ps * la * la : ps + (1 - ps) * ss((p - l0) / (1 - l0), 0, 1);
+      f.group.visible = true; f.update(pts, e, la < 1); f.e = e; f.la = la; f.ps = ps; f.dist = dist; f.pts = pts;
+      if (la < 1) { f.R.set(1, la > .62 ? (la - .62) * 9 : -1);
+        if (!reduced && la <= .62 && state.playing) exhaust.emit(f.rocket.position, tmpA.copy(UP).applyQuaternion(f.rocket.quaternion).negate(), .3, .03, 4, 1); }
+      if (!fm || m.tL > fm.tL) fm = m;
+    }
     else if (flights[m.id]) flights[m.id].group.visible = false;
     pin.s.material.color.set(state.time >= m.tE ? OFFC : m.col);
     if (p >= 1) { const pulse = m.id === state.sel ? 1.5 + .5 * Math.sin(clock.elapsedTime * 4) : Math.max(1, 2.2 - (p - 1) * 2); pin.s.scale.setScalar(pin.base * (pin.surf ? (state.sel ? 1.6 : 6) : 1.6) * pulse); }
   }
+  // follow mode: lock the camera on the craft that launched last and is still travelling
+  const want = state.follow && !state.sel && fm ? fm.id : null; cur.padOn = false;
+  if (want !== cur.followId) { cur.followId = want; rig.zoomed = false;
+    if (want) cam({ focus: () => flights[want].pos, fk: 7, r: .4, th: rig.t.th, ph: 1.2, sx: .04, sy: .04, minR: .12, maxR: 140 }); else if (!state.sel) overviewCam(); }
+  if (want) { const f = flights[want], s = SITES[fm.site], br = pins[want].body.r;
+    if (f.la < 1) { cur.padOn = true; pad.visible = true; pad.position.copy(latLon(s.lat, s.lon, 1.0005)); pad.quaternion.setFromUnitVectors(UP, pad.position.clone().normalize()); }
+    if (!rig.moved) { const dir = tmpA.copy(f.pts[f.pts.length - 1]).sub(f.pts[0]), n = tmpB.copy(f.pts[0]).normalize(); let th = Math.atan2(dir.z, dir.x) + Math.PI / 2; if (Math.cos(th) * n.x + Math.sin(th) * n.z < 0) th += Math.PI; rig.t.th = th; rig.t.ph = 1.2; }
+    if (!rig.zoomed) rig.t.r = f.la < 1 ? .38 + .55 * f.la : THREE.MathUtils.lerp(THREE.MathUtils.lerp(.93, Math.max(2, Math.min(13, f.dist * .32)), ss(f.e, f.ps, .35)), Math.max(1.4, br * 6), ss(f.e, .75, 1));
+    const tg = $('#ftag'); if (tg) { const tx = `${fm.short || fm.name} · ${f.la < .62 ? t('phases')[1] : f.la < 1 ? t('phases')[2] : t('phases')[3]}`; if (tg.textContent !== tx) tg.textContent = tx; } }
+  else { const tg = $('#ftag'); if (tg && tg.textContent) tg.textContent = ''; }
   exploreUI(false);
 }
 const UP = new V3(0, 1, 0), tq = new THREE.Quaternion();
@@ -527,7 +551,7 @@ function frame() {
   if (v === 'explorar') explore(dt);
   if (cur.flight && v === 'historia') { if (cur.static) cur.flight.update(pathFor(byId(STORIES[state.route.a].mission)), 1, false); else storyFlight(dt); }
   if (cur.stage) { stage.update(dt); fx(dt); highlight(time); }
-  exhaust.update(dt); if (v !== 'historia' || !cur.flight || cur.static) pad.visible = false;
+  exhaust.update(dt); if (!(v === 'explorar' && cur.padOn) && (v !== 'historia' || !cur.flight || cur.static)) pad.visible = false;
   rigUpdate(dt); W.stars.position.copy(camera.position);
   if (cur.stage) { stage.light.target.position.copy(cur.model.center); }
   for (const k in sitePins) if (sitePins[k].visible) sitePins[k].children[0].scale.setScalar(.16 * (1 + .25 * Math.sin(time * 3)));
