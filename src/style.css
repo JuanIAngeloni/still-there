@@ -209,3 +209,4 @@ p{margin:0;color:var(--dim);line-height:1.45;font-size:16px}
 .found.scale{border-left-color:var(--c)}.found.scale em{display:block;font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:2px}
 .found.snd{border-left-color:var(--v)}.found.snd em{display:block;font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--v);margin-bottom:2px}
 .found.snd .row{margin-top:10px}.btn[aria-pressed="true"]:not(.tog){border-color:var(--c);color:var(--c)}
+.seg{max-width:calc(100vw - 28px);overflow-x:auto;scrollbar-width:none}.seg .tab{white-space:nowrap;flex:none}

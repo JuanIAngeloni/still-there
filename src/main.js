@@ -5,8 +5,10 @@ import '@fontsource/space-grotesk/700.css';
 import './style.css';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
-import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE, SOUNDS } from './data.js';
+import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE, SOUNDS, GLB } from './data.js';
 import { IMAGES } from './images.js';
 import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
 
@@ -48,8 +50,9 @@ const UI = {
   qMsg: [['Volvé a leer la historia y probá de nuevo.', 'Casi. Una repasada y lo sacás.', 'Muy bien. Te faltó una sola.', 'Perfecto. Te ganaste el sello dorado.'], ['Read the story again and have another go.', 'Almost. One more read and you have it.', 'Well done. Just one missed.', 'Perfect. You earned the gold stamp.']],
   seePass: ['Ver mi pasaporte', 'See my passport'], passReset: ['Borrar mis sellos', 'Clear my stamps'], notYet: ['Sin visitar', 'Not visited'], notDone: ['Sin terminar', 'Not finished'], saved: ['Los sellos se guardan solo en este navegador.', 'Stamps are saved only in this browser.'],
   scaleH: ['A escala', 'To scale'], scaleNasa: ['dato y comparación de NASA', 'figure and comparison by NASA'], scaleOurs: ['dato de NASA, comparación de esta app', 'NASA figure, comparison by this app'],
-  snd: ['Voz', 'Voice'], sndTip: ['Lee en voz alta cada escena de las historias', 'Reads each story scene aloud'], listen: ['🔈 Escuchar esta escena', '🔈 Listen to this scene'], stopL: ['■ Parar', '■ Stop'], playClip: ['▶ Escuchar', '▶ Listen'], sounds: ['Sonido real de NASA', 'Real NASA sound'],
+  snd: ['Voz', 'Voice'], sndTip: ['Lee en voz alta cada escena de las historias', 'Reads each story scene aloud'], listen: ['Escuchar esta escena', 'Listen to this scene'], stopL: ['■ Parar', '■ Stop'], playClip: ['▶ Escuchar', '▶ Listen'], sounds: ['Sonido real de NASA', 'Real NASA sound'],
   ttsNote: ['La lectura usa la voz sintética de tu navegador.', 'Reading uses your browser’s synthetic voice.'], noTts: ['Tu navegador no tiene lectura por voz.', 'Your browser has no speech reading.'],
+  see3d: ['Ver modelo 3D', 'See 3D model'], noteGlb: ['Modelo 3D oficial de NASA (NASA 3D Resources). Los modelos no están a escala entre sí.', 'Official NASA 3D model (NASA 3D Resources). Models are not to scale with each other.'], glbH: ['Modelo oficial de NASA', 'Official NASA model'], glbP: ['Girá y acercá el modelo. Es el que publica NASA, no uno armado por nosotros.', 'Rotate and zoom the model. It is the one NASA publishes, not one we built.'], glbSrc: ['Modelo en NASA 3D Resources', 'Model at NASA 3D Resources'], loadingM: ['Cargando modelo…', 'Loading model…'], ours: ['Con piezas', 'With parts'], official: ['Oficiales de NASA', 'Official NASA'],
   followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -108,8 +111,24 @@ const W = makeWorld(scene, renderer, state.lite), stage = makeStage(scene, state
 const fogMars = new THREE.FogExp2(0xb98660, .006);
 const envTex = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
 const models = {};
+const gltf = new GLTFLoader(); gltf.setDRACOLoader(new DRACOLoader().setDecoderPath('draco/'));
+function makeGlb(id) {
+  const sp = GLB[id].ground === 'space', D = sp ? 9 : 3.4, group = new THREE.Group();
+  const md = { group, parts: {}, anchors: {}, center: new V3(0, sp ? 0 : D * .3, 0), radius: sp ? 19 : 6.2, minR: sp ? 4 : 2, maxR: sp ? 40 : 18, ground: !sp, loaded: false };
+  gltf.load(`models/${id}.glb`, g => {
+    const o = g.scene, box = new THREE.Box3().setFromObject(o), size = box.getSize(new V3()), c = box.getCenter(new V3()), k = D / Math.max(size.x, size.y, size.z);
+    o.scale.setScalar(k); o.position.set(-c.x * k, sp ? -c.y * k : -box.min.y * k, -c.z * k);
+    if (!sp) md.center.set(0, size.y * k * .5, 0);
+    o.traverse(m => { if (!m.isMesh) return; m.castShadow = m.receiveShadow = true; m.userData.noPick = true; for (const mt of [].concat(m.material)) if (mt.isMeshStandardMaterial) { mt.envMap = envTex; mt.envMapIntensity = .7; } });
+    group.add(o); md.loaded = true; if (cur.model === md) render();
+  }, undefined, e => { console.error(e); toast('3D: ' + id + ' ✕'); });
+  return md;
+}
+const glbView = id => { const m = GLB[id] && byId(id); return m && { mission: id, model: id, ground: GLB[id].ground, color: m.col, tag: { es: `${t(m.dest)} · ${TYPES[m.type].es}`, en: `${t(m.dest)} · ${TYPES[m.type].en}` }, parts: [], glb: GLB[id] }; };
+const viewOf = r => STORIES[r.a] || (r.view === 'maquina' ? glbView(r.a) : undefined);
 function model(id) {
   if (models[id]) return models[id];
+  if (GLB[id]) return models[id] = makeGlb(id);
   const m = models[id] = { opportunity: makeOpportunity, eagle: makeEagle, pioneer: makePioneer }[id]();
   m.group.traverse(o => { if (o.isMesh && o.material.isMeshStandardMaterial) { o.material.envMap = envTex; o.material.envMapIntensity = id === 'opportunity' ? .75 : id === 'pioneer' ? .9 : .45; } });
   return m;
@@ -198,7 +217,7 @@ function targetAt(x, y) {
   const r = state.route; ndc.set(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
   if (cur.stage && cur.model) {
     const hit = ray.intersectObject(cur.model.group, true).find(h => h.object.userData.part && !h.object.userData.noPick && h.object.visible);
-    if (!hit) return null; const id = hit.object.userData.part, p = STORIES[r.a].parts.find(q => q.id === id);
+    if (!hit) return null; const id = hit.object.userData.part, p = viewOf(r).parts.find(q => q.id === id);
     return p && { part: id, text: L(p.name), hint: t('tapPart'), href: `#/maquina/${r.a}/${id}` };
   }
   if (!['inicio', 'explorar', 'destinos'].includes(r.view)) return null;
@@ -268,7 +287,7 @@ function onRoute() {
   stopSound(); const rr = parse(); if (state.voice && rr.view === 'historia' && STORIES[rr.a]) setTimeout(() => { if (state.voice && location.hash.includes(`/${rr.a}/${rr.b}`)) speak(sceneText()); }, 900);
   const r = parse(), wasStage = cur.stage, prevModel = cur.model;
   state.route = r;
-  const st = STORIES[r.a], idx = +r.b - 1;
+  const st = viewOf(r), idx = +r.b - 1;
   const needStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
   const hard = !first && (needStage !== wasStage || (needStage && prevModel !== model(st.model)));
   if (first || reduced || !hard) { setup(r, hard || first); render(); first = false; return; }
@@ -297,7 +316,7 @@ function setup(r, snap) {
   for (const k in flights) flights[k].group.visible = false;
   for (const k in sitePins) sitePins[k].visible = false;
   aim.earth = aim.mars = aim.moon = null; W.spin = reduced ? 0 : 1; resetFx(); cur.flight = null; cur.u = 0; state.part = null;
-  const st = STORIES[r.a], idx = +r.b - 1, m = st && byId(st.mission);
+  const st = viewOf(r), idx = +r.b - 1, m = st && byId(st.mission);
   const useStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
   cur.stage = useStage; cur.ground = useStage ? st.ground : null; stage.group.visible = useStage; W.group.visible = !useStage; W.sunLight.visible = !useStage; W.fill.visible = !useStage;
   scene.fog = useStage && st.ground === 'mars' ? fogMars : null; cur.model = null;
@@ -407,7 +426,7 @@ function missionCard(m, extra = '') {
   <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)} · ${m.rocket} · ${L(SITES[m.site])}</dd>
   <dt>${L(m.arriveLabel) || t('arrive')}</dt><dd>${fmt(m.arrive)}</dd>${m.end ? `<dt>${L(m.endLabel) || t('last')}</dt><dd>${fmt(m.end)}</dd>` : ''}
   <dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
-  <div class="row">${st ? `<a class="btn pri" href="#/historia/${st}/1">${t('story')}</a><a class="btn" href="#/maquina/${st}">${t('insideOf')}</a>` : ''}${extra}<a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div>`;
+  <div class="row">${st ? `<a class="btn pri" href="#/historia/${st}/1">${t('story')}</a><a class="btn" href="#/maquina/${st}">${t('insideOf')}</a>` : ''}${GLB[m.id] ? `<a class="btn pri" href="#/maquina/${m.id}">${t('see3d')}</a>` : ''}${extra}<a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div>`;
 }
 function stampEl(m, on, gold) {
   return `<a class="stamp ${on ? 'on' : ''} ${gold ? 'gold' : ''}" href="#/destinos/${m.dest}/${m.id}" style="--acc:${m.col}"><span class="ring">${on && IMAGES[m.id] ? `<img src="${IMAGES[m.id][0].f}" alt="">` : '?'}</span><b>${esc(m.short || m.name)}</b><small>${on ? m.launch.slice(0, 4) + ' · ' + t(m.dest) : t('notYet')}</small></a>`;
@@ -415,7 +434,7 @@ function stampEl(m, on, gold) {
 function render() {
   const r = state.route, ui = $('#ui'); let h = '';
   document.documentElement.lang = state.lang;
-  const st = STORIES[r.a];
+  const st = viewOf(r);
   if (r.view === 'historia' && st) { const m = byId(st.mission); stamp('seen', m.id, m.short || m.name); if (+r.b === 5) stamp('done', r.a, `${t('storyOf')} ${m.short || m.name}`); }
   else if (r.view === 'maquina' && st) { const m = byId(st.mission); stamp('seen', m.id, m.short || m.name); }
   else if ((r.view === 'explorar' || r.view === 'destinos') && state.sel && byId(state.sel)) { const m = byId(state.sel); stamp('seen', m.id, m.short || m.name); }
@@ -438,12 +457,12 @@ function render() {
       <a class="btn" href="${i ? `#/historia/${r.a}/${i}` : '#/inicio'}">${t('prev')}</a><a class="btn pri" href="${i < 4 ? `#/historia/${r.a}/${i + 2}` : `#/quiz/${r.a}`}">${i < 4 ? t('next') : t('toQuiz')}</a></div>`;
   } else if (r.view === 'maquina' && st) {
     const m = byId(st.mission), p = st.parts.find(x => x.id === r.b);
-    h = nav('maquinas') + `<div class="chip">${t('chip')}</div><div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}<a class="tab sm" href="#/maquinas">${t('all')} ▦</a></div>
+    h = nav('maquinas') + `<div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}${Object.keys(GLB).map(id => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(id).short || byId(id).name)}</a>`).join('')}<a class="tab sm" href="#/maquinas">${t('all')} ▦</a></div>
       <section class="panel" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${L(st.tag)}</span><h2>${p ? L(p.name) : esc(m.name)}</h2>
-      ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p>${scaleEl(m.id)}<p style="margin-top:10px">${t('pickPart')}</p>`}
-      <div class="sub">${t('parts')}</div><div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
-      ${gallery(st.mission)}<div class="row"><a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
-      <div class="note">${t('noteModel')}</div>`;
+      ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p>${scaleEl(m.id)}${st.glb ? `<div class="found"><b>${t('glbH')}</b><span>${model(m.id).loaded ? t('glbP') : t('loadingM')}</span><a class="src" href="https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/${encodeURIComponent(st.glb.dir)}" target="_blank" rel="noopener">${t('glbSrc')} ↗</a></div>` : `<p style="margin-top:10px">${t('pickPart')}</p>`}`}
+      ${st.glb ? '' : `<div class="sub">${t('parts')}</div>`}<div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
+      ${gallery(st.mission)}<div class="row">${st.glb ? `<a class="btn pri" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a>` : `<a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>`}${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
+      <div class="note">${t('chip')} · ${t(st.glb ? 'noteGlb' : 'noteModel')}</div>`;
   } else if (r.view === 'explorar') {
     const sel = state.sel && byId(state.sel);
     h = nav('explorar') + `<aside class="panel left"><span class="eyebrow" style="--acc:var(--c)">${t('explorar')}</span>
@@ -482,7 +501,7 @@ function render() {
   } else if (r.view === 'maquinas') {
     h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}">${IMAGES[m.id] ? `<button class="shot cover" data-act="img" data-m="${m.id}" data-i="0"><img src="${IMAGES[m.id][0].f}" alt="${esc(L(IMAGES[m.id][0].cap))}" loading="lazy"><em>${IMAGES[m.id].length} ${t('photos').toLowerCase()}</em></button>` : ''}<span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
       ${scaleEl(m.id)}<dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd>${m.end ? `<dt>${t('off')}</dt><dd>${fmt(m.end)}</dd>` : ''}</dl>
-      <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
+      <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}${GLB[m.id] ? `<a class="btn pri" href="#/maquina/${m.id}">${t('see3d')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
   } else {
     const es = state.lang === 'es';
     h = nav('fuentes') + `<div class="grid"><div class="doc"><h1 style="margin-top:6px">${t('fuentes')}</h1>

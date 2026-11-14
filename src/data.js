@@ -194,6 +194,9 @@ export const SOURCES = [
     ['NASA Science · Opportunity', S.oppy], ['NASA Mars Exploration Rovers · Science results', S.berries], ['NASA Science · Pioneer 10', S.p10],
     ['NASA · Laser Beams Reflected Between Earth and Moon Boost Science', S.laser], ['NASA Science · Kepler', 'https://science.nasa.gov/mission/kepler/'],
     ['NASA Science · Ingenuity Mars Helicopter', 'https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/']] },
+  { h: { es: 'Modelos 3D oficiales', en: 'Official 3D models' }, items: [
+    ['NASA 3D Resources · Viking Lander, InSight, Ingenuity, NEAR Shoemaker, Dawn, Kepler (glTF)', 'https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models'],
+    ['NASA 3D Resources · pautas de uso / usage guidelines', 'https://www.nasa.gov/nasa-brand-center/images-and-media/']] },
   { h: { es: 'Sonidos', en: 'Sounds' }, items: [
     ['Apollo 11 · «The Eagle has landed» · NASA Audio and Ringtones', 'https://www.nasa.gov/audio-and-ringtones/'],
     ['Marte / Mars · First Audio Recording of Sounds on Mars (Perseverance, SuperCam) · NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaéro', 'https://science.nasa.gov/resource/first-audio-recording-of-sounds-on-mars/']] },
@@ -270,4 +273,14 @@ export const SOUNDS = {
     name: { es: 'Así suena Marte: grabación real', en: 'What Mars sounds like: a real recording' },
     note: { es: 'No lo grabó Opportunity, que no tenía micrófono: lo grabó el rover Perseverance el 19 de febrero de 2021. Se oye un poco de viento, apagado.', en: 'Not recorded by Opportunity, which had no microphone: the Perseverance rover recorded it on February 19, 2021. A little wind can be heard, muffled.' },
     credit: 'NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaéro', src: 'https://science.nasa.gov/resource/first-audio-recording-of-sounds-on-mars/' }
+};
+
+// Official NASA 3D Resources models (github.com/nasa/NASA-3D-Resources). `dir` = folder name there.
+export const GLB = {
+  viking1: { ground: 'mars', dir: 'Viking Lander' },
+  insight: { ground: 'mars', dir: 'InSight Cruise Lander' },
+  ingenuity: { ground: 'mars', dir: 'Ingenuity Mars Helicopter' },
+  near: { ground: 'space', dir: 'NEAR Shoemaker' },
+  dawn: { ground: 'space', dir: 'Dawn' },
+  kepler: { ground: 'space', dir: 'Kepler (A)' }
 };
