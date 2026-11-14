@@ -154,18 +154,18 @@ export const STORIES = {
       { title: { es: 'Nadie había ido tan lejos', en: 'Nobody had gone that far' },
         say: { es: 'Fui la primera misión de NASA a los planetas de afuera. Nadie sabía si una nave podía cruzar el cinturón de asteroides sin romperse.', en: "I was NASA's first mission to the outer planets. Nobody knew whether a spacecraft could cross the asteroid belt in one piece." },
         facts: [
-          { h: { es: '2 de marzo de 1972', en: 'March 2, 1972' }, p: { es: 'Despegué de Cabo Cañaveral en un cohete Atlas-Centaur.', en: 'I lifted off from Cape Canaveral on an Atlas-Centaur rocket.' }, src: S.p10 },
-          { h: { es: 'Plan: 21 meses', en: 'Plan: 21 months' }, p: { es: 'Era lo que tenía que durar mi misión.', en: 'That is how long my mission was meant to last.' }, src: S.p10 }] },
+          { h: { es: '2 de marzo de 1972', en: 'March 2, 1972' }, p: { es: 'Despegué de Cabo Cañaveral en un cohete Atlas-Centaur.', en: 'I lifted off from Cape Canaveral on an Atlas-Centaur rocket.' }, src: S.p },
+          { h: { es: 'Plan: 21 meses', en: 'Plan: 21 months' }, p: { es: 'Era lo que tenía que durar mi misión.', en: 'That is how long my mission was meant to last.' }, src: S.p }] },
       { title: { es: 'Crucé el cinturón de asteroides', en: 'I crossed the asteroid belt' },
         say: { es: 'Entré al cinturón en julio de 1972 y salí siete meses después. Recibí algunos golpes, menos de los esperados. Después vino Júpiter.', en: 'I entered the belt in July 1972 and came out seven months later. I took a few hits, fewer than expected. Then came Jupiter.' },
         facts: [
-          { h: { es: '15 de julio de 1972', en: 'July 15, 1972' }, p: { es: 'Entré al cinturón de asteroides. Salí en febrero de 1973.', en: 'I entered the asteroid belt. I came out in February 1973.' }, src: S.p10 },
+          { h: { es: '15 de julio de 1972', en: 'July 15, 1972' }, p: { es: 'Entré al cinturón de asteroides. Salí en febrero de 1973.', en: 'I entered the asteroid belt. I came out in February 1973.' }, src: S.p },
           { h: { es: '4 de diciembre de 1973', en: 'December 4, 1973' }, p: { es: 'Mi punto más cercano a Júpiter: unos 200.000 km.', en: 'My closest point to Jupiter: about 200,000 km.' }, src: S.p10N }] },
       { title: { es: 'Fui la primera en estudiar Júpiter', en: 'I was the first to study Jupiter' }, part: 'mag',
         say: { es: 'Fotografié a Júpiter y a sus lunas, y medí su campo magnético y su radiación. Mi sensor magnético va en la punta de un brazo de 6,6 metros.', en: 'I photographed Jupiter and its moons, and measured its magnetic field and radiation. My magnetic sensor sits at the tip of a 6.6-metre boom.' },
         facts: [
           { h: { es: 'Quince experimentos', en: 'Fifteen experiments' }, p: { es: 'Para medir campos magnéticos, viento solar, polvo, radiación y la atmósfera de Júpiter.', en: "To measure magnetic fields, solar wind, dust, radiation and Jupiter's atmosphere." }, src: S.p10N },
-          { h: { es: 'Se puede cruzar', en: 'It can be crossed' }, p: { es: 'Demostré que una nave puede atravesar el cinturón de asteroides.', en: 'I showed that a spacecraft can pass through the asteroid belt.' }, src: S.p10 }] },
+          { h: { es: 'Se puede cruzar', en: 'It can be crossed' }, p: { es: 'Demostré que una nave puede atravesar el cinturón de asteroides.', en: 'I showed that a spacecraft can pass through the asteroid belt.' }, src: S.p }] },
       { title: { es: 'Mi señal se apagó', en: 'My signal faded out' }, fx: 'fade',
         say: { es: 'Mi energía viene de cuatro generadores nucleares que se gastan de a poco. Treinta años después del despegue, ya no alcanzó para mi transmisor.', en: 'My power comes from four nuclear generators that slowly run down. Thirty years after launch, it was no longer enough for my transmitter.' },
         facts: [
@@ -199,3 +199,40 @@ export const SOURCES = [
     ['Luna / Moon: NASA SVS CGI Moon Kit (LRO LROC color, LOLA elevation)', 'https://svs.gsfc.nasa.gov/4720'],
     ['Marte / Mars: Viking MDIM 2.1 colour mosaic, NASA/JPL/USGS (public domain, via Wikimedia Commons)', 'https://commons.wikimedia.org/wiki/File:Mars_Viking_MDIM21_ClrMosaic_1km.jpg']] }
 ];
+
+// Three questions per story. Every answer is a fact already shown, with its NASA source, in that story.
+export const QUIZ = {
+  opportunity: [
+    { q: { es: '¿Para cuántos días marcianos estaba planeada la misión de Opportunity?', en: 'How many Martian days was Opportunity’s mission planned for?' },
+      o: [{ es: '14 días', en: '14 days' }, { es: '90 días', en: '90 days' }, { es: '5.000 días', en: '5,000 days' }], a: 1,
+      why: { es: 'El plan era de 90 días marcianos. Trabajó más de 14 años.', en: 'The plan was 90 Martian days. It worked for more than 14 years.' }, src: S.oppy },
+    { q: { es: '¿Qué eran los «arándanos» que encontró?', en: 'What were the “blueberries” it found?' },
+      o: [{ es: 'Bolitas de hematita, un mineral que suele formarse en agua', en: 'Tiny spheres of hematite, a mineral that usually forms in water' }, { es: 'Restos de plantas', en: 'Remains of plants' }, { es: 'Pedazos de hielo', en: 'Bits of ice' }], a: 0,
+      why: { es: 'Eran bolitas de hematita: la evidencia de que ahí hubo agua hace muchísimo tiempo.', en: 'They were hematite spheres: evidence that there was water there a very long time ago.' }, src: S.berries },
+    { q: { es: '¿Por qué dejó de responder en 2018?', en: 'Why did it stop answering in 2018?' },
+      o: [{ es: 'Se le rompieron las ruedas', en: 'Its wheels broke' }, { es: 'La apagaron desde la Tierra', en: 'It was switched off from Earth' }, { es: 'Una tormenta de polvo dejó sin luz a sus paneles solares', en: 'A dust storm left its solar panels without light' }], a: 2,
+      why: { es: 'Una tormenta de polvo cubrió el cielo. Su última comunicación fue el 10 de junio de 2018.', en: 'A dust storm covered the sky. Its last communication was on June 10, 2018.' }, src: S.oppy }
+  ],
+  eagle: [
+    { q: { es: '¿Qué parte de Eagle sigue hoy en la Luna?', en: 'Which part of Eagle is still on the Moon today?' },
+      o: [{ es: 'La cabina con el motor de regreso', en: 'The cabin with the return engine' }, { es: 'Nada: volvió entera', en: 'Nothing: all of it came back' }, { es: 'La etapa de descenso, con sus cuatro patas', en: 'The descent stage, with its four legs' }], a: 2,
+      why: { es: 'La mitad de abajo sirvió de plataforma de despegue y se quedó. La de arriba despegó con los astronautas.', en: 'The lower half served as a launch pad and stayed. The upper half lifted off with the astronauts.' }, src: S.eagle },
+    { q: { es: '¿En qué lugar de la Luna bajó?', en: 'Where on the Moon did it land?' },
+      o: [{ es: 'En el Mar de la Tranquilidad', en: 'In the Sea of Tranquility' }, { es: 'En el polo sur', en: 'At the south pole' }, { es: 'En el lado oculto', en: 'On the far side' }], a: 0,
+      why: { es: 'Bajó el 20 de julio de 1969 en el Mar de la Tranquilidad. Por eso Armstrong dijo «Tranquility Base».', en: 'It landed on July 20, 1969 in the Sea of Tranquility. That is why Armstrong said “Tranquility Base”.' }, src: S.eagle },
+    { q: { es: '¿Qué instrumento de Apollo 11 se sigue usando desde la Tierra?', en: 'Which Apollo 11 instrument is still used from Earth?' },
+      o: [{ es: 'La cámara de televisión', en: 'The TV camera' }, { es: 'El panel de espejos para láser', en: 'The laser mirror panel' }, { es: 'La antena de radio', en: 'The radio antenna' }], a: 1,
+      why: { es: 'Desde la Tierra le apuntan un láser y miden cuánto tarda en volver: así se sabe la distancia a la Luna. No necesita energía.', en: 'A laser is aimed at it from Earth and the return time is measured: that gives the distance to the Moon. It needs no power.' }, src: S.lrrr }
+  ],
+  pioneer: [
+    { q: { es: '¿Qué hizo Pioneer 10 antes que ninguna otra nave?', en: 'What did Pioneer 10 do before any other spacecraft?' },
+      o: [{ es: 'Aterrizar en Marte', en: 'Land on Mars' }, { es: 'Cruzar el cinturón de asteroides', en: 'Cross the asteroid belt' }, { es: 'Dar la vuelta a la Luna', en: 'Fly around the Moon' }], a: 1,
+      why: { es: 'Entró al cinturón en julio de 1972 y salió siete meses después. Demostró que se podía cruzar.', en: 'It entered the belt in July 1972 and left seven months later. It proved the belt could be crossed.' }, src: S.p },
+    { q: { es: '¿De dónde sacaba la energía?', en: 'Where did its power come from?' },
+      o: [{ es: 'De cuatro generadores nucleares', en: 'From four nuclear generators' }, { es: 'De paneles solares', en: 'From solar panels' }, { es: 'De baterías que se recargaban en Júpiter', en: 'From batteries recharged at Jupiter' }], a: 0,
+      why: { es: 'Tan lejos del Sol los paneles solares no servían. Sus generadores daban 155 watts al despegar.', en: 'So far from the Sun, solar panels were no use. Its generators gave 155 watts at launch.' }, src: S.p },
+    { q: { es: '¿Hacia qué estrella viaja?', en: 'Which star is it heading for?' },
+      o: [{ es: 'La estrella Polar', en: 'Polaris' }, { es: 'Sirio', en: 'Sirius' }, { es: 'Aldebarán', en: 'Aldebaran' }], a: 2,
+      why: { es: 'Va hacia Aldebarán, a 68 años luz. Tardaría unos dos millones de años en llegar.', en: 'It is heading for Aldebaran, 68 light-years away. It would take about two million years to get there.' }, src: S.p }
+  ]
+};

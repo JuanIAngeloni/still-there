@@ -6,7 +6,7 @@ import './style.css';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
-import { MISSIONS, STORIES, SITES, TYPES, SOURCES } from './data.js';
+import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ } from './data.js';
 import { IMAGES } from './images.js';
 import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
 
@@ -29,7 +29,7 @@ const UI = {
   tells: ['te cuenta', 'tells you'], rec: ['Voz recreada a partir de datos de NASA. No es una cita real.', 'Voice re-created from NASA data. Not a real quote.'],
   scene: ['Escena', 'Scene'], of: ['de', 'of'], next: ['Siguiente ▶', 'Next ▶'], prev: ['◀ Anterior', '◀ Back'], end: ['Otra historia', 'Another story'],
   steps: [['Por qué me mandaron', 'Cómo llegué', 'Qué descubrí', 'Cómo terminé', 'Dónde estoy hoy'], ['Why I was sent', 'How I got there', 'What I found', 'How it ended', 'Where I am today']],
-  inside: ['Verme por dentro', 'See my parts'], insideOf: ['Ver por dentro', 'See its parts'], story: ['Su historia', 'Its story'], source: ['Fuente NASA ↗', 'NASA source ↗'],
+  inside: ['Verme por dentro', 'See my parts'], insideOf: ['Ver por dentro', 'See its parts'], story: ['Su historia', 'Its story'], storyOf: ['Historia de', 'Story of'], source: ['Fuente NASA ↗', 'NASA source ↗'],
   replay: ['↺ Repetir el viaje', '↺ Replay the trip'], phases: [['Encendido', 'Despegue', 'Separación de etapa', 'En viaje', 'Llegada'], ['Ignition', 'Liftoff', 'Stage separation', 'In flight', 'Arrival']],
   launch: ['Despegue', 'Launch'], arrive: ['Llegada', 'Arrival'], last: ['Última señal', 'Last signal'], where: ['Dónde está', 'Where it is'], rocket: ['Cohete', 'Rocket'], from: ['Desde', 'From'],
   moon: ['Luna', 'Moon'], mars: ['Marte', 'Mars'], deep: ['Espacio profundo', 'Deep space'], earth: ['Tierra', 'Earth'], jupiter: ['Júpiter', 'Jupiter'], saturn: ['Saturno', 'Saturn'], venus: ['Venus', 'Venus'], eros: ['Eros', 'Eros'], ceres: ['Ceres', 'Ceres'],
@@ -42,6 +42,11 @@ const UI = {
   photos: ['Fotos de NASA', 'NASA photos'], art: ['Ilustración', 'Illustration'], photo: ['Foto real', 'Real photo'], credit: ['Crédito', 'Credit'], close: ['Cerrar', 'Close'], openImg: ['Ver en la biblioteca de NASA ↗', 'View in the NASA library ↗'],
   log: ['Historial', 'Event log'], logEmpty: ['Dale a Reproducir: acá se va anotando cada despegue, llegada y última señal.', 'Press Play: every launch, arrival and last signal gets logged here.'], off: ['Fuera de servicio', 'Out of service'], evLaunch: ['Despegó de', 'Lifted off from'], evArrive: ['Llegó a', 'Arrived at'], backLog: ['← Historial', '← Event log'], active: ['En servicio', 'In service'],
   inApp: ['máquinas en esta app', 'machines in this app'], first: ['la primera en llegar', 'first to arrive'],
+  pasaporte: ['Pasaporte', 'Passport'], passLead: ['Ganás un sello por cada máquina que visitás y por cada historia que terminás. Al final de cada historia hay un quiz de 3 preguntas.', 'You earn a stamp for every machine you visit and every story you finish. Each story ends with a 3-question quiz.'],
+  stampNew: ['Sello nuevo', 'New stamp'], stMach: ['Máquinas visitadas', 'Machines visited'], stStory: ['Historias terminadas', 'Stories finished'], stQuiz: ['Quiz', 'Quiz'], toQuiz: ['Quiz ▶', 'Quiz ▶'], quizOf: ['Quiz de', 'Quiz:'],
+  qQ: ['Pregunta', 'Question'], qOk: ['¡Correcto!', 'Correct!'], qNo: ['No era esa.', 'Not that one.'], qNext: ['Siguiente ▶', 'Next ▶'], qSee: ['Ver resultado ▶', 'See result ▶'], qRetry: ['↺ Repetir el quiz', '↺ Retake the quiz'], qScore: ['respuestas correctas', 'correct answers'],
+  qMsg: [['Volvé a leer la historia y probá de nuevo.', 'Casi. Una repasada y lo sacás.', 'Muy bien. Te faltó una sola.', 'Perfecto. Te ganaste el sello dorado.'], ['Read the story again and have another go.', 'Almost. One more read and you have it.', 'Well done. Just one missed.', 'Perfect. You earned the gold stamp.']],
+  seePass: ['Ver mi pasaporte', 'See my passport'], passReset: ['Borrar mis sellos', 'Clear my stamps'], notYet: ['Sin visitar', 'Not visited'], notDone: ['Sin terminar', 'Not finished'], saved: ['Los sellos se guardan solo en este navegador.', 'Stamps are saved only in this browser.'],
   followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -61,6 +66,12 @@ MISSIONS.forEach(m => { m.tL = yr(m.launch); m.dur = Math.max(.6, yr(m.arrive) -
 const EVENTS = MISSIONS.flatMap(m => [{ t: m.tL, k: 'launch', m, d: m.launch }, { t: m.tL + m.dur, k: 'arrive', m, d: m.arrive }, ...(m.end ? [{ t: m.tE, k: 'end', m, d: m.end }] : [])]).sort((a, b) => a.t - b.t);
 const OFFC = new THREE.Color(0x6f6f80);
 const byId = id => MISSIONS.find(m => m.id === id);
+// ---------- passport: stamps kept in this browser only
+const PASS = (() => { try { return JSON.parse(localStorage.getItem('pass')) || {}; } catch { return {}; } })();
+PASS.seen = PASS.seen || []; PASS.done = PASS.done || []; PASS.quiz = PASS.quiz || {};
+const savePass = () => localStorage.setItem('pass', JSON.stringify(PASS));
+function stamp(kind, id, name) { if (!id || PASS[kind].includes(id)) return; PASS[kind].push(id); savePass(); toast(`✦ ${t('stampNew')}: ${name}`); }
+const quiz = { id: null, i: 0, pick: null, score: 0 };
 
 // ---------- renderer
 const canvas = $('#gl');
@@ -267,7 +278,7 @@ function setup(r, snap) {
   cur.stage = useStage; cur.ground = useStage ? st.ground : null; stage.group.visible = useStage; W.group.visible = !useStage; W.sunLight.visible = !useStage; W.fill.visible = !useStage;
   scene.fog = useStage && st.ground === 'mars' ? fogMars : null; cur.model = null;
   for (const mm of MISSIONS) { const p = pins[mm.id]; p.on = true; p.s.scale.setScalar(p.base); p.s.material.color.set(mm.col); }
-  document.body.classList.toggle('dim', r.view === 'maquinas' || r.view === 'fuentes');
+  document.body.classList.toggle('dim', ['maquinas', 'fuentes', 'quiz', 'pasaporte'].includes(r.view));
   const bodyLabels = names => names.forEach(n => addLabel(t(n), 'body', v => wpos(W.bodies[n].obj, v), { dy: n === 'earth' || n === 'jupiter' ? -74 : -34 }));
 
   if (useStage) {
@@ -346,8 +357,8 @@ function setup(r, snap) {
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const srcLink = u => u ? ` <a class="src" href="${u}" target="_blank" rel="noopener">${t('source')}</a>` : '';
 function nav(on) {
-  const tabs = [['historias', '#/inicio'], ['explorar', '#/explorar'], ['destinos', '#/destinos/moon'], ['maquinas', '#/maquina/opportunity'], ['fuentes', '#/fuentes']];
-  return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Still There</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}</a>`).join('')}
+  const tabs = [['historias', '#/inicio'], ['explorar', '#/explorar'], ['destinos', '#/destinos/moon'], ['maquinas', '#/maquina/opportunity'], ['pasaporte', '#/pasaporte'], ['fuentes', '#/fuentes']];
+  return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Still There</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}${k === 'pasaporte' ? ` <em>${PASS.seen.length}/${MISSIONS.length}</em>` : ''}</a>`).join('')}
   <button class="tab sm" data-act="lite" aria-pressed="${state.lite}">${t('lite')}: ${state.lite ? 'on' : 'off'}</button><button class="tab sm keep" data-act="lang" aria-label="Idioma / Language">${state.lang === 'es' ? 'ES · en' : 'EN · es'}</button></nav>`;
 }
 function gallery(id, big) {
@@ -370,10 +381,16 @@ function missionCard(m, extra = '') {
   <dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
   <div class="row">${st ? `<a class="btn pri" href="#/historia/${st}/1">${t('story')}</a><a class="btn" href="#/maquina/${st}">${t('insideOf')}</a>` : ''}${extra}<a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div>`;
 }
+function stampEl(m, on, gold) {
+  return `<a class="stamp ${on ? 'on' : ''} ${gold ? 'gold' : ''}" href="#/destinos/${m.dest}/${m.id}" style="--acc:${m.col}"><span class="ring">${on && IMAGES[m.id] ? `<img src="${IMAGES[m.id][0].f}" alt="">` : '?'}</span><b>${esc(m.short || m.name)}</b><small>${on ? m.launch.slice(0, 4) + ' · ' + t(m.dest) : t('notYet')}</small></a>`;
+}
 function render() {
   const r = state.route, ui = $('#ui'); let h = '';
   document.documentElement.lang = state.lang;
   const st = STORIES[r.a];
+  if (r.view === 'historia' && st) { const m = byId(st.mission); stamp('seen', m.id, m.short || m.name); if (+r.b === 5) stamp('done', r.a, `${t('storyOf')} ${m.short || m.name}`); }
+  else if (r.view === 'maquina' && st) { const m = byId(st.mission); stamp('seen', m.id, m.short || m.name); }
+  else if ((r.view === 'explorar' || r.view === 'destinos') && state.sel && byId(state.sel)) { const m = byId(state.sel); stamp('seen', m.id, m.short || m.name); }
   if (r.view === 'inicio') {
     h = nav('historias') + `<section class="hero"><span class="eyebrow" style="--acc:var(--c)">NASA · ${t('moon')} · ${t('mars')} · ${t('deep')}</span><h1>${t('h1')}</h1><p class="lead">${t('lead')}</p><p style="margin-top:10px;font-size:14px">${t('age')}</p>
       <div class="row"><a class="btn" href="#/explorar">${t('timeline')}</a></div></section>
@@ -389,7 +406,7 @@ function render() {
       ${i >= 2 ? `<div class="row"><a class="btn" href="#/maquina/${r.a}${sc.part ? '/' + sc.part : ''}">${t('inside')}</a></div>` : ''}
       ${gallery(st.mission)}<div class="rec">${t('rec')}</div></section>
       <div class="steps" style="--acc:${st.color}">${steps.map((s, k) => `<a class="step ${k === i ? 'on' : k < i ? 'done' : ''}" href="#/historia/${r.a}/${k + 1}" aria-label="${s}">${k + 1} · ${s}</a>`).join('')}
-      <a class="btn" href="${i ? `#/historia/${r.a}/${i}` : '#/inicio'}">${t('prev')}</a><a class="btn pri" href="${i < 4 ? `#/historia/${r.a}/${i + 2}` : '#/inicio'}">${i < 4 ? t('next') : t('end')}</a></div>`;
+      <a class="btn" href="${i ? `#/historia/${r.a}/${i}` : '#/inicio'}">${t('prev')}</a><a class="btn pri" href="${i < 4 ? `#/historia/${r.a}/${i + 2}` : `#/quiz/${r.a}`}">${i < 4 ? t('next') : t('toQuiz')}</a></div>`;
   } else if (r.view === 'maquina' && st) {
     const m = byId(st.mission), p = st.parts.find(x => x.id === r.b);
     h = nav('maquinas') + `<div class="chip">${t('chip')}</div><div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}<a class="tab sm" href="#/maquinas">${t('all')} ▦</a></div>
@@ -412,6 +429,27 @@ function render() {
       <dl class="kv"><dt>${list.length}</dt><dd>${t('inApp')}</dd><dt>${firstM.arrive.slice(0, 4)}</dt><dd>${t('first')}: ${esc(firstM.short || firstM.name)}</dd></dl>`}
       <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.end ? `${t('off')} · ${m.end.slice(0, 4)}` : m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
       <div class="note">${d === 'deep' ? t('noteScale') + ' ' + t('noteDrawn') : t('noteScale')}</div>`;
+  } else if (r.view === 'quiz' && st) {
+    if (quiz.id !== r.a) Object.assign(quiz, { id: r.a, i: 0, pick: null, score: 0 });
+    const qs = QUIZ[r.a], m = byId(st.mission), name = m.short || m.name;
+    h = nav('pasaporte') + `<div class="grid"><div class="doc quiz" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${t('quizOf')} ${esc(name)}</span>`;
+    if (quiz.i < qs.length) {
+      const q = qs[quiz.i], done = quiz.pick != null;
+      h += `<h1>${L(q.q)}</h1><div class="qn">${t('qQ')} ${quiz.i + 1} ${t('of')} ${qs.length}</div><div class="opts">${q.o.map((o, k) => `<button class="opt ${done ? (k === q.a ? 'ok' : k === quiz.pick ? 'bad' : 'off') : ''}" data-act="ans" data-k="${k}" ${done ? 'disabled' : ''}><i>${'ABC'[k]}</i>${L(o)}</button>`).join('')}</div>
+        ${done ? `<div class="found"><b>${quiz.pick === q.a ? t('qOk') : t('qNo')}</b><span>${L(q.why)}</span>${srcLink(q.src)}</div><div class="row"><button class="btn pri" data-act="qnext">${quiz.i < qs.length - 1 ? t('qNext') : t('qSee')}</button></div>` : ''}`;
+    } else {
+      h += `<h1>${quiz.score}/${qs.length} ${t('qScore')}</h1><p class="lead">${t('qMsg')[quiz.score]}</p><div class="stamps one">${stampEl(m, true, quiz.score === qs.length)}</div>
+        <div class="row"><a class="btn pri" href="#/pasaporte">${t('seePass')}</a><button class="btn" data-act="qretry">${t('qRetry')}</button><a class="btn" href="#/inicio">${t('end')}</a></div>`;
+    }
+    h += `</div></div>`;
+  } else if (r.view === 'pasaporte') {
+    const nq = Object.keys(PASS.quiz).length;
+    h = nav('pasaporte') + `<div class="grid"><div class="doc wide"><h1 style="margin-top:6px">${t('pasaporte')}</h1><p class="lead">${t('passLead')}</p>
+      <dl class="kv"><dt>${PASS.seen.length}/${MISSIONS.length}</dt><dd>${t('stMach')}</dd><dt>${PASS.done.length}/3</dt><dd>${t('stStory')}</dd><dt>${nq}/3</dt><dd>${t('stQuiz')}</dd></dl>
+      <div class="sub">${t('stStory')}</div><div class="stamps big">${Object.entries(STORIES).map(([id, s]) => { const m = byId(s.mission), on = PASS.done.includes(id), q = PASS.quiz[id];
+        return `<a class="stamp ${on ? 'on' : ''} ${q === 3 ? 'gold' : ''}" href="${on ? `#/quiz/${id}` : `#/historia/${id}/1`}" style="--acc:${s.color}"><span class="ring">${on ? `<img src="${IMAGES[m.id][0].f}" alt="">` : '?'}</span><b>${esc(m.short || m.name)}</b><small>${on ? (q != null ? `${t('stQuiz')} ${q}/3` : t('toQuiz')) : t('notDone')}</small></a>`; }).join('')}</div>
+      <div class="sub">${t('stMach')}</div><div class="stamps">${MISSIONS.map(m => stampEl(m, PASS.seen.includes(m.id))).join('')}</div>
+      <div class="row"><button class="btn" data-act="passreset">${t('passReset')}</button></div><p style="margin-top:12px;font-size:13px">${t('saved')}</p></div></div>`;
   } else if (r.view === 'maquinas') {
     h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}">${IMAGES[m.id] ? `<button class="shot cover" data-act="img" data-m="${m.id}" data-i="0"><img src="${IMAGES[m.id][0].f}" alt="${esc(L(IMAGES[m.id][0].cap))}" loading="lazy"><em>${IMAGES[m.id].length} ${t('photos').toLowerCase()}</em></button>` : ''}<span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
       <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd>${m.end ? `<dt>${t('off')}</dt><dd>${fmt(m.end)}</dd>` : ''}</dl>
@@ -437,6 +475,10 @@ $('#ui').addEventListener('click', e => {
   if (a === 'lang') { state.lang = state.lang === 'es' ? 'en' : 'es'; localStorage.setItem('lang', state.lang); setup(state.route, false); render(); }
   if (a === 'lite') { localStorage.setItem('lite', state.lite ? '0' : '1'); location.reload(); }
   if (a === 'img') lightbox(b.dataset.m, +b.dataset.i);
+  if (a === 'ans' && quiz.pick == null) { quiz.pick = +b.dataset.k; if (quiz.pick === QUIZ[quiz.id][quiz.i].a) quiz.score++; render(); }
+  if (a === 'qnext') { quiz.i++; quiz.pick = null; if (quiz.i >= QUIZ[quiz.id].length) { PASS.quiz[quiz.id] = Math.max(PASS.quiz[quiz.id] || 0, quiz.score); savePass(); } render(); }
+  if (a === 'qretry') { quiz.id = null; render(); }
+  if (a === 'passreset') { PASS.seen = []; PASS.done = []; PASS.quiz = {}; savePass(); render(); }
   if (a === 'replay') { cur.u = 0; exhaust.clear(); }
   if (a === 'follow') { state.follow = !state.follow; b.setAttribute('aria-pressed', state.follow); if (state.follow && !state.playing && state.time < NOW - .05) state.playing = true; }
   if (a === 'play') { if (state.time >= NOW - .05) state.time = T0; state.playing = !state.playing; }
