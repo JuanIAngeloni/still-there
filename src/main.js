@@ -36,6 +36,7 @@ const UI = {
     mars: ['Rovers, módulos y un helicóptero que ya no responden. Tocá una luz.', 'Rovers, landers and a helicopter that no longer answer. Tap a light.'],
     deep: ['Sondas y un telescopio que siguen viajando o dando vueltas, en silencio. Tocá una luz.', 'Probes and a telescope still travelling or orbiting, in silence. Tap a light.']
   },
+  all: ['Todas las máquinas', 'All machines'], parts: ['Piezas', 'Parts'], seeParts: ['Ver sus piezas', 'See its parts'], goThere: ['clic para ver qué quedó ahí', 'click to see what was left there'], tapPart: ['clic para ver qué hizo', 'click to see what it did'], tapPin: ['clic para ver su ficha', 'click to open its card'],
   inApp: ['máquinas en esta app', 'machines in this app'], first: ['la primera en llegar', 'first to arrive'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -124,14 +125,14 @@ const flights = {}; const flight = m => flights[m.id] || (flights[m.id] = makeFl
 const rig = { focus: new V3(), r: 7, th: 1.9, ph: 1.25, sx: 0, sy: 0, t: { focus: () => ZERO, r: 4, th: 1.9, ph: 1.25, minR: 1.5, maxR: 60, maxPh: 2.9, follow: null, sx: 0, sy: 0 }, moved: false, speed: 2.4 };
 const ZERO = new V3();
 function cam(o, snap) {
-  rig.t = { focus: () => ZERO, minR: 1.3, maxR: 80, maxPh: 2.9, follow: null, sx: 0, sy: 0, ...o }; rig.moved = false;
+  rig.t = { focus: () => ZERO, minR: 1.3, maxR: 80, maxPh: 2.9, follow: null, sx: 0, sy: 0, fk: 2.8, ...o }; rig.moved = false;
   if (rig.t.follow) aimFollow();
   if (snap) { rig.focus.copy(rig.t.focus()); rig.r = rig.t.r * 1.25; rig.th = rig.t.th - .25; rig.ph = rig.t.ph; }
 }
 function aimFollow() { const d = rig.t.follow(); rig.t.th = Math.atan2(d.z, d.x) + (rig.t.dth || 0); rig.t.ph = THREE.MathUtils.clamp(Math.acos(THREE.MathUtils.clamp(d.y, -1, 1)) + (rig.t.dph || 0), .15, rig.t.maxPh); }
 const short = a => Math.atan2(Math.sin(a), Math.cos(a));
 function rigUpdate(dt) {
-  const T = rig.t, k = reduced ? 1 : 1 - Math.exp(-dt * rig.speed), kf = reduced ? 1 : 1 - Math.exp(-dt * 5);
+  const T = rig.t, k = reduced ? 1 : 1 - Math.exp(-dt * rig.speed), kf = reduced ? 1 : 1 - Math.exp(-dt * T.fk);
   if (T.follow && !rig.moved) aimFollow();
   const f = T.focus(); if (rig.focus.distanceTo(f) > 800) rig.focus.copy(f); else rig.focus.lerp(f, kf);
   rig.r += (T.r - rig.r) * k; rig.th += short(T.th - rig.th) * k; rig.ph += (T.ph - rig.ph) * k;
@@ -155,11 +156,35 @@ canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel
 const zoom = f => { rig.t.r = THREE.MathUtils.clamp(rig.t.r * f, rig.t.minR, rig.t.maxR); };
 canvas.addEventListener('wheel', e => { e.preventDefault(); zoom(Math.exp(e.deltaY * .0012)); }, { passive: false });
 const ray = new THREE.Raycaster();
-function pick(e) {
-  if (!cur.model) return;
-  ray.setFromCamera(new THREE.Vector2(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
-  const hit = ray.intersectObject(cur.model.group, true).find(h => h.object.userData.part && !h.object.userData.noPick);
-  if (hit && state.route.view === 'maquina') go(`#/maquina/${state.route.a}/${hit.object.userData.part}`);
+const ndc = new THREE.Vector2(), hv = new V3();
+function targetAt(x, y) {
+  const r = state.route; ndc.set(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  if (cur.stage && cur.model) {
+    const hit = ray.intersectObject(cur.model.group, true).find(h => h.object.userData.part && !h.object.userData.noPick && h.object.visible);
+    if (!hit) return null; const id = hit.object.userData.part, p = STORIES[r.a].parts.find(q => q.id === id);
+    return p && { part: id, text: L(p.name), hint: t('tapPart'), href: `#/maquina/${r.a}/${id}` };
+  }
+  if (!['inicio', 'explorar', 'destinos'].includes(r.view)) return null;
+  let best = null, bd = 24;
+  for (const m of MISSIONS) { const p = pins[m.id]; if (!p.g.visible) continue; wpos(p.g, hv).project(camera); if (hv.z > 1) continue;
+    const d = Math.hypot((hv.x + 1) / 2 * innerWidth - x, (1 - hv.y) / 2 * innerHeight - y); if (d < bd) { bd = d; best = m; } }
+  if (best) return { pin: best.id, text: `${best.short || best.name} · ${best.arrive.slice(0, 4)}`, hint: t('tapPin'), href: r.view === 'explorar' ? `#/explorar/${best.id}` : `#/destinos/${best.dest}/${best.id}` };
+  for (const n of ['moon', 'mars']) { if (r.view === 'destinos' && r.a === n) continue; const o = W.bodies[n].obj, c = wpos(o, hv), rad = W.bodies[n].r * 1.25;
+    if (ray.ray.distanceToPoint(c) < rad) return { text: t(n), hint: t('goThere'), href: `#/destinos/${n}` }; }
+  return null;
+}
+function pick(e) { const tg = targetAt(e.clientX, e.clientY); if (tg) go(tg.href); }
+let mouse = null, hoverPart = null, hoverPin = null; const tip = $('#tip');
+canvas.addEventListener('pointermove', e => { mouse = e.pointerType === 'mouse' ? [e.clientX, e.clientY] : null; });
+canvas.addEventListener('pointerleave', () => { mouse = null; });
+function hoverUpdate() {
+  const tg = mouse && !ptr.size ? targetAt(mouse[0], mouse[1]) : null;
+  hoverPart = tg && tg.part || null;
+  const hp = tg && tg.pin || null;
+  if (hp !== hoverPin) { for (const id of [hoverPin, hp]) if (id) pins[id].core.scale.setScalar(pins[id].base * .38 * (id === hp ? 2.4 : 1)); hoverPin = hp; }
+  tip.classList.toggle('on', !!tg); canvas.style.cursor = tg ? 'pointer' : '';
+  if (tg) { const h = `${esc(tg.text)}<small>${tg.hint}</small>`; if (tip.dataset.h !== h) { tip.innerHTML = h; tip.dataset.h = h; }
+    tip.style.transform = `translate(${Math.min(mouse[0] + 16, innerWidth - 240)}px,${mouse[1] + 18}px)`; }
 }
 
 function pinsUpdate() {
@@ -208,10 +233,23 @@ function onRoute() {
   const st = STORIES[r.a], idx = +r.b - 1;
   const needStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
   const hard = !first && (needStage !== wasStage || (needStage && prevModel !== model(st.model)));
-  const apply = () => { setup(r, hard || first); render(); };
-  if (hard && !reduced) { $('#veil').classList.add('on'); setTimeout(() => { apply(); requestAnimationFrame(() => $('#veil').classList.remove('on')); }, 230); } else apply();
-  first = false;
+  if (first || reduced || !hard) { setup(r, hard || first); render(); first = false; return; }
+  // fly through a haze instead of cutting: dive in or pull away, swap the set while covered, then settle
+  const id = ++trans, veil = $('#veil'), T = rig.t;
+  veil.style.background = VEIL[needStage ? st.ground : cur.ground] || VEIL.space;
+  rig.speed = 3.4;
+  if (wasStage) { T.maxR = 1e4; T.r *= 3; T.ph = Math.max(.35, T.ph - .5); } else { T.minR = 0; T.r *= .42; }
+  setTimeout(() => { if (id === trans) veil.classList.add('on'); }, 240);
+  setTimeout(() => {
+    if (id !== trans) return;
+    setup(r, true); render();
+    if (needStage) { rig.r = rig.t.r * 2.7; rig.ph = Math.max(.4, rig.t.ph - .55); rig.th = rig.t.th - .5; } else { rig.r = rig.t.r * .5; rig.th = rig.t.th - .15; }
+    rig.speed = 1.9; veil.classList.remove('on');
+    setTimeout(() => { if (id === trans) rig.speed = 2.4; }, 2200);
+  }, 600);
 }
+let trans = 0;
+const VEIL = { mars: '#a5673f', moon: '#77777c', space: '#05040c' };
 function resetFx() {
   stage.dustTarget = 0; cur.fx = null; cur.fxT = 0;
   if (models.eagle) { models.eagle.ascent.position.y = 0; models.eagle.ascent.visible = true; models.eagle.flame.material.opacity = 0; }
@@ -223,7 +261,7 @@ function setup(r, snap) {
   aim.earth = aim.mars = aim.moon = null; W.spin = reduced ? 0 : 1; resetFx(); cur.flight = null; cur.u = 0; state.part = null;
   const st = STORIES[r.a], idx = +r.b - 1, m = st && byId(st.mission);
   const useStage = r.view === 'maquina' || (r.view === 'historia' && st && (idx === 2 || idx === 3));
-  cur.stage = useStage; stage.group.visible = useStage; W.group.visible = !useStage; W.sunLight.visible = !useStage; W.fill.visible = !useStage;
+  cur.stage = useStage; cur.ground = useStage ? st.ground : null; stage.group.visible = useStage; W.group.visible = !useStage; W.sunLight.visible = !useStage; W.fill.visible = !useStage;
   scene.fog = useStage && st.ground === 'mars' ? fogMars : null; cur.model = null;
   for (const mm of MISSIONS) { const p = pins[mm.id]; p.on = true; p.s.scale.setScalar(p.base); }
   document.body.classList.toggle('dim', r.view === 'maquinas' || r.view === 'fuentes');
@@ -248,7 +286,7 @@ function setup(r, snap) {
     if (fx === 'dust') stage.dustTarget = 1;
     return;
   }
-  if (r.view === 'inicio') { cam({ r: 3.3, th: AZ + .75, ph: 1.32, sx: mobile() ? 0 : -.12, sy: .12, minR: 1.6, maxR: 40 }, snap); aim.moon = AZ + 1.9; bodyLabels(['moon']); }
+  if (r.view === 'inicio') { cam({ r: 5.4, th: AZ + .75, ph: 1.32, sx: .04, sy: .06, minR: 1.6, maxR: 40 }, snap); aim.moon = AZ + 1.9; bodyLabels(['moon']); }
   else if (r.view === 'historia' && st) {
     const pin = pins[m.id];
     if (idx === 0) {
@@ -259,7 +297,7 @@ function setup(r, snap) {
       const s = SITES[m.site]; aimBody('earth', s.lat, s.lon); if (m.dest === 'moon') aimBody('moon', 0, 0, 1.15); if (m.dest === 'mars') aimBody('mars', m.lat, m.lon);
       W.spin = 0; cur.flight = flight(m); cur.flight.group.visible = true; cur.u = 0; cur.m = m;
       const d0 = wpos(sitePins[m.site], new V3()).normalize();
-      cam({ focus: () => cur.flight.pos, r: .8, th: Math.atan2(d0.z, d0.x) - .9, ph: 1.2, sx: .16, minR: .25, maxR: 120 }, snap);
+      cam({ focus: () => cur.flight.pos, fk: 6, r: .8, th: Math.atan2(d0.z, d0.x) - .9, ph: 1.2, sx: .16, minR: .25, maxR: 120 }, snap);
       bodyLabels(m.dest === 'moon' ? ['moon'] : m.dest === 'mars' ? ['mars'] : ['jupiter']);
     } else {
       if (m.dest !== 'deep') { aimBody(m.dest, m.lat, m.lon); W.spin = 0; }
@@ -304,8 +342,8 @@ function setup(r, snap) {
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const srcLink = u => u ? ` <a class="src" href="${u}" target="_blank" rel="noopener">${t('source')}</a>` : '';
 function nav(on) {
-  const tabs = [['historias', '#/inicio'], ['explorar', '#/explorar'], ['destinos', '#/destinos/moon'], ['maquinas', '#/maquinas'], ['fuentes', '#/fuentes']];
-  return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Siguen ahí</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}</a>`).join('')}
+  const tabs = [['historias', '#/inicio'], ['explorar', '#/explorar'], ['destinos', '#/destinos/moon'], ['maquinas', '#/maquina/opportunity'], ['fuentes', '#/fuentes']];
+  return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Still There</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}</a>`).join('')}
   <button class="tab sm" data-act="lite" aria-pressed="${state.lite}">${t('lite')}: ${state.lite ? 'on' : 'off'}</button><button class="tab sm keep" data-act="lang" aria-label="Idioma / Language">${state.lang === 'es' ? 'ES · en' : 'EN · es'}</button></nav>`;
 }
 function missionCard(m, extra = '') {
@@ -323,11 +361,11 @@ function render() {
   if (r.view === 'inicio') {
     h = nav('historias') + `<section class="hero"><span class="eyebrow" style="--acc:var(--c)">NASA · ${t('moon')} · ${t('mars')} · ${t('deep')}</span><h1>${t('h1')}</h1><p class="lead">${t('lead')}</p><p style="margin-top:10px;font-size:14px">${t('age')}</p>
       <div class="row"><a class="btn" href="#/explorar">${t('timeline')}</a></div></section>
-      <div class="picks">${Object.entries(STORIES).map(([id, s]) => `<a class="card pick" href="#/historia/${id}/1" style="--acc:${s.color}"><span class="eyebrow">${L(s.tag)}</span><h3 style="margin-top:10px">${esc(byId(s.mission).short || byId(s.mission).name)}</h3><div class="say">«${L(s.hook)}»</div><small>${t('follow')}</small></a>`).join('')}</div>
+      <div class="panel picks">${Object.entries(STORIES).map(([id, s]) => `<div class="pick" style="--acc:${s.color}"><span class="eyebrow">${L(s.tag)}</span><h3>${esc(byId(s.mission).short || byId(s.mission).name)}</h3><div class="say">«${L(s.hook)}»</div><div class="links"><a href="#/historia/${id}/1">${t('follow')}</a><a href="#/maquina/${id}">${t('seeParts')}</a></div></div>`).join('')}</div>
       <div class="note">${t('noteScale')}</div>`;
   } else if (r.view === 'historia' && st) {
     const i = Math.min(Math.max(+r.b - 1 || 0, 0), 4), sc = st.scenes[i], m = byId(st.mission), name = m.short || m.name, steps = t('steps');
-    h = nav('historias') + `<div class="chip">${t('chip')}</div><section class="card panel" style="--acc:${st.color}" aria-live="polite">
+    h = nav('historias') + `<div class="chip">${t('chip')}</div><section class="panel" style="--acc:${st.color}" aria-live="polite">
       <span class="eyebrow">${esc(name)} · ${t('scene')} ${i + 1} ${t('of')} 5</span><h2>${L(sc.title)}</h2>
       <div class="who"><i></i>${esc(name)} ${t('tells')}</div><div class="say">${L(sc.say)}</div>
       ${sc.facts.map(f => `<div class="found"><b>${L(f.h)}</b><span>${L(f.p)}</span>${srcLink(f.src)}</div>`).join('')}
@@ -338,30 +376,30 @@ function render() {
       <a class="btn" href="${i ? `#/historia/${r.a}/${i}` : '#/inicio'}">${t('prev')}</a><a class="btn pri" href="${i < 4 ? `#/historia/${r.a}/${i + 2}` : '#/inicio'}">${i < 4 ? t('next') : t('end')}</a></div>`;
   } else if (r.view === 'maquina' && st) {
     const m = byId(st.mission), p = st.parts.find(x => x.id === r.b);
-    h = nav('maquinas') + `<div class="chip">${t('chip')}</div><div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}</div>
-      <section class="card panel" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${L(st.tag)}</span><h2>${p ? L(p.name) : esc(m.name)}</h2>
+    h = nav('maquinas') + `<div class="chip">${t('chip')}</div><div class="seg">${Object.entries(STORIES).map(([id, s]) => `<a class="tab ${id === r.a ? 'on' : ''}" href="#/maquina/${id}">${esc(byId(s.mission).short || byId(s.mission).name)}</a>`).join('')}<a class="tab sm" href="#/maquinas">${t('all')} ▦</a></div>
+      <section class="panel" style="--acc:${st.color}" aria-live="polite"><span class="eyebrow">${L(st.tag)}</span><h2>${p ? L(p.name) : esc(m.name)}</h2>
       ${p ? `<div class="found"><b>${t('whatIs')}</b><span>${L(p.what)}</span></div><div class="found"><b>${t('whatFor')}</b><span>${L(p.found)}</span>${srcLink(p.src)}</div>` : `<p class="lead">${L(m.line)}</p><p style="margin-top:10px">${t('pickPart')}</p>`}
-      <div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
+      <div class="sub">${t('parts')}</div><div class="list">${st.parts.map((x, k) => `<a class="item ${x.id === r.b ? 'on' : ''}" href="#/maquina/${r.a}/${x.id}" style="--k:var(--c)"><i></i><b>${k + 1} · ${L(x.name)}</b></a>`).join('')}</div>
       <div class="row"><a class="btn pri" href="#/historia/${r.a}/1">${t('story')}</a>${p ? `<a class="btn" href="#/maquina/${r.a}">${esc(m.short || m.name)}</a>` : ''}</div></section>
       <div class="note">${t('noteModel')}</div>`;
   } else if (r.view === 'explorar') {
     const sel = state.sel && byId(state.sel);
-    h = nav('explorar') + `<aside class="card panel left"><span class="eyebrow" style="--acc:var(--c)">${t('explorar')}</span>
+    h = nav('explorar') + `<aside class="panel left"><span class="eyebrow" style="--acc:var(--c)">${t('explorar')}</span>
       <div class="list" id="mlist">${MISSIONS.map(m => `<a class="item" data-m="${m.id}" href="#/explorar/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.launch.slice(0, 4)}</span></a>`).join('')}</div></aside>
-      ${sel ? `<section class="card panel over" aria-live="polite" style="--acc:${sel.col}">${missionCard(sel, `<a class="btn" href="#/destinos/${sel.dest}/${sel.id}">${t('seeOn')}</a>`)}</section>` : ''}
-      <div class="card time"><button class="btn pri" data-act="play" id="playb"></button><div class="year" id="year"></div>
+      ${sel ? `<section class="panel over" aria-live="polite" style="--acc:${sel.col}">${missionCard(sel, `<a class="btn" href="#/destinos/${sel.dest}/${sel.id}">${t('seeOn')}</a>`)}</section>` : ''}
+      <div class="time"><button class="btn pri" data-act="play" id="playb"></button><div class="year" id="year"></div>
       <div class="track">${MISSIONS.map(m => `<i class="tick" style="left:${((m.tL - T0) / (NOW - T0) * 100).toFixed(2)}%;--k:${m.col}"></i>`).join('')}<input id="slider" type="range" min="${T0}" max="${NOW}" step="0.01" aria-label="${state.lang === 'es' ? 'Año' : 'Year'}"></div></div>`;
   } else if (r.view === 'destinos') {
     const d = ['moon', 'mars', 'deep'].includes(r.a) ? r.a : 'moon', list = MISSIONS.filter(m => m.dest === d), sel = state.sel && byId(state.sel), firstM = list.reduce((a, b) => a.arrive < b.arrive ? a : b);
     h = nav('destinos') + `<div class="chip">${t('chip')}</div><div class="seg">${['moon', 'mars', 'deep'].map(k => `<a class="tab ${k === d ? 'on' : ''}" href="#/destinos/${k}">${t(k)}</a>`).join('')}</div>
-      <section class="card panel" style="--acc:${DEST_COL[d]}" aria-live="polite">${sel ? missionCard(sel) : `<span class="eyebrow">${t('destinos')}</span><h1 style="margin-top:10px">${t(d)}</h1><p class="lead">${UI.destLead[d][state.lang === 'es' ? 0 : 1]}</p>
+      <section class="panel" style="--acc:${DEST_COL[d]}" aria-live="polite">${sel ? missionCard(sel) : `<span class="eyebrow">${t('destinos')}</span><h1>${t(d)}</h1><p class="lead">${UI.destLead[d][state.lang === 'es' ? 0 : 1]}</p>
       <dl class="kv"><dt>${list.length}</dt><dd>${t('inApp')}</dd><dt>${firstM.arrive.slice(0, 4)}</dt><dd>${t('first')}: ${esc(firstM.short || firstM.name)}</dd></dl>`}
       <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
       <div class="note">${d === 'deep' ? t('noteScale') + ' ' + t('noteDrawn') : t('noteScale')}</div>`;
   } else if (r.view === 'maquinas') {
-    h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="card" style="--acc:${m.col}"><span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3 style="margin-top:10px">${esc(m.name)}</h3><p>${L(m.line)}</p>
+    h = nav('maquinas') + `<div class="grid"><h1 style="margin-top:6px">${t('allTitle')}</h1><p class="lead">${t('allLead')}</p><div class="cards">${MISSIONS.map(m => `<article class="entry" style="--acc:${m.col}"><span class="eyebrow">${t(m.dest)} · ${L(TYPES[m.type])}</span><h3>${esc(m.name)}</h3><p>${L(m.line)}</p>
       <dl class="kv"><dt>${t('launch')}</dt><dd>${fmt(m.launch)}</dd><dt>${t('where')}</dt><dd>${L(m.place)}</dd></dl>
-      <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
+      <div class="row">${m.story ? `<a class="btn pri" href="#/historia/${m.story}/1">${t('full')}</a><a class="btn" href="#/maquina/${m.story}">${t('seeParts')}</a>` : ''}<a class="btn" href="#/destinos/${m.dest}/${m.id}">${t('seeOn')}</a><a class="btn" href="${m.src}" target="_blank" rel="noopener">${t('source')}</a></div></article>`).join('')}</div></div>`;
   } else {
     const es = state.lang === 'es';
     h = nav('fuentes') + `<div class="grid"><div class="doc"><h1 style="margin-top:6px">${t('fuentes')}</h1>
@@ -427,7 +465,7 @@ function storyFlight(dt) {
 }
 function highlight(time) {
   const md = cur.model; if (!md) return; const pulse = .28 + .18 * Math.sin(time * 4);
-  md.group.traverse(o => { if (!o.isMesh || !o.material.emissive) return; const on = state.part && o.userData.part === state.part; if (on) o.material.emissive.setRGB(.25 * pulse, 1 * pulse, .85 * pulse); else if (o.userData.em0) o.material.emissive.copy(o.userData.em0); });
+  md.group.traverse(o => { if (!o.isMesh || !o.material.emissive) return; const on = state.part && o.userData.part === state.part; if (on) o.material.emissive.setRGB(.25 * pulse, 1 * pulse, .85 * pulse); else if (hoverPart && o.userData.part === hoverPart) o.material.emissive.setRGB(.05, .2, .17); else if (o.userData.em0) o.material.emissive.copy(o.userData.em0); });
 }
 const dusty = new THREE.Color(0x9a6a48), white = new THREE.Color(0xffffff);
 function fx(dt) {
@@ -455,7 +493,7 @@ function frame() {
   rigUpdate(dt); W.stars.position.copy(camera.position);
   if (cur.stage) { stage.light.target.position.copy(cur.model.center); }
   for (const k in sitePins) if (sitePins[k].visible) sitePins[k].children[0].scale.setScalar(.16 * (1 + .25 * Math.sin(time * 3)));
-  pinsUpdate(); labelsUpdate();
+  pinsUpdate(); labelsUpdate(); hoverUpdate();
   renderer.render(scene, camera);
   // adaptive resolution
   slow = dt > 1 / 32 ? slow + 1 : Math.max(0, slow - 2);

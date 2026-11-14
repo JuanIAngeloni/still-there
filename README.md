@@ -1,4 +1,4 @@
-# Siguen ahí
+# Still There
 
 Recorrido 3D (three.js) por el hardware que NASA dejó en la Luna, Marte y el espacio profundo, contado en primera persona por las propias máquinas. Proyecto para NASA Space Apps Córdoba 2026, desafío «Abandoned but not Forgotten».
 
