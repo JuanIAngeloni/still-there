@@ -194,6 +194,9 @@ export const SOURCES = [
     ['NASA Science · Opportunity', S.oppy], ['NASA Mars Exploration Rovers · Science results', S.berries], ['NASA Science · Pioneer 10', S.p10],
     ['NASA · Laser Beams Reflected Between Earth and Moon Boost Science', S.laser], ['NASA Science · Kepler', 'https://science.nasa.gov/mission/kepler/'],
     ['NASA Science · Ingenuity Mars Helicopter', 'https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/']] },
+  { h: { es: 'Sonidos', en: 'Sounds' }, items: [
+    ['Apollo 11 · «The Eagle has landed» · NASA Audio and Ringtones', 'https://www.nasa.gov/audio-and-ringtones/'],
+    ['Marte / Mars · First Audio Recording of Sounds on Mars (Perseverance, SuperCam) · NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaéro', 'https://science.nasa.gov/resource/first-audio-recording-of-sounds-on-mars/']] },
   { h: { es: 'Imágenes de los planetas', en: 'Planet imagery' }, items: [
     ['Tierra / Earth: NASA Blue Marble (Visible Earth) + NASA Black Marble 2016 (Earth Observatory)', 'https://visibleearth.nasa.gov/collection/1484/blue-marble'],
     ['Luna / Moon: NASA SVS CGI Moon Kit (LRO LROC color, LOLA elevation)', 'https://svs.gsfc.nasa.gov/4720'],
@@ -255,4 +258,16 @@ export const SCALE = {
   kepler: { fig: { es: 'Un espejo de 1,4 m de diámetro', en: 'A mirror 1.4 m across' }, like: { es: 'Más o menos la altura de un chico de 10 años.', en: 'Roughly the height of a 10-year-old.' }, src: 'https://science.nasa.gov/mission/kepler/' },
   insight: { fig: { es: 'Unos 6 m con los paneles abiertos', en: 'About 6 m with its panels open' }, like: { es: 'Más o menos el largo de una camioneta grande.', en: 'Roughly the length of a large pickup truck.' }, src: N('2018-042A') },
   ingenuity: { fig: { es: '1,8 kg', en: '1.8 kg' }, like: { es: 'Menos que una botella de agua de 2 litros.', en: 'Less than a 2-litre bottle of water.' }, src: 'https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/' }
+};
+
+// Real NASA recordings. `at` = story scenes (story id + scene number) and destinations where the clip is offered.
+export const SOUNDS = {
+  eagle: { f: 'audio/apollo11_eagle_has_landed.mp3', at: ['eagle/2', 'eagle/5'], dest: 'moon',
+    name: { es: 'Audio real de Apollo 11: «The Eagle has landed»', en: 'Real Apollo 11 audio: “The Eagle has landed”' },
+    note: { es: 'Radio entre la Luna y Houston, 20 de julio de 1969. Está en inglés.', en: 'Radio between the Moon and Houston, July 20, 1969.' },
+    credit: 'NASA', src: 'https://www.nasa.gov/audio-and-ringtones/' },
+  mars: { f: 'audio/mars_perseverance_sol1.mp3', at: ['opportunity/4', 'opportunity/5'], dest: 'mars',
+    name: { es: 'Así suena Marte: grabación real', en: 'What Mars sounds like: a real recording' },
+    note: { es: 'No lo grabó Opportunity, que no tenía micrófono: lo grabó el rover Perseverance el 19 de febrero de 2021. Se oye un poco de viento, apagado.', en: 'Not recorded by Opportunity, which had no microphone: the Perseverance rover recorded it on February 19, 2021. A little wind can be heard, muffled.' },
+    credit: 'NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaéro', src: 'https://science.nasa.gov/resource/first-audio-recording-of-sounds-on-mars/' }
 };

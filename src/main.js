@@ -6,7 +6,7 @@ import './style.css';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { makeWorld, latLon, SUN, glowSprite } from './world.js';
 import { makeOpportunity, makeEagle, makePioneer, makeStage, STAGE } from './models.js';
-import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE } from './data.js';
+import { MISSIONS, STORIES, SITES, TYPES, SOURCES, QUIZ, SCALE, SOUNDS } from './data.js';
 import { IMAGES } from './images.js';
 import { makeRocket, makeExhaust, makePad, rocketFamily } from './rockets.js';
 
@@ -48,6 +48,8 @@ const UI = {
   qMsg: [['Volvé a leer la historia y probá de nuevo.', 'Casi. Una repasada y lo sacás.', 'Muy bien. Te faltó una sola.', 'Perfecto. Te ganaste el sello dorado.'], ['Read the story again and have another go.', 'Almost. One more read and you have it.', 'Well done. Just one missed.', 'Perfect. You earned the gold stamp.']],
   seePass: ['Ver mi pasaporte', 'See my passport'], passReset: ['Borrar mis sellos', 'Clear my stamps'], notYet: ['Sin visitar', 'Not visited'], notDone: ['Sin terminar', 'Not finished'], saved: ['Los sellos se guardan solo en este navegador.', 'Stamps are saved only in this browser.'],
   scaleH: ['A escala', 'To scale'], scaleNasa: ['dato y comparación de NASA', 'figure and comparison by NASA'], scaleOurs: ['dato de NASA, comparación de esta app', 'NASA figure, comparison by this app'],
+  snd: ['Voz', 'Voice'], sndTip: ['Lee en voz alta cada escena de las historias', 'Reads each story scene aloud'], listen: ['🔈 Escuchar esta escena', '🔈 Listen to this scene'], stopL: ['■ Parar', '■ Stop'], playClip: ['▶ Escuchar', '▶ Listen'], sounds: ['Sonido real de NASA', 'Real NASA sound'],
+  ttsNote: ['La lectura usa la voz sintética de tu navegador.', 'Reading uses your browser’s synthetic voice.'], noTts: ['Tu navegador no tiene lectura por voz.', 'Your browser has no speech reading.'],
   followB: ['Seguir', 'Follow'], followTip: ['La cámara sigue a la nave que despega', 'The camera tracks the craft that lifts off'],
   play: ['▶ Reproducir', '▶ Play'], pause: ['❚❚ Pausa', '❚❚ Pause'], lifts: ['despega de', 'lifts off from'],
   pickPart: ['Tocá una pieza o un número', 'Tap a part or a number'], whatIs: ['Qué es', 'What it is'], whatFor: ['Qué permitió', 'What it made possible'],
@@ -72,6 +74,26 @@ const PASS = (() => { try { return JSON.parse(localStorage.getItem('pass')) || {
 PASS.seen = PASS.seen || []; PASS.done = PASS.done || []; PASS.quiz = PASS.quiz || {};
 const savePass = () => localStorage.setItem('pass', JSON.stringify(PASS));
 function stamp(kind, id, name) { if (!id || PASS[kind].includes(id)) return; PASS[kind].push(id); savePass(); toast(`✦ ${t('stampNew')}: ${name}`); }
+// ---------- sound: real NASA clips + scene narration with the browser voice
+const clip = new Audio(); let clipId = null; clip.addEventListener('ended', () => { clipId = null; syncSound(); });
+const synth = window.speechSynthesis; let speaking = false;
+state.voice = localStorage.getItem('voice') === '1';
+function stopSound() { clip.pause(); clipId = null; if (synth) synth.cancel(); speaking = false; }
+function playClip(id) { const was = clipId; stopSound(); if (was !== id) { clip.src = SOUNDS[id].f; clip.currentTime = 0; clip.play().catch(() => {}); clipId = id; } syncSound(); }
+function speak(text) {
+  if (!synth) { toast(t('noTts')); return; }
+  stopSound(); const u = new SpeechSynthesisUtterance(text.replace(/[«»“”]/g, '')); u.lang = state.lang === 'es' ? 'es-AR' : 'en-US'; u.rate = .95;
+  const v = synth.getVoices().find(x => x.lang.toLowerCase().startsWith(state.lang)); if (v) { u.voice = v; u.lang = v.lang; }
+  u.onend = u.onerror = () => { speaking = false; syncSound(); }; speaking = true; synth.speak(u); syncSound();
+}
+function sceneText() { const r = state.route, st = STORIES[r.a]; if (r.view !== 'historia' || !st) return ''; const sc = st.scenes[Math.min(Math.max(+r.b - 1 || 0, 0), 4)]; return [L(sc.title), L(sc.say), ...sc.facts.map(f => L(f.h) + '. ' + L(f.p))].join('. '); }
+function syncSound() {
+  document.querySelectorAll('[data-act=clip]').forEach(b => { const on = b.dataset.s === clipId; b.textContent = on ? t('stopL') : t('playClip'); b.setAttribute('aria-pressed', on); });
+  const l = $('#listenb'); if (l) { l.textContent = speaking ? t('stopL') : t('listen'); l.setAttribute('aria-pressed', speaking); }
+}
+function soundEl(keys) {
+  return keys.map(k => { const x = SOUNDS[k]; return `<div class="found snd"><b><em>${t('sounds')}</em>${L(x.name)}</b><span>${L(x.note)} ${t('credit')}: ${esc(x.credit)}.</span>${srcLink(x.src)}<div class="row"><button class="btn" data-act="clip" data-s="${k}" aria-pressed="false">${t('playClip')}</button></div></div>`; }).join('');
+}
 const quiz = { id: null, i: 0, pick: null, score: 0 };
 
 // ---------- renderer
@@ -243,6 +265,7 @@ function go(h) { if (location.hash === h) onRoute(); else location.hash = h; }
 addEventListener('hashchange', () => onRoute());
 let first = true;
 function onRoute() {
+  stopSound(); const rr = parse(); if (state.voice && rr.view === 'historia' && STORIES[rr.a]) setTimeout(() => { if (state.voice && location.hash.includes(`/${rr.a}/${rr.b}`)) speak(sceneText()); }, 900);
   const r = parse(), wasStage = cur.stage, prevModel = cur.model;
   state.route = r;
   const st = STORIES[r.a], idx = +r.b - 1;
@@ -360,7 +383,7 @@ const srcLink = u => u ? ` <a class="src" href="${u}" target="_blank" rel="noope
 function nav(on) {
   const tabs = [['historias', '#/inicio'], ['explorar', '#/explorar'], ['destinos', '#/destinos/moon'], ['maquinas', '#/maquina/opportunity'], ['pasaporte', '#/pasaporte'], ['fuentes', '#/fuentes']];
   return `<nav class="nav" aria-label="Principal"><a class="logo" href="#/inicio">Still There</a>${tabs.map(([k, h]) => `<a class="tab ${k === on ? 'on' : ''}" href="${h}" ${k === on ? 'aria-current="page"' : ''}>${t(k)}${k === 'pasaporte' ? ` <em>${PASS.seen.length}/${MISSIONS.length}</em>` : ''}</a>`).join('')}
-  <button class="tab sm" data-act="lite" aria-pressed="${state.lite}">${t('lite')}: ${state.lite ? 'on' : 'off'}</button><button class="tab sm keep" data-act="lang" aria-label="Idioma / Language">${state.lang === 'es' ? 'ES · en' : 'EN · es'}</button></nav>`;
+  <button class="tab sm" data-act="voice" aria-pressed="${state.voice}" title="${t('sndTip')}">${t('snd')}: ${state.voice ? 'on' : 'off'}</button><button class="tab sm" data-act="lite" aria-pressed="${state.lite}">${t('lite')}: ${state.lite ? 'on' : 'off'}</button><button class="tab sm keep" data-act="lang" aria-label="Idioma / Language">${state.lang === 'es' ? 'ES · en' : 'EN · es'}</button></nav>`;
 }
 function gallery(id, big) {
   const im = IMAGES[id]; if (!im || !im.length) return '';
@@ -407,6 +430,7 @@ function render() {
       <span class="eyebrow">${esc(name)} · ${t('scene')} ${i + 1} ${t('of')} 5</span><h2>${L(sc.title)}</h2>
       <div class="who"><i></i>${esc(name)} ${t('tells')}</div><div class="say">${L(sc.say)}</div>
       ${sc.facts.map(f => `<div class="found"><b>${L(f.h)}</b><span>${L(f.p)}</span>${srcLink(f.src)}</div>`).join('')}
+      <div class="row"><button class="btn" id="listenb" data-act="listen" aria-pressed="false" title="${t('ttsNote')}">${t('listen')}</button></div>${soundEl(Object.keys(SOUNDS).filter(k => SOUNDS[k].at.includes(`${r.a}/${i + 1}`)))}
       ${i === 0 ? scaleEl(st.mission) : ''}${i === 1 ? `<div class="bar"><i id="fbar"></i></div><div class="row" style="align-items:center"><button class="btn" data-act="replay">${t('replay')}</button><span id="fphase" style="color:var(--dim);font-size:14px"></span></div>` : ''}
       ${i >= 2 ? `<div class="row"><a class="btn" href="#/maquina/${r.a}${sc.part ? '/' + sc.part : ''}">${t('inside')}</a></div>` : ''}
       ${gallery(st.mission)}<div class="rec">${t('rec')}</div></section>
@@ -431,7 +455,7 @@ function render() {
     const d = ['moon', 'mars', 'deep'].includes(r.a) ? r.a : 'moon', list = MISSIONS.filter(m => m.dest === d), sel = state.sel && byId(state.sel), firstM = list.reduce((a, b) => a.arrive < b.arrive ? a : b);
     h = nav('destinos') + `<div class="chip">${t('chip')}</div><div class="seg">${['moon', 'mars', 'deep'].map(k => `<a class="tab ${k === d ? 'on' : ''}" href="#/destinos/${k}">${t(k)}</a>`).join('')}</div>
       <section class="panel" style="--acc:${DEST_COL[d]}" aria-live="polite">${sel ? missionCard(sel) : `<span class="eyebrow">${t('destinos')}</span><h1>${t(d)}</h1><p class="lead">${UI.destLead[d][state.lang === 'es' ? 0 : 1]}</p>
-      <dl class="kv"><dt>${list.length}</dt><dd>${t('inApp')}</dd><dt>${firstM.arrive.slice(0, 4)}</dt><dd>${t('first')}: ${esc(firstM.short || firstM.name)}</dd></dl>`}
+      <dl class="kv"><dt>${list.length}</dt><dd>${t('inApp')}</dd><dt>${firstM.arrive.slice(0, 4)}</dt><dd>${t('first')}: ${esc(firstM.short || firstM.name)}</dd></dl>${soundEl(Object.keys(SOUNDS).filter(k => SOUNDS[k].dest === d))}`}
       <div class="list">${list.map(m => `<a class="item ${m.id === state.sel ? 'on' : ''}" href="#/destinos/${d}/${m.id}" style="--k:${m.col}"><i></i><b>${esc(m.short || m.name)}</b><span>${m.end ? `${t('off')} · ${m.end.slice(0, 4)}` : m.arrive.slice(0, 4)}</span></a>`).join('')}</div></section>
       <div class="note">${d === 'deep' ? t('noteScale') + ' ' + t('noteDrawn') : t('noteScale')}</div>`;
   } else if (r.view === 'quiz' && st) {
@@ -484,6 +508,9 @@ $('#ui').addEventListener('click', e => {
   if (a === 'qnext') { quiz.i++; quiz.pick = null; if (quiz.i >= QUIZ[quiz.id].length) { PASS.quiz[quiz.id] = Math.max(PASS.quiz[quiz.id] || 0, quiz.score); savePass(); } render(); }
   if (a === 'qretry') { quiz.id = null; render(); }
   if (a === 'passreset') { PASS.seen = []; PASS.done = []; PASS.quiz = {}; savePass(); render(); }
+  if (a === 'clip') playClip(b.dataset.s);
+  if (a === 'listen') { if (speaking) { stopSound(); syncSound(); } else speak(sceneText()); }
+  if (a === 'voice') { state.voice = !state.voice; localStorage.setItem('voice', state.voice ? '1' : '0'); stopSound(); render(); if (state.voice && sceneText()) speak(sceneText()); }
   if (a === 'replay') { cur.u = 0; exhaust.clear(); }
   if (a === 'follow') { state.follow = !state.follow; b.setAttribute('aria-pressed', state.follow); if (state.follow && !state.playing && state.time < NOW - .05) state.playing = true; }
   if (a === 'play') { if (state.time >= NOW - .05) state.time = T0; state.playing = !state.playing; }
