@@ -4,6 +4,8 @@ NASA Space Apps Challenge 2026, Salta (Argentina). Challenge: *Abandoned but not
 
 **Still There: NASA's missions across time.** Fourteen machines that NASA left on the Moon, on Mars and beyond, each told as a whole mission you can fly through in 3D: the launch, the journey, the arrival and where the machine is today.
 
+**Live site:** https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce (no login needed; add `?lang=en` is not required, the language follows your browser).
+
 Spanish version of this file: [README.es.md](README.es.md).
 
 ## What you can do

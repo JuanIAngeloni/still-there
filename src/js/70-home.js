@@ -17,7 +17,7 @@ var hmApi=(function(){
         tlH:'Línea de tiempo',tlP:'Cada fila es una vida: el viaje, los años de trabajo y el silencio. Todas siguen ahí.',today:'hoy',
         leg:{trip:'Viaje',work:'Años de trabajo',silent:'En silencio',inUse:'Sigue en uso',now:'Hoy: sigue ahí'},
         tlNote:'En las sondas que no aterrizaron, la barra empieza en el despegue.',swipe:'Deslizá hacia el costado para ver todos los años.',
-        rkH:'Los cohetes que las llevaron',rkP:'En orden, del primer despegue al último. Las alturas están a la misma escala; la forma es un dibujo simple.',
+        rkH:'Los cohetes que las llevaron',rkP:'En orden, del primer despegue al último. Todos están a la misma escala y son los mismos modelos 3D que se ven en cada lanzamiento.',
         tall:'{n} m de alto',carried:'Llevó a',
         foot:'Las frases en primera persona están escritas para este sitio a partir de datos de NASA: no son citas reales. Fotos: NASA Image and Video Library. Fechas: NSSDCA y páginas de misión de NASA.'},
     en:{brand:'Still There',navAria:'Start page',visited:'Visited {n} of {t}',map:'Open the 3D map',credits:'Credits',
@@ -27,7 +27,7 @@ var hmApi=(function(){
         tlH:'Timeline',tlP:'Each row is a life: the trip, the working years and the silence. They are all still there.',today:'today',
         leg:{trip:'Trip',work:'Working years',silent:'Silent',inUse:'Still in use',now:'Today: still there'},
         tlNote:'For the probes that did not land, the bar starts at launch.',swipe:'Swipe sideways to see all the years.',
-        rkH:'The rockets that carried them',rkP:'In order, from the first launch to the last. Heights are drawn to the same scale; the shape is a simple drawing.',
+        rkH:'The rockets that carried them',rkP:'In order, from the first launch to the last. All are at the same scale, and they are the same 3D models you see in each launch.',
         tall:'{n} m tall',carried:'It carried',
         foot:'The first-person lines were written for this site from NASA data: they are not real quotes. Photos: NASA Image and Video Library. Dates: NSSDCA and NASA mission pages.'}
   };
@@ -37,7 +37,7 @@ var hmApi=(function(){
              kepler:'delta7925_10L',insight:'atlasV401',ingenuity:'atlasV541'};
   var RK_NAME={atlasCentaur:'Atlas-Centaur',atlasCentaurTE:'Atlas-Centaur',saturnV:'Saturn V',titan3e:'Titan IIIE-Centaur',
                delta7925:'Delta II',delta7925H:'Delta II',delta7925_10L:'Delta II',atlasV401:'Atlas V',atlasV541:'Atlas V'};
-  var Y0=1965,SPAN=62,NOW_PC=99.8,DECADES=[1970,1980,1990,2000,2010,2020],RK_MAX_PX=150;
+  var Y0=1965,SPAN=62,NOW_PC=99.8,DECADES=[1970,1980,1990,2000,2010,2020],RK_MAX_PX=250;
   var LEG_KEYS=['trip','work','silent','inUse','now'];
 
   var E={},CARDS={},ROWS=[],RK=null,ST={sort:'place'};
@@ -134,7 +134,7 @@ var hmApi=(function(){
 /* cohetes */
 '.hm-rks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:14px;margin-top:6px}'+
 '.hm-rk{display:flex;flex-direction:column;gap:8px;min-width:0;background:#0b0f16;border:1px solid rgba(232,238,248,.16);border-radius:12px;padding:14px 16px 12px}'+
-'.hm-rkfig{display:flex;align-items:flex-end;justify-content:center;height:164px;margin-bottom:4px;border-bottom:1px solid rgba(232,238,248,.3)}.hm-rkfig svg{display:block;flex:none}'+
+'.hm-rkfig{display:flex;align-items:flex-end;justify-content:center;height:264px;margin-bottom:4px;border-bottom:1px solid rgba(232,238,248,.3)}.hm-rkfig svg{display:block;flex:none}'+
 '.hm-rkn{margin:0;font-size:17px;font-weight:600;line-height:1.2;letter-spacing:-.01em}'+
 '.hm-rkh{font-size:12.5px;color:#a7b0bd;font-variant-numeric:tabular-nums}.hm-rkh[hidden],.hm-rkb[hidden]{display:none}'+
 '.hm-rkb{margin:0;font-size:14px;line-height:1.4;color:#cfd6e0}'+
@@ -294,7 +294,8 @@ var hmApi=(function(){
       try{
         card.setAttribute('role','listitem');
         var it={key:g.key,info:info[g.key]||{},chips:[]},fig=deco(card,'div','hm-rkfig'),hm=heightOf(it.info);
-        if(hm&&max)rocketSvg(fig,g.key,Math.max(12,Math.round(hm/max*RK_MAX_PX)));
+        fig.setAttribute('data-rk',g.key);if(max)fig.setAttribute('data-ppm',RK_MAX_PX/max);
+        if(hm&&max){var rpx=Math.max(12,Math.round(hm/max*RK_MAX_PX));rocketSvg(fig,g.key,rpx);fig.setAttribute('data-px',rpx);}
         it.hM=hm;it.n=add(card,'h3','hm-rkn');it.hEl=add(card,'span','hm-rkh');it.b=add(card,'p','hm-rkb');
         var ms=add(card,'div','hm-rkm');it.l=add(ms,'span','hm-rkl');
         g.ids.forEach(function(id){var d=null;data().forEach(function(x){if(x&&x.id===id)d=x;});
