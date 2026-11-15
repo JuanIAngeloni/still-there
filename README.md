@@ -26,7 +26,7 @@ Spanish and English. The language follows the browser; `?lang=en` or `?lang=es` 
 - **Times and fates.** T+ times and the fate of every stage come from NASA and manufacturer press kits and flight reports. Where we could not find the real time of a step, the clock is not shown.
 - **What is illustrative.** The climb profile of the launch (height and pitch), the Mars entry and the descents are animations, not flight telemetry. The site says so on screen.
 
-Every adaptation we made to a NASA model is listed in [SOURCES.md](SOURCES.md).
+Every adaptation we made to a NASA model is listed in [SOURCES.md](SOURCES.md). The NASA rocket models came with the NASA insignia, a flag and another mission's patch painted on them; we covered those.
 
 ## Run it
 

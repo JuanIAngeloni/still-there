@@ -20,6 +20,7 @@ from PIL import Image  # noqa: E402
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 COMP = {5120: "b", 5121: "B", 5122: "h", 5123: "H", 5125: "I", 5126: "f"}
 NUM = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4, "MAT4": 16}
+EDIT = None  # función opcional (nombre, imagen) -> imagen, para retocar una textura antes de comprimirla
 
 
 def read_glb(path):
@@ -82,6 +83,8 @@ def pack(js, binary, max_side):
         if i in img_views:
             im = Image.open(io.BytesIO(raw))
             im.load()
+            if EDIT:
+                im = EDIT(js["images"][img_views[i]].get("name"), im)
             alpha = im.mode in ("RGBA", "LA", "P") and im.convert("RGBA").getextrema()[3][0] < 250
             w, h = im.size
             k = min(1.0, max_side / max(w, h))

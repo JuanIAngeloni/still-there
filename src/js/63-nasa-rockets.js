@@ -6,7 +6,7 @@
      la tercera etapa Star 48B está hecha a mano; la cofia del modelo es la de 10 pies.
    - Atlas V 541: el modelo publicado es el 551 (5 propulsores); se le quita uno.
    Devuelve lo mismo que buildRocket3D: {root, parts, height, engines, payloadY, fairingRadius}. */
-var ROCKET_GLB={delta7925:'delta2',delta7925H:'delta2',delta7925_10L:'delta2',atlasV401:'atlas401',atlasV541:'atlas551'};
+var ROCKET_GLB={delta7925:'delta2c',delta7925H:'delta2c',delta7925_10L:'delta2c',atlasV401:'atlas401c',atlasV541:'atlas551c'};
 function nrStar48(g,y0){
   var al=new THREE.MeshStandardMaterial({color:0xb9bcc2,metalness:0.9,roughness:0.36,side:THREE.DoubleSide}),
     ti=new THREE.MeshStandardMaterial({color:0x55575c,metalness:0.85,roughness:0.42}),

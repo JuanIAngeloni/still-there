@@ -142,7 +142,7 @@ function lxBuilt(m,key,R){
   lxEnvBuild();lxSmokeReset();
   LX.az=0.75;LX.el=0.1;LX.zoom=1;lxFrameBox(true);LX.ready=true;
 }
-var LX_PAY={insight:'cruise',ingenuity:'cruise'},LX_PAYK={ingenuity:1.7};
+var LX_PAY={viking1:'viking',insight:'cruise',ingenuity:'cruise'},LX_PAYK={ingenuity:1.7};
 /* la nave va dentro de la cofia, achicada para que entre; al final se la agranda para verla bien */
 function lxPayload(m,R){
   var pm=R.parts.payloadMount,X=JX[m.id];LX.craft=null;if(!pm||m.id==='apollo11'||!X)return;
@@ -150,7 +150,7 @@ function lxPayload(m,R){
   function fit(o){o.traverse(function(q){if(q.isMesh&&q.material){q.material=Array.isArray(q.material)?q.material.map(function(mm){var k=mm.clone();k.envMap=null;return k;}):q.material.clone();if(!Array.isArray(q.material))q.material.envMap=null;q.castShadow=true;q.receiveShadow=true;}});
     var g=new THREE.Group();g.add(o);var b=new THREE.Box3().setFromObject(g),s=b.getSize(new THREE.Vector3()),c=b.getCenter(new THREE.Vector3());
     var k=Math.min(1,(R.fairingRadius||1.4)*1.7/Math.max(s.x,s.z,0.01));o.position.set(-c.x,-b.min.y,-c.z);g.scale.setScalar(k);hold.add(g);LX.craftK=k;}
-  var name=X.hw==='surveyor'?'surveyor':(X.craft||LX_PAY[m.id]);if(!name)return;
+  var name=LX_PAY[m.id]||(X.hw==='surveyor'?'surveyor':X.craft);if(!name)return;
   if(HW[name]){var o=HW[name]();if(name==='cruise')o.rotation.x=Math.PI;if(LX_PAYK[m.id])o.scale.setScalar(LX_PAYK[m.id]);fit(o);}else modelOf(name,function(o){fit(fitModel(o,X.craftM));});
 }
 function lxClearDebris(){LX.debris.forEach(function(d){if(d.g.parent)d.g.parent.remove(d.g);if(d.lab)d.lab.remove();});LX.debris=[];
@@ -192,7 +192,8 @@ function lxDrop(id,animate){
 /* qué piezas están encendidas en cada paso */
 function lxBurning(k){
   var steps=LX.seq.steps,on={},any=false,i;
-  for(i=0;i<=k;i++){var s=steps[i];if(s.ignite||s.shutdown)any=true;(s.ignite||[]).forEach(function(p){on[p]=1;});(s.shutdown||[]).forEach(function(p){delete on[p];});(s.drop||[]).forEach(function(p){delete on[p];});}
+  for(i=0;i<=k;i++){var s=steps[i];if(s.ignite||s.shutdown)any=true;if(!s.ignite&&/^(parking|orbit|coast)$|Cutoff$/.test(s.id||'')){delete on.stage2;delete on.stage3;}
+    (s.ignite||[]).forEach(function(p){on[p]=1;});(s.shutdown||[]).forEach(function(p){delete on[p];});(s.drop||[]).forEach(function(p){delete on[p];});}
   if(!any&&k>0){var order=['stage1','stage2','stage3'];on={};for(i=0;i<order.length;i++)if(LX.R.parts[order[i]]&&!LX.dropped[order[i]]){on[order[i]]=1;break;}
     ['srbGround','boosterSection'].forEach(function(p){if(LX.R.parts[p]&&!LX.dropped[p])on[p]=1;});}
   return on;

@@ -25,15 +25,15 @@ From science.nasa.gov (NASA 3D resources, free to use with credit under NASA's i
 | Site file | Model | Origin | Credit | Our changes |
 |---|---|---|---|---|
 | `mer_hd` | Mars Exploration Rover (Spirit and Opportunity) | `science.nasa.gov/resource/mars-exploration-rovers-3d-model/` (`MER_static.glb`) | NASA/JPL-Caltech | Textures converted to 1024 px JPEG. A dust tint is added to Opportunity. |
-| `delta2` | Delta II rocket | `science.nasa.gov/resource/delta-ii-3d-model/` (`Delta_II.glb`) | NASA VTAD | The model comes with 3 boosters and a 10-foot fairing. We repeat the booster up to 9 (6 that ignite on the ground and 3 in flight), enlarge them for the 7925H and add a hand-made Star 48B third stage (`src/js/63-nasa-rockets.js`). |
-| `atlas401` | Atlas V 401 rocket | `science.nasa.gov/resource/atlas-v-401-3d-model/` (`Atlas_V_401.glb`) | NASA VTAD | No changes to the shape. |
-| `atlas551` | Atlas V 551 rocket | `science.nasa.gov/resource/atlas-v-501-3d-model/` (`Atlas_V_551.glb`) | NASA VTAD | NASA does not publish the 541: we use the 551 and remove one booster. Its fairing carries the emblem of another mission. |
+| `delta2c` | Delta II rocket | `science.nasa.gov/resource/delta-ii-3d-model/` (`Delta_II.glb`) | NASA VTAD | The model comes with 3 boosters and a 10-foot fairing. We repeat the booster up to 9 (6 that ignite on the ground and 3 in flight), enlarge them for the 7925H and add a hand-made Star 48B third stage (`src/js/63-nasa-rockets.js`). |
+| `atlas401c` | Atlas V 401 rocket | `science.nasa.gov/resource/atlas-v-401-3d-model/` (`Atlas_V_401.glb`) | NASA VTAD | No changes to the shape. |
+| `atlas551c` | Atlas V 551 rocket | `science.nasa.gov/resource/atlas-v-501-3d-model/` (`Atlas_V_551.glb`) | NASA VTAD | NASA does not publish the 541: we use the 551 and remove one booster. |
 
-The rocket models carry the emblems painted on the real rocket (NASA, manufacturer, mission). They are part of the NASA model: we did not add them and they do not indicate sponsorship.
+Emblems: the three models came with the NASA insignia, the flag, company logos and the patch of one specific mission painted on them (OCO-2 on the Delta II, MAVEN on the Atlas V 401, Juno on the 551). The site uses those rockets for other missions and Space Apps asks teams not to use the NASA insignia or mission logos, so `tools/clean_decals.py` covers them in the texture with the rocket's own colour. The shape does not change.
 
 InSight: in the NASA model the seismometer, its dome and the heat probe come on the deck; the site places them on the ground, in front of the lander, which is how they ended up working (`insightDeploy` in `src/js/48-extra.js`). The distances are approximate.
 
-The Saturn V, Titan IIIE-Centaur and Atlas-Centaur rockets do not have an official model that can be separated by stage: they are coded with AI help (`src/js/62-rockets.js`), with the dimensions and the sources noted at the top of that file. They carry no emblems or lettering.
+The Saturn V, Titan IIIE-Centaur and Atlas-Centaur rockets have no official model that separates by stage: they are programmed with the help of AI (`src/js/62-rockets.js`), with the dimensions and sources noted at the top of that file. They carry no emblems or lettering.
 
 ## Launches and the fate of each stage
 

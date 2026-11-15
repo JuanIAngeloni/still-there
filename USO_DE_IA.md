@@ -16,7 +16,7 @@ Ninguna imagen, video, audio ni modelo 3D del sitio fue generado por IA. Las fot
 - **Trayectorias.** Escribió el script que baja las tablas de JPL Horizons. Las trayectorias que se ven son las de Horizons, no inventadas, salvo las que dicen «reconstruida».
 - **Textos.** Redactó los textos para chicos en español e inglés a partir de esos datos, incluidas las preguntas, las tarjetas de «qué aprendimos» y las frases en primera persona de la portada. Esas frases no son citas reales; el sitio lo dice.
 - **Modelos escritos como código.** Los modelos simplificados de Surveyor 1, Phoenix, Mars Pathfinder y Sojourner, la cápsula de crucero a Marte, los experimentos de Apollo 11 y los cohetes Saturn V, Titan IIIE-Centaur y Atlas-Centaur los programó la IA a partir de medidas publicadas. No son modelos de NASA y no llevan emblemas de NASA.
-- **Adaptación de modelos de NASA.** Escribió el código que separa en piezas los modelos de NASA del Delta II y del Atlas V, repite el propulsor del Delta II hasta llegar a nueve, le quita un propulsor al Atlas V 551 y apoya en el suelo los instrumentos de InSight. Cada cambio está en `FUENTES.md`.
+- **Adaptación de modelos de NASA.** Escribió el código que separa en piezas los modelos de NASA del Delta II y del Atlas V, repite el propulsor del Delta II hasta llegar a nueve, le quita un propulsor al Atlas V 551, tapa los emblemas pintados en los tres cohetes y apoya en el suelo los instrumentos de InSight. Cada cambio está en `FUENTES.md`.
 
 ## Qué hizo el equipo
 

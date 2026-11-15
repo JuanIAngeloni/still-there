@@ -23,11 +23,11 @@ De science.nasa.gov (recursos 3D de NASA, uso libre con crédito según las paut
 | Archivo del sitio | Modelo | Origen | Crédito | Cambios nuestros |
 |---|---|---|---|---|
 | `mer_hd` | Mars Exploration Rover (Spirit y Opportunity) | `science.nasa.gov/resource/mars-exploration-rovers-3d-model/` (`MER_static.glb`) | NASA/JPL-Caltech | Texturas a JPEG de 1024 px. A Opportunity se le suma un tono de polvo. |
-| `delta2` | Cohete Delta II | `science.nasa.gov/resource/delta-ii-3d-model/` (`Delta_II.glb`) | NASA VTAD | El modelo trae 3 propulsores y cofia de 10 pies. Repetimos el propulsor hasta 9 (6 que se encienden en tierra y 3 en vuelo), los agrandamos para el 7925H y agregamos una tercera etapa Star 48B hecha a mano (`src/js/63-nasa-rockets.js`). |
-| `atlas401` | Cohete Atlas V 401 | `science.nasa.gov/resource/atlas-v-401-3d-model/` (`Atlas_V_401.glb`) | NASA VTAD | Sin cambios de forma. |
-| `atlas551` | Cohete Atlas V 551 | `science.nasa.gov/resource/atlas-v-501-3d-model/` (`Atlas_V_551.glb`) | NASA VTAD | NASA no publica el 541: usamos el 551 y le quitamos un propulsor. Su cofia lleva el emblema de otra misión. |
+| `delta2c` | Cohete Delta II | `science.nasa.gov/resource/delta-ii-3d-model/` (`Delta_II.glb`) | NASA VTAD | El modelo trae 3 propulsores y cofia de 10 pies. Repetimos el propulsor hasta 9 (6 que se encienden en tierra y 3 en vuelo), los agrandamos para el 7925H y agregamos una tercera etapa Star 48B hecha a mano (`src/js/63-nasa-rockets.js`). |
+| `atlas401c` | Cohete Atlas V 401 | `science.nasa.gov/resource/atlas-v-401-3d-model/` (`Atlas_V_401.glb`) | NASA VTAD | Sin cambios de forma. |
+| `atlas551c` | Cohete Atlas V 551 | `science.nasa.gov/resource/atlas-v-501-3d-model/` (`Atlas_V_551.glb`) | NASA VTAD | NASA no publica el 541: usamos el 551 y le quitamos un propulsor. |
 
-Los modelos de los cohetes llevan los emblemas pintados en el cohete real (NASA, fabricante, misión). Son parte del modelo de NASA: no los agregamos nosotros ni indican patrocinio.
+Emblemas: los tres modelos traían pintados la insignia de NASA, la bandera, logos de empresas y el parche de una misión concreta (OCO-2 en el Delta II, MAVEN en el Atlas V 401, Juno en el 551). El sitio usa esos cohetes para otras misiones y Space Apps pide no usar la insignia de NASA ni logos de misiones, así que `tools/clean_decals.py` los tapa en la textura con el color del propio cohete. La forma no cambia.
 
 InSight: en el modelo de NASA el sismómetro, su cúpula y la sonda de calor vienen sobre la cubierta; el sitio los apoya en el suelo, delante del módulo, que es como quedaron trabajando (`insightDeploy` en `src/js/48-extra.js`). Las distancias son aproximadas.
 

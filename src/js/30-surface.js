@@ -82,6 +82,20 @@ var HW={
     part(new THREE.TorusGeometry(1.318,0.022,8,56),m.alu,0,0.05,0,g).rotation.x=Math.PI/2;
     for(var i=0;i<3;i++){var a=i*2*Math.PI/3+0.5,b=part(new THREE.CylinderGeometry(0.11,0.11,0.05,16),m.mli,Math.cos(a)*0.98,0.55,Math.sin(a)*0.98,g);b.rotation.z=-Math.cos(a)*0.95;b.rotation.x=Math.sin(a)*0.95;}
     return g;},
+  /* Viking en vuelo: el orbitador (cuerpo de ocho lados, cuatro alas de paneles solares, antena y motor) con la cápsula
+     blanca del módulo de descenso encima. Modelo simplificado, con medidas aproximadas. */
+  viking:function(){var g=new THREE.Group(),m=mats(),V2=THREE.Vector2,i,a;if(!MAT.foil)HW.aeroshell();
+    part(new THREE.CylinderGeometry(0.34,0.52,0.6,24,1,true),m.dark,0,0.3,0,g).material.side=THREE.DoubleSide;                  /* tobera del motor */
+    for(i=0;i<2;i++)part(new THREE.SphereGeometry(0.56,24,16),MAT.foil,i?0.6:-0.6,1.1,0,g);                                    /* tanques */
+    part(new THREE.CylinderGeometry(1.22,1.22,0.46,8),MAT.mli,0,1.85,0,g);part(new THREE.CylinderGeometry(1.24,1.24,0.05,8),m.alu,0,2.1,0,g);
+    for(i=0;i<4;i++){a=i*Math.PI/2+Math.PI/4;[2.05,3.68].forEach(function(r){var p=part(new THREE.BoxGeometry(1.57,0.03,1.23),m.cells,Math.cos(a)*r,1.9,Math.sin(a)*r,g);p.rotation.y=-a;});
+      rod(new THREE.Vector3(Math.cos(a)*1.2,1.9,Math.sin(a)*1.2),new THREE.Vector3(Math.cos(a)*4.4,1.9,Math.sin(a)*4.4),0.025,m.alu,g);}
+    var dish=part(new THREE.LatheGeometry([new V2(0.001,0),new V2(0.3,0.03),new V2(0.55,0.11),new V2(0.74,0.2)],32),m.white,1.5,1.5,-1.15,g);dish.material.side=THREE.DoubleSide;dish.rotation.x=1.25;
+    rod(new THREE.Vector3(1.0,1.75,-0.7),new THREE.Vector3(1.45,1.5,-1.1),0.03,m.alu,g);part(new THREE.BoxGeometry(0.4,0.3,0.3),m.alu,-1.2,1.45,0.9,g);
+    /* cápsula del módulo de descenso, con su cubierta esterilizada */
+    part(new THREE.LatheGeometry([new V2(0.7,2.12),new V2(1.3,2.3),new V2(1.83,2.7),new V2(1.85,2.9),new V2(1.6,3.25),new V2(0.95,3.6),new V2(0.001,3.72)],48),m.white,0,0,0,g);
+    part(new THREE.TorusGeometry(1.85,0.03,8,48),m.alu,0,2.82,0,g).rotation.x=Math.PI/2;
+    return g;},
   /* configuración de crucero: la etapa de crucero, con los paneles solares en anillo, va atornillada sobre la cápsula */
   cruise:function(){var g=HW.aeroshell(),m=mats(),i,a;
     part(new THREE.CylinderGeometry(1.30,1.30,0.24,56,1,true),MAT.mli,0,1.30,0,g).material.side=THREE.DoubleSide;
