@@ -1,7 +1,7 @@
 /* ---------- 62-rockets.js: procedural 3D launch vehicles (three.js r128, global THREE) ----------
    API
      ROCKET_OF            machine id -> rocket key
-     buildRocket3D(key)   -> { key, root, parts, height, engines, payloadY, fairingRadius }
+     buildRocket3D(key)   -> { key, name, root, parts, height, engines, payloadY, fairingRadius }
    Conventions
    - Metres at real size, +Y up, rocket on the Y axis, the lowest nozzle exit at y = 0.
    - Every canonical part id (wip/SPEC.md) is a THREE.Group, DIRECT child of root, group.name = id.
@@ -11,10 +11,14 @@
      (position.y = payloadY); each solid booster is its own sub-group inside srbGround / srbAir, placed on
      the booster axis (position x, 0, z; rotation.y = its clock angle, local +Z points away from the core),
      so boosters can peel off one by one.
-   - fairingA is the x > 0 half of the nose fairing, fairingB the x < 0 half (double-sided shells).
+   - fairingA is the x > 0 half of the nose fairing, fairingB the x < 0 half, cut by the plane x = 0 and closed
+     when untouched. All materials are double-sided, so the inside of every shell shows when a piece comes off.
    - engines: [{ part, x, y, z, r }] = centre and radius of every nozzle exit, in root coordinates, upper
      stages and boosters included. The Apollo service-module engine is modelled but not listed.
    - Colours are authored in sRGB and converted to linear: render with renderer.outputEncoding = sRGBEncoding.
+     The metal skins (steel, aluminium, bronze, nozzles) need scene.environment to look right; without it they are dull.
+   - Geometries and materials are cached and shared by every rocket built: clone a material before changing it
+     (opacity, colour) on one piece, or the change shows on all of them.
    - Pieces that have no id of their own (and what they ride on):
        Saturn V   S-II/S-IVB cone -> stage2 (it stayed on the S-II); instrument unit and adapter panels -> stage3;
                   payloadMount = adapter base (top of the instrument unit), where the lunar module sits; its
@@ -140,14 +144,18 @@ var RK = (function () {
     }
     texC[key] = t; return t;
   }
+  /* Every skin is double-sided (o.ds is kept only so the call sites say which shells are meant to be seen from
+     inside). Once a piece separates, its open ends show the inside of skirts, adapters, tank walls and booster
+     cases; a single-sided wall is culled there and the viewer looks straight through the hull. Shadows are
+     cast by back faces, which is also what three.js does for single-sided skins: no self-shadow speckle. */
   function mat(name, o) {
     o = o || {};
-    var key = name + (o.ds ? '|ds' : '') + (o.map ? '|' + o.map : '');
+    var key = name + (o.map ? '|' + o.map : '');
     if (matC[key]) return matC[key];
     var p = PAL[name], tex = o.map ? canvasTex(o.map) : null;
     var m = new THREE.MeshStandardMaterial({ color: tex ? 0xffffff : p[0], roughness: p[1], metalness: p[2] });
     if (tex) m.map = tex; else if (m.color && m.color.convertSRGBToLinear) m.color.convertSRGBToLinear();
-    if (o.ds) { m.side = THREE.DoubleSide; m.shadowSide = THREE.BackSide; }     /* shells: no self-shadow speckle */
+    m.side = THREE.DoubleSide; m.shadowSide = THREE.BackSide;
     m.name = 'rk:' + key;
     matC[key] = m; return m;
   }
@@ -254,6 +262,7 @@ var RK = (function () {
     o = o || {};
     var rT = o.rT || rExit * 0.22, n = 7, pts = [], i, t;
     for (i = 0; i <= n; i++) { t = i / n; pts.push([rT + (rExit - rT) * Math.pow(1 - t, 0.6), yExit + len * t]); }
+    if (o.noChamber) { pts[n][2] = 1; pts.push([0, yExit + len]); }       /* no chamber on top: plug the throat, or one sees through the engine */
     var me = lathe(g, mat('nozzle', { ds: true }), pts, { x: x, z: z, seg: o.seg || 16 });
     if (o.rx) me.rotation.x = o.rx;
     if (!o.noChamber) tube(g, mat('dark'), rT * 1.5, rT * 1.9, yExit + len, yExit + len + (o.ch || len * 0.22), { x: x, z: z, seg: 10, cap: true });
@@ -395,7 +404,7 @@ var RK = (function () {
     }
     /* sustainer core: thin polished steel tank */
     bell(s1, 'stage1', 0, 0.15, 0, 1.55, 0.6);
-    tube(s1, dull, 0.5, R * 0.985, 1.75, yStg);
+    tube(s1, dull, 0.5, R * 0.985, 1.75, yStg, { cap: true });                           /* closed thrust cone: it is in full view once the booster section drops */
     tube(s1, mat('steel', { map: 'steel:16' }), R, R, yStg, yJ);
     band(s1, alu, R, yStg + 0.1, 0.2, { t: 0.02 }); band(s1, alu, R, yJ - 0.1, 0.2, { t: 0.02 });
     dome(s1, dull, R * 0.97, yJ - 0.1, 0.7);
@@ -515,7 +524,7 @@ var RK = (function () {
       th = (45 + 90 * i) * D2R;
       bell(les, 'les', 0.42 * sin(th), 103.75, 0.42 * cos(th), 0.45, 0.17, { quiet: true, seg: 8, noChamber: true });   /* escape motor nozzles */
     }
-    tube(les, W, 0.52, 0.33, 103.9, 104.5, { seg: 16 });
+    tube(les, W, 0.52, 0.33, 103.9, 104.5, { seg: 16, cap: true });
     tube(les, W, 0.33, 0.33, 104.5, 108.7, { seg: 16 });
     band(les, dark, 0.33, 108.7, 0.1, { t: 0.01, seg: 16 });
     tube(les, W, 0.33, 0.33, 108.7, 109.35, { seg: 16 });

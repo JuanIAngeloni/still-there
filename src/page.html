@@ -608,6 +608,8 @@ function hide(c,on){c.el.classList.toggle('is-hidden',on);c.path.style.opacity=o
 
 /* ---------- textos ---------- */
 function applyLang(){
+  /* el sitio ya trae sus dos idiomas: se le dice al navegador cuál está en pantalla y que no ofrezca traducirlo */
+  document.documentElement.lang=lang;document.documentElement.setAttribute('translate','no');
   document.documentElement.lang=lang;
   var nodes=document.querySelectorAll('[data-i18n]');
   for(var i=0;i<nodes.length;i++)nodes[i].textContent=t(nodes[i].getAttribute('data-i18n'));

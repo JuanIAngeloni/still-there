@@ -439,7 +439,10 @@ function lxRender(){
   renderer.autoClear=true;renderer.outputEncoding=oe;renderer.toneMapping=tm;renderer.toneMappingExposure=ex;
 }
 /* ---------- abrir una misión desde la portada ---------- */
-function openMission(m){
+function openMission(m,n){
+  /* si los datos de las trayectorias todavía están llegando, la portada se queda a la vista hasta que estén */
+  if(typeof HZ_READY!=='undefined'&&!HZ_READY&&(n||0)<80){document.documentElement.style.cursor='progress';setTimeout(function(){openMission(m,(n||0)+1);},250);return;}
+  document.documentElement.style.cursor='';
   if(typeof homeHide==='function')homeHide();
   var pre=typeof ROCKET_GLB!=='undefined'&&lxOk(m)&&ROCKET_GLB[lxKey(m)];if(pre)modelOf(pre,function(){});
   var X=JX[m.id];if(!X){exGoMachine(m);return;}

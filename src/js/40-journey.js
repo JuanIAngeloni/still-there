@@ -300,7 +300,8 @@ function fadeCut(fn){
   c.style.transition='none';c.style.opacity='1';fn();
   requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.transition='opacity .9s ease';c.style.opacity='0';});});
 }
-JE.x.addEventListener('click',endJourney);JE.home.addEventListener('click',endJourney);
+/* sin argumentos: si se pasa el evento del clic, endJourney lo toma como «terminar en silencio» y no vuelve a la portada */
+JE.x.addEventListener('click',function(){endJourney();});JE.home.addEventListener('click',function(){endJourney();});
 JE.play.addEventListener('click',function(){JR.paused=!JR.paused;playTexts();});
 JE.next.addEventListener('click',nextSeg);
 JE.view.addEventListener('click',function(){JR.view=JR.view==='ship'?'map':'ship';JR.blend=0;playTexts();});
