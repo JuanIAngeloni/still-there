@@ -11,7 +11,7 @@ Versión en inglés: [README.md](README.md).
 ## Qué se puede hacer
 
 - **Portada.** Catorce tarjetas con una foto real de NASA y una frase en la voz de la máquina, y una línea de tiempo donde cada fila es una vida: el viaje, los años de trabajo y el silencio.
-- **Lanzamiento en 3D.** Cada misión arranca en su plataforma con su cohete. Cada paso espera al lector: despegue, separación de propulsores, etapas, cofia, impulso final, separación de la nave. Se puede girar y acercar en cualquier momento. Un panel cuenta **qué pasó con cada parte descartada**: cuáles cayeron al mar, cuáles se quemaron, cuáles siguen en órbita del Sol, cuáles chocaron contra la Luna o Marte. Cada dato tiene su enlace a la fuente.
+- **Lanzamiento en 3D.** Cada misión arranca en su plataforma con su cohete. La misión avanza sola, paso por paso: despegue, separación de propulsores, etapas, cofia, impulso final, separación de la nave. Se puede pausar, adelantar, y girar o acercar la escena en cualquier momento; la cámara queda donde uno la deja. Un panel cuenta **qué pasó con cada parte descartada**: cuáles cayeron al mar, cuáles se quemaron, cuáles siguen en órbita del Sol, cuáles chocaron contra la Luna o Marte. Cada dato tiene su enlace a la fuente.
 - **Viaje.** La nave sigue su trayectoria real (vectores de JPL Horizons) por un sistema solar a escala real.
 - **Llegada y hoy.** Antes de mostrar la máquina, el sitio hace una pregunta sobre lo que descubrió. Después se pueden tocar sus piezas sobre el modelo, ver fotos reales de NASA, escuchar audio real, ver el video real del lanzamiento y leer qué más dejó la misión (etapa de crucero, escudo térmico, paracaídas).
 - **Explorar.** Un solo espacio continuo, desde el sistema solar entero hasta el suelo junto a cada máquina, con todas en su lugar de hoy.
@@ -25,7 +25,7 @@ Español e inglés. El idioma se elige según el navegador; con `?lang=en` o `?l
 - **Naves.** Modelos 3D de NASA para Spirit y Opportunity, InSight, Viking 1, Ingenuity, el módulo lunar de Apollo, Pioneer 10 y 11, NEAR Shoemaker, Dawn y Kepler. Surveyor 1, Phoenix y Mars Pathfinder con Sojourner son modelos simplificados armados en código.
 - **Tiempos y destinos.** Los tiempos T+ y el destino de cada etapa salen de informes de prensa y de vuelo de NASA y de los fabricantes. Donde no encontramos el tiempo real de un paso, el reloj no se muestra.
 - **Qué falta.** Apollo 11, Viking 1, InSight e Ingenuity muestran el despegue y la máquina hoy, sin el viaje en el medio.
-- **Qué es ilustrativo.** La curva de subida del lanzamiento, la entrada en Marte y los descensos son animaciones, no telemetría. El sitio lo dice en pantalla.
+- **Qué es ilustrativo.** La curva de subida del lanzamiento, la entrada en Marte y los descensos son animaciones, no telemetría. El sitio lo dice en pantalla. En la escena del lanzamiento, el suelo alrededor de la plataforma, la costa y las nubes están dibujados por código, no salen de imágenes satelitales; la Tierra de abajo es la Blue Marble de NASA.
 
 ## Cómo se arma
 

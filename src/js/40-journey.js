@@ -279,7 +279,10 @@ function nextSeg(){if(JR.si>=JR.segs.length-1)return;var s=JR.segs[JR.si],nx=JR.
   if(s.launch&&nx.launch){JR.si++;enterSeg();}
   else if(JR.wait&&!(nx.surface&&!s.surface)&&!s.launch){JR.prevShot=true;JR.si++;enterSeg();}else jumpTo(JR.si+1);}
 function enterSeg(first){
-  var s=JR.segs[JR.si];JR.wait=false;JR.u=0;JR.uAz=0;JR.uEl=0;JR.uZ=segZoom(s);JR.view='auto';
+  var s=JR.segs[JR.si],kind=s.shot.k+'|'+(s.shot.from||'');JR.wait=false;JR.dwell=0;JR.u=0;
+  /* si el usuario movió la cámara, sus ángulos se respetan; el zoom solo vuelve al de la toma cuando la toma cambia de tipo */
+  if(!JR.userCam||first){JR.uAz=0;JR.uEl=0;}if(!JR.userCam||first||kind!==JR.shotKind)JR.uZ=segZoom(s);
+  if(first)JR.userCam=false;JR.shotKind=kind;JR.view='auto';
   if(!first&&JR.prevShot)JR.blend=0;else JR.blend=1;
   JR.scene=s.launch?'launch':(s.surface?'surface':'space');
   var bs=JE.chaps.querySelectorAll('button'),cur=JR.segs[JR.si].id;
@@ -312,11 +315,11 @@ var jdrag=null;
 canvas.addEventListener('pointerdown',function(e){if(!JR.active)return;jdrag={x:e.clientX,y:e.clientY};if(SF)SF.dragging=true;});
 window.addEventListener('pointermove',function(e){if(!jdrag)return;var dx=e.clientX-jdrag.x,dy=e.clientY-jdrag.y;jdrag.x=e.clientX;jdrag.y=e.clientY;
   if(JR.scene==='launch'){lxDrag(dx,dy);return;}
-  if(JR.scene==='surface'&&SF){SF.orb.azT-=dx*0.006;SF.orb.elT=clamp(SF.orb.elT+dy*0.004,0.02,1.3);}else{JR.uAz-=dx*0.006;JR.uEl=clamp(JR.uEl+dy*0.005,-1.3,1.3);}});
+  if(JR.scene==='surface'&&SF){SF.orb.azT-=dx*0.006;SF.orb.elT=clamp(SF.orb.elT+dy*0.004,0.02,1.3);}else{JR.uAz-=dx*0.006;JR.uEl=clamp(JR.uEl+dy*0.005,-1.3,1.3);if(Math.abs(dx)+Math.abs(dy)>0)JR.userCam=true;}});
 window.addEventListener('pointerup',function(){jdrag=null;if(SF)SF.dragging=false;});
 stage.addEventListener('wheel',function(e){if(!JR.active||overPanel(e))return;if(JR.scene==='launch'){lxWheel(e);return;}var f=Math.exp(e.deltaY*0.0012),s=JR.segs[JR.si],back=JR.fromExplore&&s&&s.id==='hoy';
   if(JR.scene==='surface'&&SF){if(back&&f>1&&SF.orb.rT>=139){exReturn();return;}SF.orb.rT=clamp(SF.orb.rT*f,3,back?140:60);}
-  else{if(back&&f>1&&JR.uZ>=29){exReturn();return;}JR.uZ=clamp(JR.uZ*f,0.05,back?30:4e6);}},{passive:true});
+  else{if(back&&f>1&&JR.uZ>=29){exReturn();return;}JR.uZ=clamp(JR.uZ*f,0.05,back?30:4e6);JR.userCam=true;}},{passive:true});
 
 /* ---------- tomas de cámara ---------- */
 var UPZ=new THREE.Vector3(0,0,1);
@@ -391,8 +394,10 @@ function jRender(dt,now){
 }
 function tickJourney(dt,now){
   var s=JR.segs[JR.si];if(!s){endJourney();return;}
-  /* al terminar un capítulo la escena se queda quieta y espera a que el lector toque "Siguiente" */
-  if(!JR.paused&&s.map!=='hold'){JR.u+=dt;if(JR.u>=s.dur){JR.u=s.dur;if(!JR.wait&&JR.si<JR.segs.length-1){JR.wait=true;playTexts();}}}
+  /* la misión avanza sola: al terminar un capítulo la escena espera un momento y pasa al siguiente. «Pausar» la detiene
+     y «Siguiente» la adelanta. Es un contador de cuadros, no un temporizador, para que la pausa lo congele. */
+  if(!JR.paused&&s.map!=='hold'){JR.u+=dt;if(JR.u>=s.dur){JR.u=s.dur;if(!JR.wait&&JR.si<JR.segs.length-1){JR.wait=true;JR.dwell=0;playTexts();}}}
+  if(JR.wait&&!JR.paused&&JR.auto!==false){JR.dwell=(JR.dwell||0)+dt;if(JR.dwell>=(s.launch?2.2:1.6)){JR.dwell=0;nextSeg();return;}}
   if(s.launch){lxFrame(s,dt);return;}
   var jd=segJd(s,JR.u);JR.jd=jd;
   jUpdateBodies(jd);craftAt(jd,P3.craft,P3.vel);

@@ -13,7 +13,7 @@ Spanish version of this file: [README.es.md](README.es.md).
 ## What you can do
 
 - **Start page.** Fourteen cards with a real NASA photo and one line in the machine's own voice, plus a timeline where each row is a life: the trip, the working years and the silence.
-- **Launch in 3D.** Each mission starts on its pad with its own rocket. Every step waits for the reader: liftoff, booster separation, staging, fairing, final burn, spacecraft separation. You can turn the scene and zoom at any moment. A panel tells **what happened to each discarded part**: which ones fell into the ocean, which burned up, which are still in orbit around the Sun, which hit the Moon or Mars. Every fact has its source link.
+- **Launch in 3D.** Each mission starts on its pad with its own rocket. The mission plays by itself, step by step: liftoff, booster separation, staging, fairing, final burn, spacecraft separation. You can pause it, skip ahead, and turn the scene or zoom at any moment; the camera stays where you leave it. A panel tells **what happened to each discarded part**: which ones fell into the ocean, which burned up, which are still in orbit around the Sun, which hit the Moon or Mars. Every fact has its source link.
 - **Journey.** The spacecraft follows its real trajectory (JPL Horizons vectors) through a solar system drawn at true scale.
 - **Arrival and today.** Before showing the machine, the site asks one question about what it discovered. Then you can tap its parts on the model, see real NASA photos, listen to real audio, watch the real launch video and read what else the mission left behind (cruise stage, heat shield, parachute).
 - **Explore.** A single continuous space, from the whole solar system down to the ground next to each machine, with every machine in its place today.
@@ -27,7 +27,7 @@ Spanish and English. The language follows the browser; `?lang=en` or `?lang=es` 
 - **Spacecraft.** NASA 3D models for the Spirit and Opportunity rovers, InSight, Viking 1, Ingenuity, the Apollo lunar module, Pioneer 10 and 11, NEAR Shoemaker, Dawn and Kepler. Surveyor 1, Phoenix and Mars Pathfinder with Sojourner are simplified models built in code.
 - **Times and fates.** T+ times and the fate of every stage come from NASA and manufacturer press kits and flight reports. Where we could not find the real time of a step, the clock is not shown.
 - **What is missing.** Apollo 11, Viking 1, InSight and Ingenuity show the launch and the machine today, with no journey in between.
-- **What is illustrative.** The climb profile of the launch (height and pitch), the Mars entry and the descents are animations, not flight telemetry. The site says so on screen.
+- **What is illustrative.** The climb profile of the launch (height and pitch), the Mars entry and the descents are animations, not flight telemetry. The site says so on screen. In the launch scene, the ground around the pad, the coastline and the clouds are drawn by code, not taken from satellite images; the Earth underneath is NASA's Blue Marble.
 
 Every adaptation we made to a NASA model is listed in [SOURCES.md](SOURCES.md). The NASA rocket models came with the NASA insignia, a flag and another mission's patch painted on them; we covered those.
 
