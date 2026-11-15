@@ -278,3 +278,7 @@ NASA's Phoenix launch-day pages (nasa.gov/mission_pages/phoenix/launch/) now ret
 7. **Shape**: no `shutdown` key (not in SPEC.md), as before.
 8. **`src` fields that do not carry the whole claim** (one `src` per entry): `firstYear` 1989 is supported by the OCO2 page, while both `ROCKETS_INFO` entries keep the MER kit as `src` (it supports height and blurb). The Spirit and Opportunity step texts say "Atlantic" while the step `src` is the MER kit (times, altitudes, speeds); the support for the ocean is the FEIS, cited in the fates. Pathfinder step alt/speed come from the M96KIT figure, the "in general" ocean sentence from the FEIS.
 9. **Third stage `sunOrbit` for Pathfinder and Phoenix** rests on the catalog (Sun-centred object), not on a NASA sentence that says "orbit around the Sun". NASA support is indirect: Pathfinder's figure ("Hyperbolic Injection" at stage 3 burnout) and Phoenix's kit ("By design, the third stage is never aimed at Mars"). For Spirit and Opportunity the FEIS says "interplanetary space".
+
+## Update, 15 November 2026 (evening)
+
+`firstYear` now follows the model, not the family, because the site prints it as "First flight: {y}" beside the model name: `delta7925H` = 2003 (NASA-sourced, see `delta2_other.md`, item 2 of the corrections) and `delta7925` = null (the 1990 debut has no NASA source, so no year is shown). The earlier notes in this file that give 1989 for both keys describe the previous state.

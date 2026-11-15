@@ -2,7 +2,7 @@
 
 NASA Space Apps Challenge 2026, Salta. Desafío: *Abandoned but not Forgotten: Storytelling about NASA's Discarded Equipment on the Moon and Mars*.
 
-**Siguen ahí: las misiones de NASA a través del tiempo.** Catorce máquinas que NASA dejó en la Luna, en Marte y más lejos, cada una contada como una misión que se recorre en 3D. Las catorce muestran el despegue y dónde está la máquina hoy; diez muestran también el viaje y la llegada.
+**Siguen ahí: las misiones de NASA a través del tiempo.** Catorce máquinas que NASA dejó en la Luna, en Marte y más lejos, cada una contada como una misión que se recorre en 3D. Las catorce muestran el despegue y dónde está la máquina hoy; diez muestran también el viaje en el medio.
 
 **Sitio:** https://ginomoretta-creator.github.io/siguen-ahi/ (copia: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce).
 
