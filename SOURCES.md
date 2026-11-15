@@ -39,7 +39,7 @@ The Saturn V, Titan IIIE-Centaur and Atlas-Centaur rockets have no official mode
 
 The steps of each launch, the T+ times and what happened to each part of the rocket and to the rest of the discarded equipment are in `src/js/66-stages-data.js`, which is generated with `tools/merge_stages.py` from `docs/etapas/*.json`. Each fact carries its link in the `src` field and appears on the site as "Source". The details of the search and the verification, including what could not be confirmed, are in `docs/etapas/*.md` (in English). Where we did not find the real time of a step, the site does not show the T+ clock. The climb curve (height and pitch) is illustrative, not the flight telemetry.
 
-Surveyor, Phoenix, Mars Pathfinder with Sojourner, the entry capsule with its cruise stage, the parachute and the airbags are simplified models, coded with AI help (Claude) from simple parts (`src/js/30-surface.js`), with approximate dimensions. They are not NASA models.
+Surveyor, Phoenix, Mars Pathfinder with Sojourner, the entry capsule with its cruise stage, the Viking orbiter with its capsule (as it travelled to Mars), the parachute and the airbags are simplified models, coded with AI help (Claude) from simple parts (`src/js/30-surface.js`), with approximate dimensions. They are not NASA models.
 
 ## Trajectories
 

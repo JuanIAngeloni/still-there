@@ -37,7 +37,7 @@ Los cohetes Saturn V, Titan IIIE-Centaur y Atlas-Centaur no tienen un modelo ofi
 
 Los pasos de cada lanzamiento, los tiempos T+ y qué pasó con cada parte del cohete y con el resto del equipo descartado están en `src/js/66-stages-data.js`, que se genera con `tools/merge_stages.py` a partir de `docs/etapas/*.json`. Cada dato lleva su enlace en el campo `src` y en el sitio aparece como «Fuente». El detalle de la búsqueda y de la verificación, con lo que no se pudo confirmar, está en `docs/etapas/*.md` (en inglés). Donde no encontramos el tiempo real de un paso, el sitio no muestra el reloj T+. La curva de subida (altura e inclinación) es ilustrativa, no la telemetría del vuelo.
 
-Surveyor, Phoenix, Mars Pathfinder con Sojourner, la cápsula de entrada con su etapa de crucero, el paracaídas y los airbags son modelos simplificados, programados con ayuda de IA (Claude) a partir de piezas simples (`src/js/30-surface.js`), con medidas aproximadas. No son modelos de NASA.
+Surveyor, Phoenix, Mars Pathfinder con Sojourner, la cápsula de entrada con su etapa de crucero, el orbitador de Viking con su cápsula (como viajó hasta Marte), el paracaídas y los airbags son modelos simplificados, programados con ayuda de IA (Claude) a partir de piezas simples (`src/js/30-surface.js`), con medidas aproximadas. No son modelos de NASA.
 
 ## Trayectorias
 

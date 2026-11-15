@@ -6,3 +6,6 @@ demo/
 *.pyc
 docs/comparacion_repos.md
 tools/make_demo.py
+assets/models/saturn_v.glb
+assets/models/mer.glb
+assets/models_plain/mer.glb

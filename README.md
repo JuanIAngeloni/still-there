@@ -76,4 +76,4 @@ The site is plain JavaScript with three.js r128, no bundler. `tools/build.py` jo
 - Use of artificial intelligence: [AI_USE.md](AI_USE.md). The site also says it in its Credits dialog.
 - Code: Apache License 2.0, see [LICENSE](LICENSE). NASA material keeps NASA's own usage terms and is credited in the site and in SOURCES.md.
 
-This is a student project made for NASA Space Apps. NASA does not sponsor or endorse it.
+This project was made at the NASA Space Apps hackathon. NASA does not sponsor or endorse it.

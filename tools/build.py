@@ -91,7 +91,6 @@ def glb_to_json(src, dst):
 
 
 models = {p.stem: p for p in (ROOT / "assets" / "models_plain").glob("*.glb")}
-models["saturn_v"] = ROOT / "assets" / "models" / "saturn_v.glb"
 for name, p in models.items():
     out = A / "models" / (name + ".gltf.json")
     if not out.exists() or out.stat().st_mtime < p.stat().st_mtime:

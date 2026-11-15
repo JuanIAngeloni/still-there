@@ -39,4 +39,4 @@ Después abrir `http://localhost:5188/dist/preview.html`.
 
 Código bajo Apache 2.0 (`LICENSE`). Fuentes de datos, mapas y modelos en `FUENTES.md` (inglés: `SOURCES.md`). Uso de IA en `USO_DE_IA.md` (inglés: `AI_USE.md`).
 
-Proyecto de estudiantes hecho para NASA Space Apps. NASA no lo patrocina ni lo avala.
+Proyecto hecho en la hackatón NASA Space Apps. NASA no lo patrocina ni lo avala.
