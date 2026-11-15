@@ -1,0 +1,641 @@
+{
+  "ROCKETS_INFO": {
+    "saturnV": {
+      "name": {
+        "es": "Saturno V",
+        "en": "Saturn V"
+      },
+      "family": "Saturn V",
+      "heightM": 111,
+      "firstYear": 1967,
+      "blurb": {
+        "es": "Era el cohete más potente que había volado con éxito: la NASA lo construyó con tres etapas para mandar personas a la Luna.",
+        "en": "It was the most powerful rocket that had ever flown successfully: NASA built it with three stages to send people to the Moon."
+      },
+      "src": "https://www.nasa.gov/learning-resources/for-kids-and-students/what-was-the-saturn-v-grades-5-8/"
+    },
+    "titan3e": {
+      "name": {
+        "es": "Titan IIIE-Centaur",
+        "en": "Titan IIIE-Centaur"
+      },
+      "family": "Titan IIIE-Centaur",
+      "heightM": 48.8,
+      "firstYear": 1974,
+      "blurb": {
+        "es": "Unió el cohete Titan III, con dos grandes motores de combustible sólido a los costados, con la etapa superior Centaur, que quema hidrógeno y oxígeno líquidos.",
+        "en": "It joined the Titan III rocket, with two big solid rocket motors on its sides, to the Centaur upper stage, which burns liquid hydrogen and liquid oxygen."
+      },
+      "src": "https://ntrs.nasa.gov/api/citations/19750018961/downloads/19750018961.pdf"
+    }
+  },
+  "LAUNCH_SEQ": {
+    "apollo11": {
+      "rocket": "saturnV",
+      "site": "cape",
+      "pad": "LC-39A",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma 39A",
+            "en": "On Pad 39A"
+          },
+          "text": {
+            "es": "El Saturno V espera en la plataforma 39A del Centro Espacial Kennedy. En la punta van tres astronautas, la nave Columbia y el módulo lunar Eagle.",
+            "en": "The Saturn V waits on Pad 39A at Kennedy Space Center. At the top ride three astronauts, the spacecraft Columbia and the lunar module Eagle."
+          },
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue hacia la Luna",
+            "en": "Liftoff for the Moon"
+          },
+          "text": {
+            "es": "El 16 de julio de 1969, a las 13:32 (hora universal), los motores de la primera etapa levantan el cohete de la plataforma.",
+            "en": "On 16 July 1969 at 13:32 (Universal Time), the first stage engines lift the rocket off the pad."
+          },
+          "ignite": [
+            "stage1"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11i_Timeline.htm"
+        },
+        {
+          "id": "stage1",
+          "t": 162.3,
+          "title": {
+            "es": "Se suelta la primera etapa",
+            "en": "First stage drops away"
+          },
+          "text": {
+            "es": "A los 2 minutos y 42 segundos, a 67 km de altura, la primera etapa ya vacía se suelta y cae al océano Atlántico, a unos 661 km del lugar de lanzamiento. Se enciende la segunda etapa.",
+            "en": "At 2 minutes 42 seconds, 67 km up, the empty first stage drops away and falls into the Atlantic Ocean, about 661 km from the launch site. The second stage lights up."
+          },
+          "drop": [
+            "stage1"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 66.7,
+          "speed_kmh": 9986,
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11d_Ascent_Phase.htm"
+        },
+        {
+          "id": "interstage",
+          "t": 192.3,
+          "title": {
+            "es": "Se suelta el anillo",
+            "en": "The ring drops away"
+          },
+          "text": {
+            "es": "Treinta segundos después se suelta el anillo que unía las dos primeras etapas. El cohete aún no iba tan rápido como para quedar en órbita, así que el anillo volvió a caer. No encontramos en qué lugar.",
+            "en": "Thirty seconds later the ring that joined the first two stages drops away. The rocket was still too slow to stay in orbit, so the ring fell back. We could not find where."
+          },
+          "drop": [
+            "interstage"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11i_Timeline.htm"
+        },
+        {
+          "id": "les",
+          "t": 197.9,
+          "title": {
+            "es": "Se suelta la torre",
+            "en": "Escape tower drops away"
+          },
+          "text": {
+            "es": "A los 3 minutos y 18 segundos se suelta la torre de escape: un cohete en la punta para alejar la cápsula si algo fallaba al despegar. No hizo falta usarla. Volvió a caer; no encontramos en qué lugar.",
+            "en": "At 3 minutes 18 seconds the escape tower drops away: a rocket on the tip to pull the capsule clear if the launch went wrong. It was not needed. It fell back; we could not find where."
+          },
+          "drop": [
+            "les"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11i_Timeline.htm"
+        },
+        {
+          "id": "stage2",
+          "t": 549.0,
+          "title": {
+            "es": "Se suelta la segunda etapa",
+            "en": "Second stage drops away"
+          },
+          "text": {
+            "es": "A los 9 minutos y 9 segundos, a 187 km de altura, la segunda etapa se suelta y cae al océano Atlántico, a casi 4.400 km del lugar de lanzamiento. Se enciende la tercera etapa.",
+            "en": "At 9 minutes 9 seconds, 187 km up, the second stage drops away and falls into the Atlantic Ocean, almost 4,400 km from the launch site. The third stage lights up."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "alt_km": 187.4,
+          "speed_kmh": 24908,
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11d_Ascent_Phase.htm"
+        },
+        {
+          "id": "orbit",
+          "t": 709.33,
+          "title": {
+            "es": "En órbita terrestre",
+            "en": "In Earth orbit"
+          },
+          "text": {
+            "es": "A los 11 minutos y 49 segundos la nave ya gira alrededor de la Tierra a unos 28.000 km/h, con la tercera etapa todavía unida. Da una vuelta y media mientras se revisan los sistemas.",
+            "en": "At 11 minutes 49 seconds the spacecraft is circling Earth at about 28,000 km/h, with the third stage still attached. It goes around one and a half times while the systems are checked."
+          },
+          "alt_km": 191.1,
+          "speed_kmh": 28055,
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11d_Ascent_Phase.htm"
+        },
+        {
+          "id": "tli",
+          "t": 9856.2,
+          "title": {
+            "es": "Rumbo a la Luna",
+            "en": "Off to the Moon"
+          },
+          "text": {
+            "es": "A las 2 horas y 44 minutos la tercera etapa se vuelve a encender durante casi 6 minutos. La nave sale de la órbita de la Tierra a unos 39.000 km/h, camino a la Luna.",
+            "en": "At 2 hours 44 minutes the third stage fires again for almost 6 minutes. The spacecraft leaves Earth orbit at about 39,000 km/h, on its way to the Moon."
+          },
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        },
+        {
+          "id": "separation",
+          "t": 15423.0,
+          "title": {
+            "es": "Columbia saca al Eagle",
+            "en": "Columbia pulls Eagle out"
+          },
+          "text": {
+            "es": "Columbia se separa, se da vuelta y se engancha al módulo lunar Eagle. A las 4 horas y 17 minutos lo saca de la tercera etapa. La etapa vacía pasó de largo junto a la Luna y quedó girando alrededor del Sol.",
+            "en": "Columbia separates, turns around and docks with the lunar module Eagle. At 4 hours 17 minutes it pulls Eagle out of the third stage. The empty stage flew past the Moon and ended up orbiting the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        }
+      ],
+      "fates": [
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa (S-IC)",
+            "en": "First stage (S-IC)"
+          },
+          "fate": {
+            "es": "Cayó al océano Atlántico unos 9 minutos después del despegue, a unos 661 km del lugar de lanzamiento, según el punto de caída que calculó la NASA.",
+            "en": "It fell into the Atlantic Ocean about 9 minutes after liftoff, about 661 km from the launch site, according to the impact point NASA calculated."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Se soltó a los 3 minutos y 12 segundos, mucho antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 3 minutes 12 seconds, long before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11i_Timeline.htm"
+        },
+        {
+          "part": "les",
+          "name": {
+            "es": "Torre de escape",
+            "en": "Launch escape tower"
+          },
+          "fate": {
+            "es": "Se soltó sin usarse a los 3 minutos y 18 segundos, mucho antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped unused at 3 minutes 18 seconds, long before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11i_Timeline.htm"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa (S-II)",
+            "en": "Second stage (S-II)"
+          },
+          "fate": {
+            "es": "Cayó al océano Atlántico unos 20 minutos después del despegue, a casi 4.400 km del lugar de lanzamiento, según el punto de caída que calculó la NASA.",
+            "en": "It fell into the Atlantic Ocean about 20 minutes after liftoff, almost 4,400 km from the launch site, according to the impact point NASA calculated."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (S-IVB)",
+            "en": "Third stage (S-IVB)"
+          },
+          "fate": {
+            "es": "Después de dejar a Columbia y Eagle camino a la Luna, pasó a unos 3.380 km de la superficie lunar el 19 de julio de 1969 y quedó en órbita alrededor del Sol, con una vuelta cada 342 días.",
+            "en": "After sending Columbia and Eagle on their way, it passed about 3,380 km from the Moon's surface on 19 July 1969 and went into orbit around the Sun, with one lap every 342 days."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Etapa de descenso del Eagle",
+            "en": "Eagle descent stage"
+          },
+          "fate": {
+            "es": "Sirvió de plataforma de despegue para la parte de arriba del Eagle y se quedó en la Luna, con una placa conmemorativa detrás de la escalera.",
+            "en": "It served as the launch platform for the upper part of Eagle and stayed on the Moon, with a commemorative plaque behind its ladder."
+          },
+          "where": "onMoon",
+          "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
+        },
+        {
+          "name": {
+            "es": "Etapa de ascenso del Eagle",
+            "en": "Eagle ascent stage"
+          },
+          "fate": {
+            "es": "Llevó a Armstrong y Aldrin de vuelta al Columbia y se soltó en órbita alrededor de la Luna; no se sabe dónde terminó.",
+            "en": "It carried Armstrong and Aldrin back to Columbia and was cast off in orbit around the Moon; it is not known where it ended up."
+          },
+          "where": "unknown",
+          "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
+        },
+        {
+          "name": {
+            "es": "Reflector láser",
+            "en": "Laser ranging retroreflector"
+          },
+          "fate": {
+            "es": "Quedó en la superficie para devolver hacia la Tierra los rayos láser con los que se mide la distancia entre la Tierra y la Luna.",
+            "en": "It was left on the surface to bounce back the laser beams from Earth that are used to measure the distance between Earth and the Moon."
+          },
+          "where": "onMoon",
+          "src": "https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1969-059C-04"
+        },
+        {
+          "name": {
+            "es": "Sismómetro",
+            "en": "Seismometer"
+          },
+          "fate": {
+            "es": "Los astronautas lo instalaron al sur del Eagle para medir los temblores de la Luna, y llegó a registrar sus propios pasos sobre la superficie.",
+            "en": "The astronauts set it up south of Eagle to measure moonquakes, and it even recorded their own footsteps on the surface."
+          },
+          "where": "onMoon",
+          "src": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm"
+        },
+        {
+          "name": {
+            "es": "Bandera de Estados Unidos",
+            "en": "United States flag"
+          },
+          "fate": {
+            "es": "Armstrong y Aldrin la plantaron en un mástil de aluminio y figura en la lista de la NASA de objetos que quedaron en la Luna.",
+            "en": "Armstrong and Aldrin put it up on an aluminium staff, and it is on NASA's list of objects left on the Moon."
+          },
+          "where": "onMoon",
+          "src": "https://www.nasa.gov/wp-content/uploads/2024/02/final-catalogue-of-manmade-material-on-the-moon.pdf"
+        },
+        {
+          "name": {
+            "es": "Recuerdos y homenajes",
+            "en": "Mementos and tributes"
+          },
+          "fate": {
+            "es": "En la lista de la NASA figuran una insignia del Apolo 1, dos medallas en honor a los cosmonautas Gagarin y Komarov, una rama de olivo de oro y un disco conmemorativo.",
+            "en": "NASA's list includes an Apollo 1 patch, two medals honouring the cosmonauts Gagarin and Komarov, a gold olive branch and a memorial disc."
+          },
+          "where": "onMoon",
+          "src": "https://www.nasa.gov/wp-content/uploads/2024/02/final-catalogue-of-manmade-material-on-the-moon.pdf"
+        },
+        {
+          "name": {
+            "es": "Mochilas, botas y cámara",
+            "en": "Backpacks, overshoes and camera"
+          },
+          "fate": {
+            "es": "Antes de despegar de la Luna dejaron en la superficie las mochilas de los trajes, las botas lunares, la cámara de televisión y otros equipos.",
+            "en": "Before lifting off from the Moon they left the suit backpacks, the lunar overshoes, the TV camera and other gear on the surface."
+          },
+          "where": "onMoon",
+          "src": "https://www.nasa.gov/wp-content/uploads/2024/02/final-catalogue-of-manmade-material-on-the-moon.pdf"
+        }
+      ]
+    },
+    "viking1": {
+      "rocket": "titan3e",
+      "site": "cape",
+      "pad": "LC-41",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En el Complejo 41",
+            "en": "On Complex 41"
+          },
+          "text": {
+            "es": "El Titan IIIE-Centaur espera en el Complejo 41 de Cabo Cañaveral. Mide 48,8 metros. Bajo la cofia de la punta van, unidos, el orbitador y el módulo de aterrizaje Viking 1.",
+            "en": "The Titan IIIE-Centaur waits on Complex 41 at Cape Canaveral. It is 48.8 metres tall. Under the shroud at the tip ride the Viking 1 orbiter and lander, joined together."
+          },
+          "src": "https://ntrs.nasa.gov/api/citations/19750018961/downloads/19750018961.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue con motores sólidos",
+            "en": "Liftoff on solid motors"
+          },
+          "text": {
+            "es": "El 20 de agosto de 1975, a las 21:22 (hora universal), se encienden los dos motores de combustible sólido de los costados. Ellos solos levantan el cohete: el motor del centro sigue apagado.",
+            "en": "On 20 August 1975 at 21:22 (Universal Time), the two solid rocket motors on the sides ignite. They lift the rocket alone: the engine in the middle is still off."
+          },
+          "ignite": [
+            "srbGround"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "stage1Ignition",
+          "t": 110.4,
+          "title": {
+            "es": "Encendido en pleno vuelo",
+            "en": "Engine start in flight"
+          },
+          "text": {
+            "es": "A los 110 segundos, cuando los motores sólidos se están quedando sin combustible, se enciende en pleno vuelo el motor de la primera etapa central, que quema combustible líquido.",
+            "en": "At 110 seconds, as the solid motors are running out of propellant, the engine of the first core stage, which burns liquid propellants, starts up in mid-flight."
+          },
+          "ignite": [
+            "stage1"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "srbGround",
+          "t": 121.7,
+          "title": {
+            "es": "Se sueltan los motores sólidos",
+            "en": "Solid motors drop away"
+          },
+          "text": {
+            "es": "A los 122 segundos los dos motores sólidos, ya vacíos, se sueltan. El cohete aún no iba tan rápido como para quedar en órbita, así que volvieron a caer. No encontramos en qué lugar.",
+            "en": "At 122 seconds the two empty solid motors drop away. The rocket was still too slow to stay in orbit, so they fell back. We could not find where."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 260.1,
+          "title": {
+            "es": "Se suelta la primera etapa",
+            "en": "First stage drops away"
+          },
+          "text": {
+            "es": "A los 4 minutos y 20 segundos la primera etapa central se queda sin combustible y se suelta, y en el mismo instante se enciende la segunda. La primera volvió a caer; no encontramos en qué lugar.",
+            "en": "At 4 minutes 20 seconds the first core stage runs out of propellant and drops away, and at the same instant the second one lights up. The first fell back; we could not find where."
+          },
+          "drop": [
+            "stage1"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 270.3,
+          "title": {
+            "es": "Se abre la cofia",
+            "en": "The shroud opens"
+          },
+          "text": {
+            "es": "Diez segundos después la cofia que protegía a la nave se parte en dos mitades y se suelta. También volvió a caer; no encontramos en qué lugar.",
+            "en": "Ten seconds later the shroud that protected the spacecraft splits into two halves and drops away. It fell back too; we could not find where."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 473.8,
+          "title": {
+            "es": "Turno del Centaur",
+            "en": "Centaur takes over"
+          },
+          "text": {
+            "es": "A los 7 minutos y 54 segundos se suelta la segunda etapa, que vuelve a caer (no encontramos en qué lugar). Se enciende el Centaur y dos minutos después la nave está en órbita, a unos 165 km de altura.",
+            "en": "At 7 minutes 54 seconds the second stage drops away and falls back (we could not find where). The Centaur lights up and two minutes later the spacecraft is in orbit, about 165 km up."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "tmi",
+          "t": 1530.1,
+          "title": {
+            "es": "Rumbo a Marte",
+            "en": "Off to Mars"
+          },
+          "text": {
+            "es": "Después de 15 minutos girando alrededor de la Tierra, el Centaur se vuelve a encender durante algo más de 5 minutos y pone a Viking 1 en camino a Marte.",
+            "en": "After 15 minutes circling Earth, the Centaur fires again for a little over 5 minutes and puts Viking 1 on its way to Mars."
+          },
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 2066.1,
+          "title": {
+            "es": "Viking 1 viaja sola",
+            "en": "Viking 1 flies alone"
+          },
+          "text": {
+            "es": "A los 34 minutos Viking 1 se separa del Centaur y abre sus paneles solares. Después el Centaur hace una última maniobra para no chocar con Marte. Como ya había escapado de la Tierra, quedó girando alrededor del Sol.",
+            "en": "At 34 minutes Viking 1 separates from the Centaur and opens its solar panels. Then the Centaur makes one last manoeuvre to miss Mars. As it had already escaped from Earth, it was left orbiting the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Motores de combustible sólido (etapa 0)",
+            "en": "Solid rocket motors (stage 0)"
+          },
+          "fate": {
+            "es": "Se soltaron a los 122 segundos, mucho antes de llegar a la órbita, y volvieron a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "They were dropped at 122 seconds, long before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa central del Titan",
+            "en": "Titan first core stage"
+          },
+          "fate": {
+            "es": "Se soltó a los 4 minutos y 20 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 4 minutes 20 seconds, before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Shroud, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4 minutos y 30 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 4 minutes 30 seconds, before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Shroud, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4 minutos y 30 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 4 minutes 30 seconds, before orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa central del Titan",
+            "en": "Titan second core stage"
+          },
+          "fate": {
+            "es": "Se soltó a los 7 minutos y 54 segundos, antes de que el Centaur llevara la nave a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 7 minutes 54 seconds, before the Centaur took the spacecraft to orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Etapa superior Centaur D-1T",
+            "en": "Centaur D-1T upper stage"
+          },
+          "fate": {
+            "es": "Después de soltar a Viking 1 hizo una maniobra para no chocar con Marte y, como ya había escapado de la Tierra, quedó en órbita alrededor del Sol.",
+            "en": "After releasing Viking 1 it made a manoeuvre to miss Mars and, as it had already escaped from Earth, it was left in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://ntrs.nasa.gov/api/citations/19760021170/downloads/19760021170.pdf"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Orbitador Viking 1",
+            "en": "Viking 1 Orbiter"
+          },
+          "fate": {
+            "es": "Estudió Marte desde su órbita hasta agosto de 1980, después de más de 1.400 vueltas, y quedó en una órbita más alta para que no cayera sobre el planeta antes de 2019; no encontramos si sigue ahí.",
+            "en": "It studied Mars from orbit until August 1980, after more than 1,400 orbits, and was left in a higher orbit so that it would not fall onto the planet before 2019; we could not find whether it is still there."
+          },
+          "where": "unknown",
+          "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-075A"
+        },
+        {
+          "name": {
+            "es": "Tapa del bioescudo",
+            "en": "Bioshield cap"
+          },
+          "fate": {
+            "es": "Era una de las dos mitades de la cápsula blanca que mantenía sin microbios al módulo de aterrizaje; se soltó unas 2 horas después del lanzamiento, ya camino a Marte, y no encontramos dónde terminó.",
+            "en": "It was one of the two halves of the white cocoon that kept the lander free of microbes; it was released about 2 hours after launch, already on the way to Mars, and we could not find where it ended up."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19770022101/downloads/19770022101.pdf"
+        },
+        {
+          "name": {
+            "es": "Base del bioescudo",
+            "en": "Bioshield base"
+          },
+          "fate": {
+            "es": "Era la otra mitad de la cápsula blanca; el orbitador la soltó en 1976, poco después de la salida del módulo de aterrizaje, mientras giraba alrededor de Marte, y no encontramos si sigue en órbita.",
+            "en": "It was the other half of the white cocoon; the orbiter released it in 1976, shortly after the lander left, while circling Mars, and we could not find whether it is still in orbit."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19780024194/downloads/19780024194.pdf"
+        },
+        {
+          "name": {
+            "es": "Escudo térmico (aeroshell)",
+            "en": "Heat shield (aeroshell)"
+          },
+          "fate": {
+            "es": "Frenó la cápsula al entrar en la atmósfera de Marte, se soltó 7 segundos después de abrirse el paracaídas, a unos 6 km de altura, y cayó a la superficie; en 2006 la sonda MRO fotografió el lugar donde probablemente está.",
+            "en": "It slowed the capsule as it entered the atmosphere of Mars, was released 7 seconds after the parachute opened, about 6 km up, and fell to the surface; in 2006 the MRO orbiter photographed the place where it probably lies."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/viking-lander-1-thomas-a-mutch-memorial-station-imaged-from-orbit"
+        },
+        {
+          "name": {
+            "es": "Cubierta trasera y paracaídas",
+            "en": "Base cover and parachute"
+          },
+          "fate": {
+            "es": "El paracaídas de 16 metros frenó la bajada y se soltó junto con la cubierta trasera a cerca de 1,5 km del suelo, al encenderse los motores de aterrizaje; quedaron en Marte y en 2006 la sonda MRO fotografió el lugar donde probablemente están.",
+            "en": "The 16 metre parachute slowed the descent and was released with the base cover about 1.5 km above the ground, when the landing engines lit; they stayed on Mars and in 2006 the MRO orbiter photographed the place where they probably lie."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/viking-lander-1-thomas-a-mutch-memorial-station-imaged-from-orbit"
+        }
+      ]
+    }
+  }
+}

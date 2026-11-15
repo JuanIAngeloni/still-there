@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Modelos</title>
+<style>body{margin:0;background:#202630;color:#fff;font:13px system-ui}canvas{display:block;width:100vw;height:100vh}#l{position:fixed;left:8px;top:6px;white-space:pre}</style>
+<pre id="l"></pre><canvas id="c"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+var N=[['apollo_lm','models_plain'],['dawn','models_plain'],['kepler','models_plain'],['mer','models_plain'],['near','models_plain'],['pioneer10','models_plain'],['saturn_v','models']];
+var r=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});r.setSize(innerWidth,innerHeight);r.outputEncoding=THREE.sRGBEncoding;
+var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(30,innerWidth/innerHeight,0.01,100);cam.position.set(0,1.2,9);cam.lookAt(0,0,0);
+sc.add(new THREE.HemisphereLight(0xdde8ff,0x2a2018,0.6));var d=new THREE.DirectionalLight(0xffffff,2.2);d.position.set(4,5,6);sc.add(d);
+var info={},g=new THREE.GLTFLoader();window.objs=[];
+N.forEach(function(n,i){g.load('../assets/'+n[1]+'/'+n[0]+'.glb',function(x){var o=x.scene,b=new THREE.Box3().setFromObject(o),s=b.getSize(new THREE.Vector3()),k=1.7/Math.max(s.x,s.y,s.z);
+  var w=new THREE.Group();o.scale.setScalar(k);o.position.copy(b.getCenter(new THREE.Vector3()).multiplyScalar(-k));w.add(o);w.position.set((i%4-1.5)*2.2,i<4?1.1:-1.1,0);sc.add(w);objs.push(w);
+  info[n[0]]=[s.x,s.y,s.z].map(function(v){return +v.toFixed(2);});document.getElementById('l').textContent=JSON.stringify(info);});});
+(function loop(){requestAnimationFrame(loop);objs.forEach(function(o){o.rotation.y+=0.004;});r.render(sc,cam);})();
+</script>

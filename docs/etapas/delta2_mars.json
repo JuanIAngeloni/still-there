@@ -1,0 +1,1311 @@
+{
+  "ROCKETS_INFO": {
+    "delta7925": {
+      "name": {
+        "es": "Delta II 7925",
+        "en": "Delta II 7925"
+      },
+      "family": "Delta II",
+      "heightM": 39.6,
+      "firstYear": 1989,
+      "blurb": {
+        "es": "Un cohete de tres etapas con nueve propulsores de combustible sólido, seis encendidos en tierra y tres en vuelo; para 2003 este modelo ya sumaba más de 40 lanzamientos exitosos.",
+        "en": "A three-stage rocket with nine strap-on solid boosters, six lit on the pad and three in flight; by 2003 this model had more than 40 successful launches."
+      },
+      "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+    },
+    "delta7925H": {
+      "name": {
+        "es": "Delta II 7925H (pesado)",
+        "en": "Delta II 7925H (Heavy)"
+      },
+      "family": "Delta II",
+      "heightM": 39.6,
+      "firstYear": 1989,
+      "blurb": {
+        "es": "La H es de heavy, pesado: un Delta II más nuevo y un poco más potente, con nueve propulsores más anchos que dan alrededor de un 25 por ciento más de empuje.",
+        "en": "The H means heavy: a newer, slightly more powerful Delta II whose nine boosters are wider and give about 25 percent more thrust."
+      },
+      "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+    }
+  },
+  "LAUNCH_SEQ": {
+    "pathfinder": {
+      "rocket": "delta7925",
+      "site": "cape",
+      "pad": "LC-17B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "Mars Pathfinder espera en la punta de un cohete Delta II 7925 en Cabo Cañaveral. La primera etapa lleva nueve propulsores: seis se encienden al despegar y tres en pleno vuelo.",
+            "en": "Mars Pathfinder waits on top of a Delta II 7925 rocket at Cape Canaveral. The first stage carries nine solid boosters: six light at liftoff and three light in flight."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue de madrugada",
+            "en": "Liftoff before dawn"
+          },
+          "text": {
+            "es": "El 4 de diciembre de 1996, a la 1:58 de la madrugada de Florida, el Delta II despega de Cabo Cañaveral con Pathfinder en la punta.",
+            "en": "On December 4, 1996, at 1:58 in the morning in Florida, the Delta II lifts off from Cape Canaveral with Pathfinder on top."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/mpfland.pdf"
+        },
+        {
+          "id": "srbGround",
+          "t": 66,
+          "title": {
+            "es": "Se sueltan seis propulsores",
+            "en": "Six boosters drop off"
+          },
+          "text": {
+            "es": "Unos 66 segundos después del despegue, a 18 km de altura, los primeros seis propulsores ya están vacíos y se sueltan. Se encienden los otros tres. En general, en los Delta II estas piezas caen al océano.",
+            "en": "About 66 seconds after liftoff, 18 km up, the first six boosters are empty and drop off. The other three light up. In general, on Delta II rockets these pieces fall into the ocean."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "alt_km": 18.2,
+          "speed_kmh": 3690,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": 131.5,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "A los 2 minutos y 11,5 segundos, a unos 54 km de altura, los tres últimos propulsores ya terminaron su trabajo y se sueltan. En general, en los Delta II también caen al océano.",
+            "en": "At 2 minutes 11.5 seconds, about 54 km up, the last three boosters have done their job and drop off. In general, on Delta II rockets they also fall into the ocean."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "alt_km": 54.3,
+          "speed_kmh": 9130,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "meco",
+          "t": 260.7,
+          "title": {
+            "es": "Se va la primera etapa",
+            "en": "First stage falls away"
+          },
+          "text": {
+            "es": "A los 4 minutos y 21 segundos, a unos 118 km de altura, el motor principal se apaga. La primera etapa se separa y, unos 13 segundos después, se enciende la segunda. En general, la primera etapa cae al océano.",
+            "en": "At 4 minutes 21 seconds, about 118 km up, the main engine shuts down. The first stage separates and about 13 seconds later the second stage lights. In general, the first stage falls into the ocean."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 118.3,
+          "speed_kmh": 22486,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 282,
+          "title": {
+            "es": "Se abre la cofia",
+            "en": "The nose cone opens"
+          },
+          "text": {
+            "es": "A los 4 minutos y 42 segundos, a 130 km de altura, la cofia que cubría a Pathfinder se desprende. En general, en los Delta II sus dos mitades caen al océano.",
+            "en": "At 4 minutes 42 seconds, 130 km up, the nose cone that covered Pathfinder is thrown off. In general, on Delta II rockets its two halves fall into the ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "alt_km": 130.0,
+          "speed_kmh": 22583,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 557.9,
+          "title": {
+            "es": "Casi una hora de espera",
+            "en": "Nearly an hour's wait"
+          },
+          "text": {
+            "es": "Unos 9 minutos y 20 segundos después del despegue la segunda etapa se apaga, a unos 189 km de altura. Pathfinder gira alrededor de la Tierra casi una hora. Después la etapa se enciende por segunda vez.",
+            "en": "About 9 minutes 20 seconds after liftoff the second stage shuts down, about 189 km up. Pathfinder coasts around Earth for nearly an hour. Then the stage fires a second time."
+          },
+          "alt_km": 188.7,
+          "speed_kmh": 28055,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "injection",
+          "t": 4151.8,
+          "title": {
+            "es": "La tercera etapa gira",
+            "en": "The third stage spins"
+          },
+          "text": {
+            "es": "Unos cohetes chicos hacen girar la tercera etapa, la PAM-D, a unas 70 vueltas por minuto. Se separa de la segunda, que queda un tiempo en órbita de la Tierra, y se enciende. En el plan, a unos 70 minutos del despegue.",
+            "en": "Small rockets spin the third stage, the PAM-D, to about 70 turns per minute. It separates from the second stage, which stays in Earth orbit for a while, and fires. In the plan, about 70 minutes after liftoff."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 4500,
+          "title": {
+            "es": "Pathfinder sigue por su cuenta",
+            "en": "Pathfinder on its own"
+          },
+          "text": {
+            "es": "Un sistema de cables tipo yoyó frena el giro. Unos 75 minutos después del despegue, Pathfinder se separa de la tercera etapa, que queda dando vueltas al Sol.",
+            "en": "A yo-yo cable system slows the spin. About 75 minutes after liftoff Pathfinder separates from the third stage, which is left circling the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://pds.nasa.gov/data/mpfl-m-imp-2-edr-v1.0/mpim_0002/document/mission.htm"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis propulsores encendidos en tierra",
+            "en": "Six ground-lit boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 66 y 67 segundos del despegue; en general, las carcasas de estos propulsores del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "They dropped away empty 66 and 67 seconds after liftoff; in general, the casings of these Delta II boosters fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres propulsores encendidos en vuelo",
+            "en": "Three air-lit boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 2 minutos y 11,5 segundos, a unos 54 km de altura; en general, estas carcasas caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "They dropped away empty at 2 minutes 11.5 seconds, about 54 km up; in general, these casings fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Llevó el cohete hasta unos 118 km de altura y se separó; en general, la primera etapa del Delta II cae al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It lifted the rocket to about 118 km and separated; in general, the Delta II first stage falls into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Este anillo une la primera etapa con la segunda; los documentos de la NASA que leímos no dicen qué pasó con él en este vuelo.",
+            "en": "This ring joins the first stage to the second; the NASA documents we read do not say what happened to it on this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/m96pkt.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia (primera mitad)",
+            "en": "Nose cone (first half)"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4 minutos y 42 segundos, a 130 km de altura; en general, las mitades de la cofia del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It dropped away together with the other half at 4 minutes 42 seconds, 130 km up; in general, the halves of the Delta II nose cone fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia (segunda mitad)",
+            "en": "Nose cone (second half)"
+          },
+          "fate": {
+            "es": "Se soltó junto con la primera mitad a los 4 minutos y 42 segundos, a 130 km de altura; en general, las mitades de la cofia del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It dropped away together with the first half at 4 minutes 42 seconds, 130 km up; in general, the halves of the Delta II nose cone fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Después de su segundo encendido quedó en una órbita alargada alrededor de la Tierra y volvió a caer en la atmósfera el 28 de noviembre de 1997, según el catálogo de satélites de Estados Unidos.",
+            "en": "After its second burn it stayed in a stretched orbit around Earth and fell back into the atmosphere on 28 November 1997, according to the U.S. satellite catalog."
+          },
+          "where": "burned",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=1996-068"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (PAM-D)",
+            "en": "Third stage (PAM-D)"
+          },
+          "fate": {
+            "es": "Después de enviar a Pathfinder hacia Marte también se fue de la Tierra, y el catálogo de satélites de Estados Unidos la registra en órbita alrededor del Sol.",
+            "en": "After sending Pathfinder on its way to Mars it left Earth as well, and the U.S. satellite catalog lists it in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=1996-068"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Etapa de crucero",
+            "en": "Cruise stage"
+          },
+          "fate": {
+            "es": "Esta sección controló la nave durante el viaje a Marte, se soltó antes de entrar en la atmósfera y chocó contra la superficie.",
+            "en": "This section controlled the spacecraft during the trip to Mars, was cast off before entering the atmosphere and hit the surface."
+          },
+          "where": "marsImpact",
+          "src": "https://pds.nasa.gov/data/mpfl-m-imp-2-edr-v1.0/mpim_0001/document/insthost.htm"
+        },
+        {
+          "name": {
+            "es": "Escudo térmico",
+            "en": "Heat shield"
+          },
+          "fate": {
+            "es": "Cayó al suelo durante el descenso, y en una foto tomada desde la órbita en 2006 se ven cuatro manchas que podrían ser pedazos del escudo.",
+            "en": "It fell to the ground during the descent, and a photo taken from orbit in 2006 shows four spots that may be pieces of it."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-pathfinder-landing-site-and-surroundings"
+        },
+        {
+          "name": {
+            "es": "Cubierta trasera y paracaídas",
+            "en": "Back shell and parachute"
+          },
+          "fate": {
+            "es": "La cubierta trasera y el paracaídas quedaron en el suelo al sur del módulo, donde una cámara en órbita los fotografió en 2006.",
+            "en": "The back shell and the parachute ended up on the ground south of the lander, where a camera in orbit photographed them in 2006."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-pathfinder-landing-site-and-surroundings"
+        },
+        {
+          "name": {
+            "es": "Airbags",
+            "en": "Airbags"
+          },
+          "fate": {
+            "es": "Las bolsas de aire que hicieron rebotar a Pathfinder se desinflaron, y en la foto de 2006 tomada desde la órbita todavía se ven partes de ellas junto al módulo.",
+            "en": "The airbags that let Pathfinder bounce were deflated, and the 2006 photo taken from orbit still shows parts of them around the lander."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-pathfinder-landing-site-and-surroundings"
+        },
+        {
+          "name": {
+            "es": "Rover Sojourner",
+            "en": "Sojourner rover"
+          },
+          "fate": {
+            "es": "El pequeño rover bajó por una rampa el 6 de julio de 1997 y trabajó cerca del módulo hasta que se perdió la comunicación el 27 de septiembre de 1997; quedó en Marte.",
+            "en": "The small rover rolled down a ramp on 6 July 1997 and worked near the lander until communications were lost on 27 September 1997; it stayed on Mars."
+          },
+          "where": "onMars",
+          "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=MESURPR"
+        }
+      ]
+    },
+    "spirit": {
+      "rocket": "delta7925",
+      "site": "cape",
+      "pad": "SLC-17A",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "Spirit espera en la punta de un cohete Delta II de 39,6 metros de alto. Alrededor de la primera etapa hay nueve propulsores: seis se encienden al despegar y tres en pleno vuelo.",
+            "en": "Spirit waits on top of a Delta II rocket 39.6 meters tall. Nine solid boosters surround the first stage: six light at liftoff and three light in flight."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue hacia Marte",
+            "en": "Liftoff for Mars"
+          },
+          "text": {
+            "es": "El 10 de junio de 2003, a las 13:58 de Florida, el Delta II despega con un trueno de Cabo Cañaveral. Empieza un viaje de siete meses hasta Marte.",
+            "en": "On June 10, 2003, at 1:58 p.m. in Florida, the Delta II thunders away from Cape Canaveral. A seven-month trip to Mars begins."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/nasas-spirit-rises-on-its-way-to-mars/"
+        },
+        {
+          "id": "srbGround",
+          "t": 66,
+          "title": {
+            "es": "Se sueltan seis propulsores",
+            "en": "Six boosters drop off"
+          },
+          "text": {
+            "es": "A los 66 segundos, a 18 km de altura, los seis propulsores ya están vacíos. Se sueltan de a tres y caen al océano Atlántico. En ese momento se encienden los otros tres.",
+            "en": "At 66 seconds, 18 km up, the six boosters are empty. They let go in sets of three and fall into the Atlantic Ocean. Right then the other three light up."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "alt_km": 18.0,
+          "speed_kmh": 3668,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": 131.5,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "A los 2 minutos y 11,5 segundos, a 52,4 km de altura y a 9.046 km/h, los tres últimos propulsores se sueltan y caen al Atlántico.",
+            "en": "At 2 minutes 11.5 seconds, 52.4 km up and flying at 9,046 km/h, the last three boosters drop off and fall into the Atlantic."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "alt_km": 52.4,
+          "speed_kmh": 9046,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "meco",
+          "t": 263.4,
+          "title": {
+            "es": "Se va la primera etapa",
+            "en": "First stage falls away"
+          },
+          "text": {
+            "es": "A los 4 minutos y 23 segundos, a 119 km de altura, el motor principal se apaga. La primera etapa se separa y cae al Atlántico. Unos 13 segundos después se enciende la segunda etapa.",
+            "en": "At 4 minutes 23 seconds, 119 km up, the main engine shuts down. The first stage separates and falls into the Atlantic. About 13 seconds later the second stage lights."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 119.3,
+          "speed_kmh": 22317,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 282,
+          "title": {
+            "es": "Se abre la cofia",
+            "en": "The nose cone opens"
+          },
+          "text": {
+            "es": "A los 4 minutos y 42 segundos, a 121 km de altura, la cofia que protegía a Spirit durante la subida se desprende. Sus dos mitades caen al océano Atlántico.",
+            "en": "At 4 minutes 42 seconds, 121 km up, the nose cone that shielded Spirit on the way up falls away. Its two halves fall into the Atlantic Ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "alt_km": 121.3,
+          "speed_kmh": 22377,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 578.5,
+          "title": {
+            "es": "Una órbita de espera",
+            "en": "A waiting orbit"
+          },
+          "text": {
+            "es": "A los 9 minutos y 38 segundos la segunda etapa se apaga. Spirit gira alrededor de la Tierra a unos 170 km de altura y a 28.095 km/h. Antes de dar una vuelta completa, la etapa se enciende otra vez por 2 o 3 minutos.",
+            "en": "At 9 minutes 38 seconds the second stage shuts down. Spirit circles Earth about 170 km up at 28,095 km/h. Before finishing one lap, the stage fires again for 2 to 3 minutes."
+          },
+          "alt_km": 170.4,
+          "speed_kmh": 28095,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "injection",
+          "t": 1859.4,
+          "title": {
+            "es": "La tercera etapa gira",
+            "en": "The third stage spins"
+          },
+          "text": {
+            "es": "Cohetes chicos hacen girar la tercera etapa a unas 63 vueltas por minuto. Se separa de la segunda, que queda en órbita de la Tierra, y empuja unos 87 segundos. En el plan del primer día posible, eso era a los 31 minutos.",
+            "en": "Small rockets spin the third stage to about 63 turns per minute. It leaves the second stage behind in Earth orbit and burns for about 87 seconds. In the plan for the first possible day, that came at 31 minutes."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 2160,
+          "title": {
+            "es": "Spirit sigue por su cuenta",
+            "en": "Spirit on its own"
+          },
+          "text": {
+            "es": "Unas pesas con cables, como yoyós, frenan el giro. Unos 36 minutos después del despegue, sobre el océano Índico, Spirit se separa de la tercera etapa, que queda dando vueltas al Sol.",
+            "en": "Weights on cables, like yo-yos, slow the spin. About 36 minutes after liftoff, over the Indian Ocean, Spirit separates from the third stage, which is left circling the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/nasas-spirit-rises-on-its-way-to-mars/"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis propulsores encendidos en tierra",
+            "en": "Six ground-lit boosters"
+          },
+          "fate": {
+            "es": "Se quedaron sin combustible cerca de un minuto después del despegue, se soltaron de a tres a los 66 y 67 segundos y cayeron al océano Atlántico.",
+            "en": "They ran out of fuel about a minute after liftoff, were dropped in sets of three at 66 and 67 seconds and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres propulsores encendidos en vuelo",
+            "en": "Three air-lit boosters"
+          },
+          "fate": {
+            "es": "Se encendieron en pleno vuelo, se soltaron a los 2 minutos y 11,5 segundos del despegue y cayeron al océano Atlántico.",
+            "en": "They lit in flight, were dropped 2 minutes 11.5 seconds after liftoff and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Funcionó unos 4 minutos y 23 segundos, se separó y cayó al océano Atlántico.",
+            "en": "It burned for about 4 minutes 23 seconds, separated and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Este anillo une la primera etapa con la segunda; los documentos de la NASA que leímos no dicen qué pasó con él en este vuelo.",
+            "en": "This ring joins the first stage to the second; the NASA documents we read do not say what happened to it on this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia (primera mitad)",
+            "en": "Nose cone (first half)"
+          },
+          "fate": {
+            "es": "La cofia que cubría la nave se abrió en dos mitades poco después de apagarse el motor principal, y esta mitad cayó al océano Atlántico.",
+            "en": "The nose cone that covered the spacecraft split into two halves soon after the main engine shut down, and this half fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia (segunda mitad)",
+            "en": "Nose cone (second half)"
+          },
+          "fate": {
+            "es": "Era la segunda mitad de la cofia y cayó al océano Atlántico igual que la primera.",
+            "en": "It was the second half of the nose cone and fell into the Atlantic Ocean just like the first."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Después de su segundo encendido quedó en una órbita alargada alrededor de la Tierra y volvió a caer en la atmósfera el 27 de enero de 2004, según el catálogo de satélites de Estados Unidos.",
+            "en": "After its second burn it stayed in a stretched orbit around Earth and fell back into the atmosphere on 27 January 2004, according to the U.S. satellite catalog."
+          },
+          "where": "burned",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2003-027"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (Star 48B)",
+            "en": "Third stage (Star 48B)"
+          },
+          "fate": {
+            "es": "Después de empujar unos 87 segundos siguió viaje por un camino elegido a propósito para no chocar con Marte, y quedó en órbita alrededor del Sol.",
+            "en": "After its 87-second burn it flew on along a path chosen on purpose to miss Mars, and it stayed in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Etapa de crucero",
+            "en": "Cruise stage"
+          },
+          "fate": {
+            "es": "Dio electricidad y corrigió el rumbo durante el viaje, se soltó 15 minutos antes de entrar en la atmósfera y, según el plan de la misión, terminó chocando contra Marte.",
+            "en": "It gave power and steered during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
+          },
+          "where": "marsImpact",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "name": {
+            "es": "Escudo térmico",
+            "en": "Heat shield"
+          },
+          "fate": {
+            "es": "Se soltó durante el descenso, y en una foto tomada desde la órbita en 2006 se lo ve en el borde del cráter Bonneville.",
+            "en": "It was dropped during the descent, and a photo taken from orbit in 2006 shows it at the edge of Bonneville crater."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-gusev-crater/"
+        },
+        {
+          "name": {
+            "es": "Cubierta trasera y paracaídas",
+            "en": "Back shell and parachute"
+          },
+          "fate": {
+            "es": "Quedaron juntos en el suelo, y desde la órbita la cubierta trasera se ve casi sin daños y se distinguen los pliegues de la tela del paracaídas.",
+            "en": "They lie close together on the ground, and from orbit the back shell looks almost undamaged and the folds of the parachute cloth can be seen."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-gusev-crater/"
+        },
+        {
+          "name": {
+            "es": "Módulo de aterrizaje con airbags",
+            "en": "Lander with airbags"
+          },
+          "fate": {
+            "es": "Spirit llegó dentro de este módulo envuelto en bolsas de aire, bajó de él y lo dejó vacío en el cráter Gusev, donde una foto de 2006 tomada desde la órbita lo muestra.",
+            "en": "Spirit arrived inside this lander wrapped in airbags, drove off it and left it empty in Gusev crater, where a 2006 photo taken from orbit shows it."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-gusev-crater/"
+        }
+      ]
+    },
+    "opportunity": {
+      "rocket": "delta7925H",
+      "site": "cape",
+      "pad": "SLC-17B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "Opportunity espera en la punta de un Delta II pesado de 39,6 metros. Sus nueve propulsores son más anchos que los del cohete de Spirit y empujan alrededor de un 25 por ciento más.",
+            "en": "Opportunity waits on top of a heavy Delta II, 39.6 meters tall. Its nine boosters are wider than the ones on Spirit's rocket and give about 25 percent more thrust."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue de noche",
+            "en": "A night liftoff"
+          },
+          "text": {
+            "es": "El 7 de julio de 2003, a las 23:18 de Florida (ya era 8 de julio en hora universal), el Delta II despega de Cabo Cañaveral. Opportunity sigue a su gemelo Spirit, que ya viaja a Marte.",
+            "en": "On July 7, 2003, at 11:18 p.m. in Florida (already July 8 in universal time), the Delta II lifts off from Cape Canaveral. Opportunity follows its twin Spirit, already bound for Mars."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/newly-launched-opportunity-follows-mars-bound-spirit/"
+        },
+        {
+          "id": "srbGround",
+          "t": 82.5,
+          "title": {
+            "es": "Se sueltan seis propulsores",
+            "en": "Six boosters drop off"
+          },
+          "text": {
+            "es": "Poco más de 80 segundos después del despegue, a unos 26 km de altura, los seis propulsores grandes ya están vacíos. Se sueltan de a tres y caen al océano Atlántico. Se encienden los otros tres.",
+            "en": "A little over 80 seconds after liftoff, about 26 km up, the six big boosters are empty. They let go in sets of three and fall into the Atlantic Ocean. The other three light up."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "alt_km": 26.1,
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": 161.5,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "Unos 2 minutos y 40 segundos después del despegue, a casi 70 km de altura, se sueltan los tres últimos propulsores, ya vacíos, y caen al Atlántico.",
+            "en": "About 2 minutes 40 seconds after liftoff, almost 70 km up, the last three boosters, now empty, drop off and fall into the Atlantic."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "alt_km": 68.9,
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "id": "meco",
+          "t": 263,
+          "title": {
+            "es": "Se va la primera etapa",
+            "en": "First stage falls away"
+          },
+          "text": {
+            "es": "Unos 4 minutos y 23 segundos después del despegue el motor principal se apaga. En los 20 segundos siguientes la primera etapa se separa y cae al Atlántico, y se enciende la segunda etapa.",
+            "en": "About 4 minutes 23 seconds after liftoff the main engine shuts down. Within the next 20 seconds the first stage separates and falls into the Atlantic, and the second stage lights."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": null,
+          "title": {
+            "es": "Se abre la cofia",
+            "en": "The nose cone opens"
+          },
+          "text": {
+            "es": "En los 20 segundos que siguen al apagado del motor principal, la cofia que protegía a Opportunity durante la subida se desprende. Sus dos mitades caen al océano Atlántico.",
+            "en": "In the 20 seconds after the main engine shuts down, the nose cone that shielded Opportunity on the way up falls away. Its two halves fall into the Atlantic Ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 540,
+          "title": {
+            "es": "Una hora de espera",
+            "en": "An hour of waiting"
+          },
+          "text": {
+            "es": "Unos 9 minutos después del despegue la segunda etapa se apaga. Opportunity gira alrededor de la Tierra a 167 km de altura durante alrededor de una hora. Después la etapa se enciende otra vez por 2 o 3 minutos.",
+            "en": "About 9 minutes after liftoff the second stage shuts down. Opportunity circles Earth 167 km up for about an hour. Then the stage fires again for 2 to 3 minutes."
+          },
+          "alt_km": 167,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "injection",
+          "t": null,
+          "title": {
+            "es": "La tercera etapa gira",
+            "en": "The third stage spins"
+          },
+          "text": {
+            "es": "Más de una hora después del despegue, unos cohetes chicos hacen girar la tercera etapa a unas 63 vueltas por minuto. Se separa de la segunda, que queda en órbita de la Tierra, y empuja unos 87 segundos rumbo a Marte.",
+            "en": "More than an hour after liftoff, small rockets spin the third stage to about 63 turns per minute. It separates from the second stage, which stays in Earth orbit, and burns about 87 seconds on course for Mars."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 4980,
+          "title": {
+            "es": "Opportunity sigue por su cuenta",
+            "en": "Opportunity on its own"
+          },
+          "text": {
+            "es": "Unas pesas con cables, como yoyós, frenan el giro. A los 83 minutos del despegue, Opportunity se separa de la tercera etapa, que queda dando vueltas al Sol.",
+            "en": "Weights on cables, like yo-yos, slow the spin. 83 minutes after liftoff Opportunity separates from the third stage, which is left circling the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/newly-launched-opportunity-follows-mars-bound-spirit/"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis propulsores encendidos en tierra",
+            "en": "Six ground-lit boosters"
+          },
+          "fate": {
+            "es": "Más anchos que los de un Delta II común, se soltaron de a tres poco más de 80 segundos después del despegue y cayeron al océano Atlántico.",
+            "en": "Wider than those of a standard Delta II, they were dropped in sets of three a little over 80 seconds after liftoff and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres propulsores encendidos en vuelo",
+            "en": "Three air-lit boosters"
+          },
+          "fate": {
+            "es": "Se encendieron en pleno vuelo, se soltaron unos 2 minutos y 40 segundos después del despegue y cayeron al océano Atlántico.",
+            "en": "They lit in flight, were dropped about 2 minutes 40 seconds after liftoff and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Funcionó unos 4 minutos y 23 segundos, se separó y cayó al océano Atlántico.",
+            "en": "It burned for about 4 minutes 23 seconds, separated and fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Este anillo une la primera etapa con la segunda; los documentos de la NASA que leímos no dicen qué pasó con él en este vuelo.",
+            "en": "This ring joins the first stage to the second; the NASA documents we read do not say what happened to it on this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia (primera mitad)",
+            "en": "Nose cone (first half)"
+          },
+          "fate": {
+            "es": "La cofia que cubría la nave se abrió en dos mitades poco después de apagarse el motor principal, y esta mitad cayó al océano Atlántico.",
+            "en": "The nose cone that covered the spacecraft split into two halves soon after the main engine shut down, and this half fell into the Atlantic Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia (segunda mitad)",
+            "en": "Nose cone (second half)"
+          },
+          "fate": {
+            "es": "Era la segunda mitad de la cofia y cayó al océano Atlántico igual que la primera.",
+            "en": "It was the second half of the nose cone and fell into the Atlantic Ocean just like the first."
+          },
+          "where": "ocean",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Después de su segundo encendido quedó en una órbita alargada alrededor de la Tierra y volvió a caer en la atmósfera el 25 de julio de 2004, según el catálogo de satélites de Estados Unidos.",
+            "en": "After its second burn it stayed in a stretched orbit around Earth and fell back into the atmosphere on 25 July 2004, according to the U.S. satellite catalog."
+          },
+          "where": "burned",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2003-032"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (Star 48B)",
+            "en": "Third stage (Star 48B)"
+          },
+          "fate": {
+            "es": "Después de empujar unos 87 segundos siguió viaje por un camino elegido a propósito para no chocar con Marte, y quedó en órbita alrededor del Sol.",
+            "en": "After its 87-second burn it flew on along a path chosen on purpose to miss Mars, and it stayed in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Etapa de crucero",
+            "en": "Cruise stage"
+          },
+          "fate": {
+            "es": "Dio electricidad y corrigió el rumbo durante el viaje, se soltó 15 minutos antes de entrar en la atmósfera y, según el plan de la misión, terminó chocando contra Marte.",
+            "en": "It gave power and steered during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
+          },
+          "where": "marsImpact",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
+        },
+        {
+          "name": {
+            "es": "Escudo térmico",
+            "en": "Heat shield"
+          },
+          "fate": {
+            "es": "Se rompió al golpear el suelo, y en una foto tomada desde la órbita en 2006 se ven el lugar del impacto y sus restos.",
+            "en": "It broke when it hit the ground, and a photo taken from orbit in 2006 shows the impact point and its broken remains."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-meridiani-planum/"
+        },
+        {
+          "name": {
+            "es": "Cubierta trasera y paracaídas",
+            "en": "Back shell and parachute"
+          },
+          "fate": {
+            "es": "El paracaídas quedó tendido en el suelo con la cubierta trasera, que tiene forma de cono, a su lado, como muestra una foto tomada desde la órbita en 2006.",
+            "en": "The parachute lies on the ground with the cone-shaped back shell next to it, as a photo taken from orbit in 2006 shows."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-meridiani-planum/"
+        },
+        {
+          "name": {
+            "es": "Módulo de aterrizaje con airbags",
+            "en": "Lander with airbags"
+          },
+          "fate": {
+            "es": "El módulo envuelto en bolsas de aire se detuvo dentro del cráter Eagle; Opportunity bajó de él y el módulo vacío se sigue viendo en el fondo del cráter en una foto de 2006 tomada desde la órbita.",
+            "en": "The lander wrapped in airbags came to rest inside Eagle crater; Opportunity drove off it and the empty lander is still visible on the crater floor in a 2006 photo taken from orbit."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/mars-exploration-rover-landing-site-at-meridiani-planum/"
+        }
+      ]
+    },
+    "phoenix": {
+      "rocket": "delta7925",
+      "site": "cape",
+      "pad": "SLC-17A",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "Phoenix espera en la punta de un cohete Delta II 7925 de 39,6 metros. La primera etapa lleva nueve propulsores de unos 13 metros de alto cada uno.",
+            "en": "Phoenix waits on top of a Delta II 7925 rocket 39.6 meters tall. The first stage carries nine solid boosters, each about 13 meters tall."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue antes del amanecer",
+            "en": "Liftoff before dawn"
+          },
+          "text": {
+            "es": "El 4 de agosto de 2007, a las 5:26 de la mañana de Florida, el Delta II despega de Cabo Cañaveral hacia el cielo todavía oscuro del este.",
+            "en": "On August 4, 2007, at 5:26 in the morning in Florida, the Delta II lifts off from Cape Canaveral into the still-dark eastern sky."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-landing.pdf"
+        },
+        {
+          "id": "srbGround",
+          "t": null,
+          "title": {
+            "es": "Se sueltan seis propulsores",
+            "en": "Six boosters drop off"
+          },
+          "text": {
+            "es": "Alrededor de un minuto después del despegue, los primeros seis propulsores ya están vacíos y se sueltan. Se encienden los otros tres. En general, en los Delta II estas piezas caen al océano.",
+            "en": "About a minute after liftoff the first six boosters are empty and drop off. The other three light up. In general, on Delta II rockets these pieces fall into the ocean."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": null,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "Alrededor de un minuto más tarde se sueltan los tres últimos propulsores, ya vacíos. En general, en los Delta II también caen al océano.",
+            "en": "About a minute later the last three boosters, now empty, drop off. In general, on Delta II rockets they also fall into the ocean."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "meco",
+          "t": 263,
+          "title": {
+            "es": "Se va la primera etapa",
+            "en": "First stage falls away"
+          },
+          "text": {
+            "es": "Unos 4 minutos y 23 segundos después del despegue, a unos 111 km de altura, el motor principal se apaga. La primera etapa se separa y se enciende la segunda. En general, la primera etapa cae al océano.",
+            "en": "About 4 minutes 23 seconds after liftoff, about 111 km up, the main engine shuts down. The first stage separates and the second stage lights. In general, the first stage falls into the ocean."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 111,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": null,
+          "title": {
+            "es": "Se abre la cofia",
+            "en": "The nose cone opens"
+          },
+          "text": {
+            "es": "En los 40 segundos que siguen al apagado del motor principal, la cofia que protegía a Phoenix del aire se desprende. En general, en los Delta II sus dos mitades caen al océano.",
+            "en": "In the 40 seconds after the main engine shuts down, the nose cone that shielded Phoenix from the air falls away. In general, on Delta II rockets its two halves fall into the ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 560,
+          "title": {
+            "es": "La espera más larga",
+            "en": "The longest wait"
+          },
+          "text": {
+            "es": "Cerca de los 9 minutos y 20 segundos la segunda etapa se apaga. Phoenix rodea la Tierra a 167 km de altura más de una hora, la espera más larga de un Delta II hasta entonces. Luego la etapa se enciende unos 2 minutos.",
+            "en": "At about 9 minutes 20 seconds the second stage shuts down. Phoenix circles Earth 167 km up for more than an hour, the longest wait of any Delta II until then. Then the stage fires for about 2 minutes."
+          },
+          "alt_km": 167,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "injection",
+          "t": null,
+          "title": {
+            "es": "La tercera etapa gira",
+            "en": "The third stage spins"
+          },
+          "text": {
+            "es": "Más de una hora después del despegue, unos cohetes chicos hacen girar la tercera etapa a unas 70 vueltas por minuto. Se separa de la segunda, que queda en órbita de la Tierra, y empuja unos 87 segundos rumbo a Marte.",
+            "en": "More than an hour after liftoff, small rockets spin the third stage to about 70 turns per minute. It separates from the second stage, which stays in Earth orbit, and burns about 87 seconds on course for Mars."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 5040,
+          "title": {
+            "es": "Phoenix sigue por su cuenta",
+            "en": "Phoenix on its own"
+          },
+          "text": {
+            "es": "Unas pesas con cables, como yoyós, frenan el giro y Phoenix se separa de la tercera etapa, que queda dando vueltas al Sol. En el plan del primer día posible era a los 84 minutos; según el día, entre 82 y 96.",
+            "en": "Weights on cables, like yo-yos, slow the spin and Phoenix separates from the third stage, which is left circling the Sun. In the plan for the first possible day that came at 84 minutes; depending on the day, 82 to 96."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis propulsores encendidos en tierra",
+            "en": "Six ground-lit boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos cerca de un minuto después del despegue; en general, las carcasas de estos propulsores del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "They dropped away empty about a minute after liftoff; in general, the casings of these Delta II boosters fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres propulsores encendidos en vuelo",
+            "en": "Three air-lit boosters"
+          },
+          "fate": {
+            "es": "Se encendieron cuando los primeros seis se apagaron y se soltaron alrededor de un minuto más tarde; en general, estas carcasas caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "They lit when the first six burned out and were dropped about a minute later; in general, these casings fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Funcionó unos 4 minutos y 23 segundos y se separó; en general, la primera etapa del Delta II cae al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It burned for about 4 minutes 23 seconds and separated; in general, the Delta II first stage falls into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Este anillo une la primera etapa con la segunda; los documentos de la NASA que leímos no dicen qué pasó con él en este vuelo.",
+            "en": "This ring joins the first stage to the second; the NASA documents we read do not say what happened to it on this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia (primera mitad)",
+            "en": "Nose cone (first half)"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad poco después de apagarse el motor principal; en general, las mitades de la cofia del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It dropped away together with the other half soon after the main engine shut down; in general, the halves of the Delta II nose cone fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia (segunda mitad)",
+            "en": "Nose cone (second half)"
+          },
+          "fate": {
+            "es": "Se soltó junto con la primera mitad poco después de apagarse el motor principal; en general, las mitades de la cofia del Delta II caen al océano, pero los documentos de la NASA que leímos no lo dicen para este vuelo.",
+            "en": "It dropped away together with the first half soon after the main engine shut down; in general, the halves of the Delta II nose cone fall into the ocean, but the NASA documents we read do not say so for this flight."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Después de su segundo encendido quedó en una órbita alargada alrededor de la Tierra y volvió a caer en la atmósfera el 6 de junio de 2010, según el catálogo de satélites de Estados Unidos.",
+            "en": "After its second burn it stayed in a stretched orbit around Earth and fell back into the atmosphere on 6 June 2010, according to the U.S. satellite catalog."
+          },
+          "where": "burned",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2007-034"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (Star 48B)",
+            "en": "Third stage (Star 48B)"
+          },
+          "fate": {
+            "es": "Por diseño nunca apuntó a Marte: después de empujar unos 87 segundos siguió de largo y quedó en órbita alrededor del Sol.",
+            "en": "By design it was never aimed at Mars: after its 87-second burn it flew on past and stayed in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Etapa de crucero",
+            "en": "Cruise stage"
+          },
+          "fate": {
+            "es": "Llevó los paneles solares del viaje, se soltó minutos antes de entrar en la atmósfera y, según el plan de la misión, la atravesó hasta chocar contra Marte.",
+            "en": "It carried the solar panels for the trip, was cast off minutes before entering the atmosphere and, according to the mission plan, plunged through it and hit Mars."
+          },
+          "where": "marsImpact",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
+        },
+        {
+          "name": {
+            "es": "Escudo térmico",
+            "en": "Heat shield"
+          },
+          "fate": {
+            "es": "Se soltó mientras Phoenix bajaba colgada del paracaídas, y una foto tomada desde la órbita lo muestra en el suelo junto a la marca que dejó al rebotar.",
+            "en": "It was dropped while Phoenix hung under its parachute, and a photo taken from orbit shows it on the ground next to the mark it left when it bounced."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/connecting-the-dots-lander-heat-shield-parachute/"
+        },
+        {
+          "name": {
+            "es": "Cubierta trasera y paracaídas",
+            "en": "Back shell and parachute"
+          },
+          "fate": {
+            "es": "Phoenix los soltó para terminar de bajar con sus motores, y una foto tomada desde la órbita muestra el paracaídas todavía unido a la cubierta trasera en el suelo.",
+            "en": "Phoenix let go of them to finish the descent on its engines, and a photo taken from orbit shows the parachute still attached to the back shell on the ground."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/photojournal/connecting-the-dots-lander-heat-shield-parachute/"
+        }
+      ]
+    }
+  }
+}

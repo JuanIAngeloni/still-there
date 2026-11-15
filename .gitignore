@@ -1,0 +1,8 @@
+dist/
+__pycache__/
+capture/
+wip/
+demo/
+*.pyc
+docs/comparacion_repos.md
+tools/make_demo.py

@@ -1,0 +1,864 @@
+{
+  "ROCKETS_INFO": {
+    "delta7925": {
+      "name": {
+        "es": "Delta II 7925",
+        "en": "Delta II 7925"
+      },
+      "family": "Delta II",
+      "heightM": 39.6,
+      "firstYear": null,
+      "blurb": {
+        "es": "La familia Delta II voló 155 veces entre 1989 y 2018, con 100 lanzamientos exitosos seguidos; el modelo 7925 lleva nueve cohetes de combustible sólido atados a la primera etapa y una tercera etapa pequeña que da el empujón final.",
+        "en": "The Delta II family flew 155 times between 1989 and 2018, with 100 successful launches in a row; the 7925 model has nine solid-fuel boosters strapped to its first stage and a small third stage that gives the final push."
+      },
+      "src": "https://ocov2.jpl.nasa.gov/observatory/launch-vehicle/"
+    },
+    "delta7925H": {
+      "name": {
+        "es": "Delta II 7925H (Heavy)",
+        "en": "Delta II 7925H (Heavy)"
+      },
+      "family": "Delta II",
+      "heightM": 39.6,
+      "firstYear": 2003,
+      "blurb": {
+        "es": "Es un Delta II más potente, con cohetes laterales más grandes que se habían creado para el cohete Delta III; la NASA lo usó por primera vez en 2003, para lanzar a Opportunity.",
+        "en": "A more powerful Delta II, with bigger strap-on boosters that had been developed for the Delta III rocket; NASA first used it in 2003, to launch Opportunity."
+      },
+      "src": "https://science.nasa.gov/resource/opportunity-rover-delta-ii-launch"
+    },
+    "delta7925_10L": {
+      "name": {
+        "es": "Delta II 7925-10L",
+        "en": "Delta II 7925-10L"
+      },
+      "family": "Delta II",
+      "heightM": null,
+      "firstYear": null,
+      "blurb": {
+        "es": "Es un Delta II con una cofia alargada de 3 metros de diámetro, que cubre también la segunda y la tercera etapa y donde entra el telescopio Kepler con su parasol.",
+        "en": "A Delta II with a stretched nose cone 3 metres across, which also covers the second and third stages and has room for the Kepler telescope and its sunshade."
+      },
+      "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+    }
+  },
+  "LAUNCH_SEQ": {
+    "near": {
+      "rocket": "delta7925",
+      "site": "cape",
+      "pad": "LC-17B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "17 de febrero de 1996, plataforma 17B de Cabo Cañaveral. NEAR espera en la punta de un Delta II de tres etapas.",
+            "en": "17 February 1996, pad 17B at Cape Canaveral. NEAR waits on top of a three-stage Delta II."
+          },
+          "src": "https://nssdc.gsfc.nasa.gov/planetary/mission/near/near_traj.html"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue de NEAR",
+            "en": "NEAR lifts off"
+          },
+          "text": {
+            "es": "A las 15:43, hora de Florida (20:43 en hora universal), NEAR despega rumbo al asteroide Eros.",
+            "en": "At 3:43 p.m. Florida time (20:43 Universal Time), NEAR lifts off, bound for the asteroid Eros."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://nssdc.gsfc.nasa.gov/planetary/mission/near/near_traj.html"
+        },
+        {
+          "id": "srbGround",
+          "t": null,
+          "title": {
+            "es": "Seis cohetes menos",
+            "en": "Six boosters gone"
+          },
+          "text": {
+            "es": "En un Delta II 7925, seis de los nueve cohetes laterales arden desde el despegue. Cuando se gastan, se encienden los otros tres y los seis vacíos se sueltan. En general, estas piezas caen al océano.",
+            "en": "On a Delta II 7925, six of the nine strap-on boosters burn from liftoff. When they run out, the other three light up and the six empty ones drop away. In general, these pieces fall into the ocean."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": null,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "Los últimos tres cohetes laterales también se gastan y se sueltan. En general, caen al océano como los primeros.",
+            "en": "The last three boosters run out too and drop away. In general, they fall into the ocean like the first ones."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": null,
+          "title": {
+            "es": "Adiós, primera etapa",
+            "en": "Goodbye, first stage"
+          },
+          "text": {
+            "es": "El motor principal se apaga y la primera etapa se separa. El plan era encender la segunda etapa a 122 km de altura. En general, la primera etapa del Delta II cae al océano.",
+            "en": "The main engine shuts down and the first stage separates. The plan was to light the second stage 122 km up. In general, the Delta II first stage falls into the ocean."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 122,
+          "src": "https://www.govinfo.gov/content/pkg/FR-1996-01-24/html/96-917.htm"
+        },
+        {
+          "id": "fairing",
+          "t": null,
+          "title": {
+            "es": "Se suelta la cofia",
+            "en": "The nose cone drops"
+          },
+          "text": {
+            "es": "Con la segunda etapa ya encendida, la cofia que protegía a NEAR se suelta. En general, en los Delta II sus mitades caen al océano.",
+            "en": "With the second stage already burning, the nose cone that protected NEAR drops away. In general, on a Delta II its halves fall into the ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 600,
+          "title": {
+            "es": "Órbita de espera",
+            "en": "A parking orbit"
+          },
+          "text": {
+            "es": "Unos 10 minutos después del despegue, NEAR entra en una órbita de espera a 183 km de altura. Ahí avanza 13 minutos con los motores apagados.",
+            "en": "About 10 minutes after liftoff, NEAR enters a parking orbit 183 km up. It coasts there for 13 minutes with the engines off."
+          },
+          "alt_km": 183,
+          "src": "https://nssdc.gsfc.nasa.gov/planetary/mission/near/near_traj.html"
+        },
+        {
+          "id": "stage2",
+          "t": null,
+          "title": {
+            "es": "El empujón final",
+            "en": "The final push"
+          },
+          "text": {
+            "es": "Después de esos 13 minutos llega el empujón final, de unos 4 minutos, hecho sobre todo por la tercera etapa, de combustible sólido. La segunda etapa quedó en órbita baja hasta caer a la atmósfera.",
+            "en": "After those 13 minutes comes the final push: about 4 minutes, done mostly by the solid-fuel third stage. The second stage stayed in low orbit until it fell into the atmosphere."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://nssdc.gsfc.nasa.gov/planetary/mission/near/near_traj.html"
+        },
+        {
+          "id": "separation",
+          "t": null,
+          "title": {
+            "es": "NEAR vuela sola",
+            "en": "NEAR flies alone"
+          },
+          "text": {
+            "es": "NEAR se separa de la tercera etapa. Un yoyó de cables frena su giro, de hasta 69 vueltas por minuto, y libera los paneles solares. Según el catálogo espacial de EE. UU., la etapa quedó en órbita solar.",
+            "en": "NEAR separates from the third stage. A yo-yo of cables stops its spin, up to 69 turns per minute, and frees the solar panels. According to the US space catalogue, the stage was left in orbit around the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://nssdc.gsfc.nasa.gov/planetary/mission/near/near_traj.html"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis cohetes laterales encendidos en tierra",
+            "en": "Six ground-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos poco después de apagarse; según la NASA, en los Delta II las carcasas de estos cohetes caen al océano.",
+            "en": "They dropped away empty soon after burning out; NASA says that on a Delta II the casings of these boosters fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres cohetes laterales encendidos en vuelo",
+            "en": "Three air-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos después de los seis primeros; según la NASA, en los Delta II estas carcasas caen al océano.",
+            "en": "They dropped away empty after the first six; NASA says that on a Delta II these casings fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Se separó cuando se apagó el motor principal; según la NASA, la primera etapa de los Delta II cae al océano.",
+            "en": "It separated when the main engine shut down; NASA says the Delta II first stage falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Es el tubo que une la primera etapa con la segunda; en los Delta II forma parte de la primera etapa, que según la NASA cae al océano.",
+            "en": "It is the tube that joins the first stage to the second; on a Delta II it is part of the first stage, which NASA says falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose cone, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad poco después de encenderse la segunda etapa; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half soon after the second stage lit up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose cone, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad poco después de encenderse la segunda etapa; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half soon after the second stage lit up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Quedó en órbita baja alrededor de la Tierra hasta que su órbita decayó y volvió a entrar en la atmósfera, tal como lo había previsto la NASA antes del lanzamiento.",
+            "en": "It stayed in low orbit around Earth until its orbit decayed and it re-entered the atmosphere, just as NASA had planned before the launch."
+          },
+          "where": "burned",
+          "src": "https://www.govinfo.gov/content/pkg/FR-1996-01-24/html/96-917.htm"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (motor Star 48)",
+            "en": "Third stage (Star 48 motor)"
+          },
+          "fate": {
+            "es": "Sacó a NEAR de la órbita terrestre y, según el catálogo de objetos espaciales de Estados Unidos, quedó en órbita alrededor del Sol.",
+            "en": "It pushed NEAR out of Earth orbit and, according to the United States catalogue of space objects, it was left in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=1996-008"
+        }
+      ],
+      "left": []
+    },
+    "dawn": {
+      "rocket": "delta7925H",
+      "site": "cape",
+      "pad": "SLC-17B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "27 de septiembre de 2007, plataforma 17B de Cabo Cañaveral. Dawn espera en la punta de un Delta II con nueve cohetes laterales, guardada dentro de la cofia.",
+            "en": "27 September 2007, pad 17B at Cape Canaveral. Dawn waits on top of a Delta II with nine strap-on boosters, tucked inside the nose cone."
+          },
+          "src": "https://www.jpl.nasa.gov/news/dawn-spacecraft-successfully-launched/"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue de Dawn",
+            "en": "Dawn lifts off"
+          },
+          "text": {
+            "es": "A las 7:34 de la mañana, hora de Florida, se encienden el motor principal de la primera etapa y seis de los nueve cohetes laterales.",
+            "en": "At 7:34 in the morning, Florida time, the first stage main engine and six of the nine strap-on boosters light up."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/dawn-launch.pdf"
+        },
+        {
+          "id": "srbGround",
+          "t": 80.5,
+          "title": {
+            "es": "Seis cohetes menos",
+            "en": "Six boosters gone"
+          },
+          "text": {
+            "es": "A los 77 segundos, a unos 24 km de altura, los seis cohetes se apagan. Se encienden los otros tres y los seis vacíos se sueltan. En general, en los Delta II estas piezas caen al océano.",
+            "en": "At 77 seconds, about 24 km up, the six boosters burn out. The other three light up and the six empty ones drop away. In general, on a Delta II these pieces fall into the ocean."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "src": "https://www.jpl.nasa.gov/blog/2007/9/september-12-2007"
+        },
+        {
+          "id": "srbAir",
+          "t": 159.5,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "Los últimos tres cohetes laterales arden 77 segundos y se sueltan a casi 73 km de altura, cuando el cohete va a unas diez veces la velocidad del sonido. En general, también caen al océano.",
+            "en": "The last three boosters burn for 77 seconds and drop away almost 73 km up, with the rocket flying at about ten times the speed of sound. In general, they fall into the ocean too."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "alt_km": 73,
+          "src": "https://www.jpl.nasa.gov/blog/2007/9/september-12-2007"
+        },
+        {
+          "id": "stage1",
+          "t": 271,
+          "title": {
+            "es": "Adiós, primera etapa",
+            "en": "Goodbye, first stage"
+          },
+          "text": {
+            "es": "El motor principal se apaga a los 4 minutos y 23 segundos. Poco después, a 130 km de altura, la primera etapa se separa y se enciende la segunda. En general, la primera etapa cae al océano.",
+            "en": "The main engine shuts down at 4 minutes 23 seconds. Soon after, 130 km up, the first stage separates and the second one lights up. In general, the first stage falls into the ocean."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "alt_km": 130,
+          "src": "https://www.jpl.nasa.gov/blog/2007/9/september-12-2007"
+        },
+        {
+          "id": "fairing",
+          "t": 281,
+          "title": {
+            "es": "Se suelta la cofia",
+            "en": "The nose cone drops"
+          },
+          "text": {
+            "es": "A los 4 minutos y 41 segundos, a 135 km de altura, ya no hace falta la cofia que protegía a Dawn del aire, y se suelta. En general, en los Delta II sus mitades caen al océano.",
+            "en": "At 4 minutes 41 seconds, 135 km up, the nose cone that shielded Dawn from the air is no longer needed, and it drops away. In general, on a Delta II its halves fall into the ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "alt_km": 135,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/dawn-launch.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 538,
+          "title": {
+            "es": "En órbita baja",
+            "en": "In low orbit"
+          },
+          "text": {
+            "es": "A los 8 minutos y 58 segundos la segunda etapa se apaga: Dawn ya está en órbita baja alrededor de la Tierra. El cohete avanza 42 minutos y 37 segundos con el motor apagado.",
+            "en": "At 8 minutes 58 seconds the second stage shuts down: Dawn is now in a low orbit around Earth. The rocket coasts for 42 minutes 37 seconds with its engine off."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/dawn-launch.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 3308,
+          "title": {
+            "es": "Otro empujón",
+            "en": "Another push"
+          },
+          "text": {
+            "es": "La segunda etapa se enciende 2 minutos y 39 segundos más. Dawn y la tercera etapa se ponen a girar a unas 50 vueltas por minuto y la segunda se separa y queda atrás, en órbita alrededor de la Tierra.",
+            "en": "The second stage fires for 2 minutes 39 seconds more. Dawn and the third stage are spun up to about 50 turns per minute and the second stage separates and stays behind, in orbit around Earth."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/dawn-launch.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 3721,
+          "title": {
+            "es": "Dawn vuela sola",
+            "en": "Dawn flies alone"
+          },
+          "text": {
+            "es": "La tercera etapa arde 86 segundos y Dawn escapa de la Tierra. Un yoyó de cables frena el giro y, a 62 minutos del despegue y 1.021 km de altura, Dawn se suelta. La etapa siguió sola, alrededor del Sol.",
+            "en": "The third stage burns for 86 seconds and Dawn escapes from Earth. A yo-yo of cables stops the spin and, 62 minutes after liftoff and 1,021 km up, Dawn lets go. The stage went on alone, around the Sun."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "alt_km": 1021,
+          "src": "https://www.jpl.nasa.gov/blog/2007/9/september-12-2007"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis cohetes laterales encendidos en tierra",
+            "en": "Six ground-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 80,5 y 81,5 segundos del despegue; según la NASA, en los Delta II las carcasas de estos cohetes caen al océano.",
+            "en": "They dropped away empty 80.5 and 81.5 seconds after liftoff; NASA says that on a Delta II the casings of these boosters fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres cohetes laterales encendidos en vuelo",
+            "en": "Three air-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 2 minutos y 39,5 segundos, a casi 73 km de altura; según la NASA, en los Delta II estas carcasas caen al océano.",
+            "en": "They dropped away empty at 2 minutes 39.5 seconds, almost 73 km up; NASA says that on a Delta II these casings fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Se separó a los 4 minutos y 31 segundos, a unos 130 km de altura; según la NASA, la primera etapa de los Delta II cae al océano.",
+            "en": "It separated at 4 minutes 31 seconds, about 130 km up; NASA says the Delta II first stage falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Es el tubo que une la primera etapa con la segunda; en los Delta II forma parte de la primera etapa, que según la NASA cae al océano.",
+            "en": "It is the tube that joins the first stage to the second; on a Delta II it is part of the first stage, which NASA says falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose cone, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4 minutos y 41 segundos, a 135 km de altura; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half at 4 minutes 41 seconds, 135 km up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose cone, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4 minutos y 41 segundos, a 135 km de altura; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half at 4 minutes 41 seconds, 135 km up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Se separó a los 55 minutos del despegue y quedó dando vueltas a la Tierra hasta que, según el catálogo de objetos espaciales de Estados Unidos, volvió a entrar en la atmósfera el 18 de septiembre de 2009.",
+            "en": "It separated 55 minutes after liftoff and kept circling Earth until, according to the United States catalogue of space objects, it re-entered the atmosphere on 18 September 2009."
+          },
+          "where": "burned",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2007-043"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (motor Star 48)",
+            "en": "Third stage (Star 48 motor)"
+          },
+          "fate": {
+            "es": "Después de soltar a Dawn siguió sola por el sistema solar, en órbita alrededor del Sol, igual que los dos cables con pesas del yoyó que frenó el giro.",
+            "en": "After releasing Dawn it went on alone through the solar system, in orbit around the Sun, and so did the two weighted yo-yo cables that stopped the spin."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/blog/2007/9/september-12-2007"
+        }
+      ],
+      "left": []
+    },
+    "kepler": {
+      "rocket": "delta7925_10L",
+      "site": "cape",
+      "pad": "SLC-17B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "Noche del 6 de marzo de 2009, plataforma 17B de Cabo Cañaveral. El telescopio Kepler espera en la punta de un Delta II, dentro de una cofia de 3 metros de ancho.",
+            "en": "Night of 6 March 2009, pad 17B at Cape Canaveral. The Kepler telescope waits on top of a Delta II, inside a nose cone 3 metres wide."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue de noche",
+            "en": "A night liftoff"
+          },
+          "text": {
+            "es": "A las 22:49, hora de Florida, se encienden el motor principal de la primera etapa y seis de los nueve cohetes laterales.",
+            "en": "At 10:49 p.m. Florida time, the first stage main engine and six of the nine strap-on boosters light up."
+          },
+          "ignite": [
+            "stage1",
+            "srbGround"
+          ],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+        },
+        {
+          "id": "srbGround",
+          "t": 66,
+          "title": {
+            "es": "Seis cohetes menos",
+            "en": "Six boosters gone"
+          },
+          "text": {
+            "es": "Los seis cohetes se apagan a los 63,1 segundos. A los 65,5 se encienden los otros tres y enseguida los seis vacíos se sueltan, de a tres. En general, en los Delta II estas piezas caen al océano.",
+            "en": "The six boosters burn out at 63.1 seconds. At 65.5 the other three light up and right after the six empty ones drop away, three at a time. In general, on a Delta II these pieces fall into the ocean."
+          },
+          "drop": [
+            "srbGround"
+          ],
+          "ignite": [
+            "srbAir"
+          ],
+          "alt_km": 18.1,
+          "src": "https://www.ulalaunch.com/docs/default-source/news-items/dii_kepler_mob.pdf"
+        },
+        {
+          "id": "srbAir",
+          "t": 131.5,
+          "title": {
+            "es": "Los últimos tres",
+            "en": "The last three"
+          },
+          "text": {
+            "es": "Los últimos tres cohetes laterales se sueltan a los 131,5 segundos, a unos 57 km de altura. En general, también caen al océano.",
+            "en": "The last three boosters drop away at 131.5 seconds, about 57 km up. In general, they fall into the ocean too."
+          },
+          "drop": [
+            "srbAir"
+          ],
+          "alt_km": 57,
+          "src": "https://www.ulalaunch.com/docs/default-source/news-items/dii_kepler_mob.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 271.3,
+          "title": {
+            "es": "Adiós, primera etapa",
+            "en": "Goodbye, first stage"
+          },
+          "text": {
+            "es": "El motor principal arde casi 4 minutos y medio. Después la primera etapa se separa y, unos 5 segundos más tarde, se enciende la segunda. En general, la primera etapa cae al océano.",
+            "en": "The main engine burns for almost 4 and a half minutes. Then the first stage separates and, about 5 seconds later, the second one lights up. In general, the first stage falls into the ocean."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://www.ulalaunch.com/docs/default-source/news-items/dii_kepler_mob.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 281,
+          "title": {
+            "es": "Se suelta la cofia",
+            "en": "The nose cone drops"
+          },
+          "text": {
+            "es": "A los 4,7 minutos de vuelo, a unos 135 km de altura, el aire ya casi no calienta al cohete y la cofia se suelta. En general, en los Delta II sus mitades caen al océano.",
+            "en": "4.7 minutes into the flight, about 135 km up, the air hardly heats the rocket any more and the nose cone drops away. In general, on a Delta II its halves fall into the ocean."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "alt_km": 135.4,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+        },
+        {
+          "id": "parking",
+          "t": 596,
+          "title": {
+            "es": "En órbita baja",
+            "en": "In low orbit"
+          },
+          "text": {
+            "es": "Poco antes de los 10 minutos la segunda etapa se apaga: Kepler está en una órbita circular a 185 km de altura. El cohete avanza unos 43 minutos sin motor, girando despacio como un asador.",
+            "en": "Just under 10 minutes in, the second stage shuts down: Kepler is in a circular orbit 185 km up. The rocket coasts for about 43 minutes, slowly rolling like a barbecue spit."
+          },
+          "alt_km": 185,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 3296.8,
+          "title": {
+            "es": "Otro empujón",
+            "en": "Another push"
+          },
+          "text": {
+            "es": "La segunda etapa empuja 64 segundos más. Unos cohetes chicos ponen a girar a la tercera etapa con Kepler y la segunda se separa. Según el catálogo de objetos espaciales de Estados Unidos, sigue en órbita terrestre.",
+            "en": "The second stage pushes for 64 more seconds. Small rockets spin up the third stage with Kepler and the second stage separates. According to the United States catalogue of space objects, it is still in Earth orbit."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "ignite": [
+            "stage3"
+          ],
+          "src": "https://www.ulalaunch.com/docs/default-source/news-items/dii_kepler_mob.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 3708.8,
+          "title": {
+            "es": "Kepler vuela solo",
+            "en": "Kepler flies alone"
+          },
+          "text": {
+            "es": "La tercera etapa arde casi 90 segundos. Unos 5 minutos después un yoyó frena el giro y Kepler se suelta, al sudeste de Nueva Guinea. Queda en órbita solar y, según el catálogo espacial de EE. UU., la etapa también.",
+            "en": "The third stage burns for almost 90 seconds. About 5 minutes later a yo-yo stops the spin and Kepler lets go southeast of New Guinea. It stays in solar orbit and, according to the US space catalogue, so does the stage."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "alt_km": 721.5,
+          "src": "https://www.jpl.nasa.gov/news/press_kits/Kepler-presskit-2-19-smfile.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": {
+            "es": "Seis cohetes laterales encendidos en tierra",
+            "en": "Six ground-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 66 y 67 segundos del despegue, a unos 18 km de altura; según la NASA, en los Delta II las carcasas de estos cohetes caen al océano.",
+            "en": "They dropped away empty 66 and 67 seconds after liftoff, about 18 km up; NASA says that on a Delta II the casings of these boosters fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "srbAir",
+          "name": {
+            "es": "Tres cohetes laterales encendidos en vuelo",
+            "en": "Three air-lit strap-on boosters"
+          },
+          "fate": {
+            "es": "Se soltaron vacíos a los 131,5 segundos, a unos 57 km de altura; según la NASA, en los Delta II estas carcasas caen al océano.",
+            "en": "They dropped away empty at 131.5 seconds, about 57 km up; NASA says that on a Delta II these casings fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Primera etapa",
+            "en": "First stage"
+          },
+          "fate": {
+            "es": "Se separó unos 4 minutos y medio después del despegue; según la NASA, la primera etapa de los Delta II cae al océano.",
+            "en": "It separated about 4 and a half minutes after liftoff; NASA says the Delta II first stage falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Anillo entre etapas",
+            "en": "Interstage ring"
+          },
+          "fate": {
+            "es": "Es el tubo que une la primera etapa con la segunda; en los Delta II forma parte de la primera etapa, que según la NASA cae al océano.",
+            "en": "It is the tube that joins the first stage to the second; on a Delta II it is part of the first stage, which NASA says falls into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose cone, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4,7 minutos de vuelo, a unos 135 km de altura; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half 4.7 minutes into the flight, about 135 km up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose cone, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 4,7 minutos de vuelo, a unos 135 km de altura; según la NASA, las mitades de la cofia de los Delta II caen al océano.",
+            "en": "It dropped away together with the other half 4.7 minutes into the flight, about 135 km up; NASA says the halves of the Delta II nose cone fall into the ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/wp-content/uploads/2018/04/mer_feis_dec_2002_0.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Segunda etapa",
+            "en": "Second stage"
+          },
+          "fate": {
+            "es": "Después de soltar la tercera etapa quedó en una órbita alargada alrededor de la Tierra y, según el catálogo de objetos espaciales de Estados Unidos, sigue ahí.",
+            "en": "After releasing the third stage it was left in a stretched-out orbit around Earth and, according to the United States catalogue of space objects, it is still there."
+          },
+          "where": "earthOrbit",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2009-011"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (motor Star 48B)",
+            "en": "Third stage (Star 48B motor)"
+          },
+          "fate": {
+            "es": "Sacó a Kepler de la órbita terrestre y, según el catálogo de objetos espaciales de Estados Unidos, quedó igual que Kepler en órbita alrededor del Sol.",
+            "en": "It pushed Kepler out of Earth orbit and, according to the United States catalogue of space objects, it ended up like Kepler in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://celestrak.org/satcat/table-satcat.php?INTDES=2009-011"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Tapa contra el polvo del telescopio",
+            "en": "Telescope dust cover"
+          },
+          "fate": {
+            "es": "Kepler la soltó el 7 de abril de 2009 para dejar entrar la luz de las estrellas: la tapa ovalada, de 1,7 por 1,3 metros, se alejó flotando y quedó en su propia órbita alrededor del Sol, parecida a la de Kepler.",
+            "en": "Kepler released it on 7 April 2009 to let the starlight in: the oval cover, 1.7 by 1.3 metres, drifted away and ended up in its own orbit around the Sun, similar to Kepler's."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/dust-cover-jettisoned-from-nasas-kepler-telescope/"
+        }
+      ]
+    }
+  }
+}

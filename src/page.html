@@ -1,0 +1,1157 @@
+<title>Siguen ahí</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@500;700&family=Geist:wght@300;400;500;600&display=swap">
+<style>
+/* Una sola pantalla: la escena ocupa todo; el título flota arriba al centro; los carteles salen de
+   cada objeto con una línea guía; la línea de tiempo corre abajo. Un solo aspecto oscuro, a propósito:
+   es el espacio. La Tierra es el único objeto con color; todo lo demás es línea fina y luz. */
+:root{
+  color-scheme:dark;
+  --space:#05070b;
+  --veil:rgba(5,7,11,.78);
+  --fg:#eef2f8;
+  --fg-dim:#aab3c2;
+  --fg-faint:#78828f;
+  --line:rgba(206,218,238,.30);
+  --line-strong:rgba(232,238,248,.78);
+  --accent:#ffd08a;            /* la luz de cada máquina */
+  --accent-glow:rgba(255,208,138,.6);
+  --limb:#5fa8ff;
+  --live:#ff4b3e;              /* señal de transmisión */              /* borde de atmósfera */
+  --font-ui:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --font-dot:"Doto","Geist",system-ui,sans-serif;
+}
+html,body{height:100%}
+body{background:var(--space);color:var(--fg);font-family:var(--font-ui);font-size:15px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.stage{position:relative;height:100%;overflow:hidden;isolation:isolate}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.stage.is-grabbing #gl{cursor:grabbing}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:
+  radial-gradient(120% 55% at 50% 0%,var(--veil),rgba(5,7,11,0) 72%),
+  linear-gradient(to top,var(--veil),rgba(5,7,11,0) 24%)}
+#leaders{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
+#leaders path{fill:none;stroke:var(--line-strong);stroke-width:1}
+
+/* carteles con línea guía */
+.callouts{position:absolute;inset:0;z-index:3;pointer-events:none}
+.callout{position:absolute;left:0;top:0;display:grid;gap:2px;max-width:232px;pointer-events:auto;transition:opacity .25s ease;will-change:transform}
+.callout[data-side="left"]{text-align:right;justify-items:end}
+.callout[data-side="above"]{text-align:center;justify-items:center}
+.c-n{font-weight:500;font-size:12.5px;letter-spacing:.16em;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+.c-name{font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase}
+.c-sub{font-size:12.5px;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+.c-status{font-size:12.5px;color:var(--fg-dim);display:inline-flex;align-items:center;gap:7px}
+.c-status i{width:6px;height:6px;border-radius:50%;background:var(--fg-faint);flex:none}
+.callout.is-live .c-status i{background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+.c-go{justify-self:start;margin-top:5px;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--fg);background:none;border:0;border-bottom:1px solid var(--line);padding:2px 0;cursor:pointer}
+.callout[data-side="left"] .c-go{justify-self:end}
+.c-go:hover{border-bottom-color:var(--fg)}
+.callout.is-far{opacity:.86;max-width:200px}
+.callout.is-far .c-sub,.callout.is-far .c-follow{display:none}
+.callout.is-far .c-status{white-space:nowrap}
+/* en las luces lejanas el botón aparece al pasar el puntero o al llegar con el teclado, sin mover nada */
+.callout.is-far .c-actions{position:absolute;left:0;right:0;top:100%;margin:0;padding-top:3px;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.callout.is-far:hover .c-actions,.callout.is-far:focus-within .c-actions{opacity:1;pointer-events:auto}
+.callout.is-far:hover,.callout.is-far:focus-within{opacity:1;z-index:1}
+.callout.is-hidden{opacity:0;pointer-events:none}
+.callout.is-mini .c-sub,.callout.is-mini .c-status,.callout.is-mini .c-actions{display:none}
+
+/* lupa del despegue */
+.lens{--d:clamp(220px,21vw,300px);position:absolute;left:0;top:0;z-index:4;width:var(--d);height:var(--d);margin:calc(var(--d) / -2) 0 0 calc(var(--d) / -2);pointer-events:none;opacity:0;will-change:transform,opacity}
+.lens-glass{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid var(--line-strong);background:var(--space);
+  box-shadow:0 0 0 6px rgba(255,255,255,.035),0 18px 60px rgba(0,0,0,.65),inset 0 0 34px rgba(95,168,255,.16)}
+.lens svg{display:block;width:100%;height:100%}
+.lens-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-10px);white-space:nowrap;text-align:center;display:grid;gap:2px;justify-items:center}
+.lens.is-below .lens-label{bottom:auto;top:100%;transform:translate(-50%,10px)}
+.lens-label strong{font-weight:600;font-size:13px;letter-spacing:.09em;text-transform:uppercase}
+.lens-label span{font-size:12.5px;color:var(--fg-dim)}
+.lens-label em{font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-faint)}
+.lens-label .lens-row{display:inline-flex;align-items:center;gap:8px;margin-bottom:2px}
+.lens-label .lens-live{display:inline-flex;align-items:center;gap:5px;background:var(--live);color:#fff;font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.lens-live i{width:5px;height:5px;border-radius:50%;background:#fff;animation:tw 1.2s ease-in-out infinite}
+.lens-live b{font-weight:600}
+.lens.is-cruise .lens-live{display:none}
+.lens-label .lens-clock{font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--fg);font-variant-numeric:tabular-nums}
+.lens.is-cruise .lens-label .lens-clock{color:var(--accent);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.rk-sky-a{stop-color:#17365f}.rk-sky-b{stop-color:#0a1626}.rk-sky-c{stop-color:var(--space)}
+.rk-earth{fill:#0b1d38}.rk-limb{fill:none;stroke:var(--limb);stroke-opacity:.45;stroke-width:2}
+.rk-body{fill:var(--fg)}.rk-shade{fill:var(--fg-dim)}.rk-dark{fill:var(--fg-faint)}
+.rk-streaks line{stroke:var(--fg);stroke-opacity:.38;stroke-width:1;stroke-linecap:round;animation:streak .55s linear infinite}
+.rk-flame{transform-box:fill-box;transform-origin:50% 0%;animation:flick .16s steps(2) infinite alternate}
+@keyframes streak{from{transform:translateY(-40px)}to{transform:translateY(240px)}}
+@keyframes flick{from{transform:scale(1,1)}to{transform:scale(.84,1.2)}}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* cohete: una sola definición, usada por la lupa y por la transmisión */
+.rk-core{fill:url(#gCore)}
+.rk-atlas .rk-core{fill:url(#gSteel)}
+.rk-atlas .rk-srb,.rk-atlas .d2-only,.rk-delta .ac-only{display:none}
+
+/* botones del cartel */
+.c-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px}
+.c-actions .c-go{margin-top:0}
+.callout[data-side="left"] .c-actions{justify-content:flex-end}
+.callout[data-side="above"] .c-actions{justify-content:center}
+
+/* transmisión en vivo */
+.live{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding-block:16px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:rgba(3,5,8,.76)}
+.live-frame{position:relative;width:min(100%,980px);max-width:100%;max-height:100%;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--space);box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.live-frame svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.lv-top{position:absolute;left:12px;right:12px;top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-right:42px;min-height:28px}
+.lv-badge{display:inline-flex;align-items:center;gap:6px;background:var(--live);color:#fff;font-weight:600;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.lv-badge i{width:6px;height:6px;border-radius:50%;background:#fff;animation:tw 1.2s ease-in-out infinite}
+.lv-date,.lv-cam{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.lv-cam{color:var(--fg-dim)}
+.lv-close{position:absolute;right:0;top:-2px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line-strong);background:var(--veil);color:var(--fg);font-size:17px;line-height:1;cursor:pointer;padding:0}
+.lv-lower{position:absolute;left:12px;top:54px;display:grid;gap:1px;border-left:2px solid var(--live);padding-left:9px;max-width:46%;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.lv-lower strong{font-weight:600;font-size:13.5px;letter-spacing:.07em;text-transform:uppercase}
+.lv-lower span{font-size:12px;color:var(--fg-dim)}
+.lv-tele{position:absolute;right:12px;top:54px;display:grid;gap:8px;text-align:right;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.lv-tele div{display:grid;justify-items:end}
+.lv-tele span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim)}
+.lv-tele b{font-weight:500;font-size:clamp(18px,2.6vw,27px);font-variant-numeric:tabular-nums;line-height:1.05}
+.lv-tele em{font-style:normal;font-size:11px;color:var(--fg-dim)}
+.lv-caption{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:min(88%,580px);margin:0;text-align:center;font-size:clamp(13px,1.7vw,15.5px);background:var(--veil);border-radius:8px;padding:6px 10px;text-wrap:balance}
+.lv-caption:empty{display:none}
+.lv-clockrow{position:absolute;left:50%;bottom:50px;transform:translateX(-50%);display:flex;align-items:baseline;gap:10px;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.95)}
+.lv-clock{font-weight:500;font-size:clamp(21px,3.4vw,31px);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.lv-fast{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-dim)}
+.lv-next{position:absolute;left:14px;bottom:52px;max-width:36%;font-size:11.5px;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.lv-note{position:absolute;right:14px;bottom:52px;max-width:30%;margin:0;font-size:10.5px;color:var(--fg-faint);text-align:right}
+.lv-events{position:absolute;left:14px;right:14px;bottom:18px;height:20px}
+.lv-events::before{content:"";position:absolute;left:0;right:0;top:8px;height:1px;background:var(--line-strong)}
+.lv-ev{position:absolute;top:4px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;border:1px solid var(--line-strong);background:var(--space)}
+.lv-ev.is-done{background:var(--fg)}
+.lv-now{position:absolute;top:0;width:2px;margin-left:-1px;height:17px;background:var(--live)}
+.lv-end{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;background:var(--veil);padding:16px}
+.lv-end p{margin:0;max-width:26rem;font-size:15.5px;text-wrap:balance}
+.live-frame .lv-end svg{position:static;width:min(42%,210px);height:auto;aspect-ratio:1;overflow:visible}
+
+/* capa de interfaz */
+.ui{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;padding-block:14px 12px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));pointer-events:none}
+.ui > *{pointer-events:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:14px;color:var(--fg);background:none;border:0;padding:6px 0;cursor:pointer}
+.brand i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px 2px var(--accent-glow);animation:tw 2.6s ease-in-out infinite}
+.lang{display:inline-flex;gap:2px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.lang button{font-size:12px;letter-spacing:.1em;color:var(--fg-dim);background:none;border:0;border-radius:999px;padding:5px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{color:var(--space);background:var(--fg)}
+
+.hero{align-self:center;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:clamp(2px,2.5vh,26px);max-width:34rem;min-width:0;transition:opacity .6s ease,transform .6s ease}
+.eyebrow{margin:0;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--fg-faint)}
+.hero h1{margin:0;font-weight:500;font-size:clamp(36px,6vw,60px);letter-spacing:-.035em;line-height:1;text-wrap:balance}
+.lede{margin:0;color:var(--fg-dim);font-size:clamp(15px,1.6vw,17px);text-wrap:balance}
+.start{margin-top:8px;font-weight:500;font-size:14px;color:var(--space);background:var(--fg);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.start:hover{filter:brightness(1.08)}
+.stage.is-running .hero{opacity:0;transform:translateY(-8px);pointer-events:none}
+
+.toast{align-self:center;margin-top:auto;margin-bottom:10px;max-width:30rem;text-align:center;font-size:13px;color:var(--fg);background:var(--veil);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.toast:not([hidden]) + .timeline{margin-top:0}
+
+/* línea de tiempo */
+.timeline{margin-top:auto;display:grid;grid-template-columns:auto 1fr;align-items:start;column-gap:14px;row-gap:6px}
+.tl-read{grid-column:1 / -1;display:flex;align-items:baseline;gap:10px;min-height:32px;min-width:0}
+.tl-year{font-family:var(--font-dot);font-weight:700;font-size:30px;line-height:1;letter-spacing:.05em;font-variant-numeric:tabular-nums}
+.tl-month{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);min-width:4.8em;font-variant-numeric:tabular-nums}
+.tl-slow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-glow);border-radius:999px;padding:3px 9px}
+.tl-note{margin:0 0 0 auto;font-size:11.5px;color:var(--fg-faint);text-align:right;min-width:0;display:grid;gap:1px}
+.tl-note .hint{color:var(--fg-dim)}
+.tl-play{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--fg);display:grid;place-items:center;cursor:pointer;padding:0}
+.tl-play:hover{border-color:var(--line-strong)}
+.tl-play svg{width:12px;height:12px;fill:currentColor}
+.tl-track{position:relative;height:36px;cursor:pointer;touch-action:none;min-width:0}
+.tl-line{position:absolute;left:0;right:0;top:12px;height:1px;background:var(--line)}
+.tl-tick{position:absolute;top:12px;width:1px;height:5px;background:var(--line)}
+.tl-tick.dec{height:9px;background:var(--line-strong)}
+.tl-tick span{position:absolute;top:12px;left:0;transform:translateX(-50%);font-size:11px;color:var(--fg-faint);font-variant-numeric:tabular-nums}
+.tl-mark{position:absolute;top:8px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;border:1px solid var(--line-strong);background:var(--space);padding:0;cursor:pointer}
+.tl-mark.is-past{background:var(--fg)}
+.tl-mark.up{top:-3px}
+.tl-cursor{position:absolute;top:0;left:0;width:1px;height:25px;background:var(--accent);pointer-events:none}
+.tl-cursor::after{content:"";position:absolute;left:-3px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+
+.nogl-note{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);z-index:2;margin:0;color:var(--fg-dim);font-size:13px;text-align:center;max-width:22rem}
+
+@media (max-width:640px){
+  .live-frame{aspect-ratio:3/4}
+  .lv-cam,.lv-note{display:none}
+  .lv-next{left:50%;transform:translateX(-50%);bottom:86px;max-width:92%;text-align:center;white-space:nowrap}
+  .lv-caption{bottom:112px}
+  .lv-lower{max-width:52%;top:68px}
+  .lv-tele{top:68px}
+  .c-sub{display:none}
+  .callout{max-width:168px}
+  .callout[data-kind="site"]{display:none}
+  .callout.is-far .c-status,.callout.is-far .c-go{display:none}
+  .tl-tick:not(.dec2) span{display:none}
+  .tl-note{display:none}
+}
+@media (max-height:560px){.eyebrow,.lede{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="stage" id="stage">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="gCore" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="10" y2="0">
+        <stop offset="0" stop-color="#113a40"/><stop offset=".3" stop-color="#2f8f99"/><stop offset=".5" stop-color="#4fb9c3"/><stop offset=".78" stop-color="#22707a"/><stop offset="1" stop-color="#0d2e33"/>
+      </linearGradient>
+      <linearGradient id="gSteel" gradientUnits="userSpaceOnUse" x1="-13.5" y1="0" x2="13.5" y2="0">
+        <stop offset="0" stop-color="#3b424b"/><stop offset=".22" stop-color="#aab2bc"/><stop offset=".44" stop-color="#f3f6f9"/><stop offset=".6" stop-color="#98a1ab"/><stop offset=".85" stop-color="#606873"/><stop offset="1" stop-color="#2c3239"/>
+      </linearGradient>
+      <linearGradient id="gFair" gradientUnits="userSpaceOnUse" x1="-12" y1="0" x2="12" y2="0">
+        <stop offset="0" stop-color="#6c7580"/><stop offset=".28" stop-color="#dfe4ea"/><stop offset=".5" stop-color="#ffffff"/><stop offset=".8" stop-color="#aab2bc"/><stop offset="1" stop-color="#59626d"/>
+      </linearGradient>
+      <linearGradient id="gWhite"><stop offset="0" stop-color="#6c7580"/><stop offset=".28" stop-color="#dfe4ea"/><stop offset=".5" stop-color="#ffffff"/><stop offset=".8" stop-color="#aab2bc"/><stop offset="1" stop-color="#59626d"/></linearGradient>
+      <linearGradient id="gDark"><stop offset="0" stop-color="#101317"/><stop offset=".5" stop-color="#4c535c"/><stop offset="1" stop-color="#0c0e11"/></linearGradient>
+      <linearGradient id="gGold" gradientUnits="userSpaceOnUse" x1="-9" y1="0" x2="9" y2="0"><stop offset="0" stop-color="#4c3d17"/><stop offset=".45" stop-color="#e0c070"/><stop offset=".7" stop-color="#a88a3c"/><stop offset="1" stop-color="#3f3212"/></linearGradient>
+      <linearGradient id="gFoil"><stop offset="0" stop-color="#4c3d17"/><stop offset=".4" stop-color="#e6c877"/><stop offset=".7" stop-color="#a88a3c"/><stop offset="1" stop-color="#3f3212"/></linearGradient>
+      <linearGradient id="gShield"><stop offset="0" stop-color="#6a4d30"/><stop offset=".5" stop-color="#cfa87d"/><stop offset="1" stop-color="#5c4229"/></linearGradient>
+      <linearGradient id="gCell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d1f44"/><stop offset=".5" stop-color="#2b58a8"/><stop offset="1" stop-color="#122a5a"/></linearGradient>
+      <linearGradient id="gFrost" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset=".3" stop-color="#ffffff" stop-opacity=".5"/><stop offset=".72" stop-color="#ffffff" stop-opacity=".42"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gFlame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".18" stop-color="#fff0c4"/><stop offset=".55" stop-color="#ffab52" stop-opacity=".8"/><stop offset="1" stop-color="#ff6a1a" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gFlame2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".4" stop-color="#bcd9ff" stop-opacity=".6"/><stop offset="1" stop-color="#7fb2ff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="lvSkyN" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#14203a"/><stop offset=".55" stop-color="#080d19"/><stop offset="1" stop-color="#030408"/></linearGradient>
+      <linearGradient id="lvSkyD" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#b9d8f4"/><stop offset=".45" stop-color="#5b9be0"/><stop offset="1" stop-color="#1c4f99"/></linearGradient>
+      <radialGradient id="lvSmoke"><stop offset="0" stop-color="#fff3df" stop-opacity=".95"/><stop offset=".5" stop-color="#d9c7ae" stop-opacity=".55"/><stop offset="1" stop-color="#8c8274" stop-opacity="0"/></radialGradient>
+      <radialGradient id="lvGlow"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient>
+      <linearGradient id="lvTrailG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0dc" stop-opacity=".9"/><stop offset=".3" stop-color="#d8cbb8" stop-opacity=".5"/><stop offset="1" stop-color="#b9b0a2" stop-opacity="0"/></linearGradient>
+
+      <!-- Naves. Caja de 200 x 200 centrada en el origen; arriba es la dirección de vuelo.
+           Lo que lleva la clase sc-dep va plegado dentro de la cofia y se despliega después. -->
+      <g id="sc-aeroshell">
+        <rect x="-13" y="34" width="26" height="12" rx="2" fill="url(#gDark)"/>
+        <circle cx="-25" cy="38" r="5.5" fill="url(#gFoil)"/><circle cx="25" cy="38" r="5.5" fill="url(#gFoil)"/>
+        <path d="M-40 22 H40 V34 H-40 Z" fill="url(#gCell)"/>
+        <path d="M-40 28 H40 M-30 22 V34 M-20 22 V34 M-10 22 V34 M0 22 V34 M10 22 V34 M20 22 V34 M30 22 V34" stroke="#0a1322" stroke-width=".6" opacity=".7" fill="none"/>
+        <rect x="-40" y="19" width="80" height="3.6" fill="url(#gWhite)"/>
+        <path d="M-45 28 H-40 M40 28 H45" stroke="#aeb6c0" stroke-width="2.4" fill="none"/>
+        <path d="M-22 19 L22 19 L41 -18 L-41 -18 Z" fill="url(#gWhite)"/>
+        <path d="M-27 9 H27 M-33 -3 H33 M-38 -13 H38 M-8 19 L-14 -18 M8 19 L14 -18" stroke="#59626d" stroke-width=".5" opacity=".6" fill="none"/>
+        <rect x="-41" y="-21.5" width="82" height="4" rx="1" fill="#2a2f36"/>
+        <path d="M-41 -21 Q0 -60 41 -21 Z" fill="url(#gShield)"/>
+        <path d="M-29 -30 Q0 -51 29 -30" stroke="#f3dcc0" stroke-width=".8" fill="none" opacity=".5"/>
+      </g>
+      <g id="sc-pioneer">
+        <g class="sc-dep" data-ox="-14"><path d="M-14 22 L-86 33" stroke="#aeb6c0" stroke-width="1.6" fill="none"/><rect x="-100" y="26" width="16" height="13" rx="2" fill="url(#gDark)"/><path d="M-96 26 V39 M-92 26 V39 M-88 26 V39" stroke="#8a929c" stroke-width=".8" fill="none"/></g>
+        <g class="sc-dep" data-ox="14"><path d="M14 22 L86 33" stroke="#aeb6c0" stroke-width="1.6" fill="none"/><rect x="84" y="26" width="16" height="13" rx="2" fill="url(#gDark)"/><path d="M88 26 V39 M92 26 V39 M96 26 V39" stroke="#8a929c" stroke-width=".8" fill="none"/></g>
+        <g class="sc-dep" data-ox="12"><path d="M12 30 L70 66" stroke="#aeb6c0" stroke-width="1" fill="none"/><rect x="68" y="63" width="8" height="6" fill="url(#gFoil)"/></g>
+        <rect x="-9" y="30" width="18" height="10" fill="url(#gDark)"/>
+        <path d="M-17 12 L17 12 L21 31 L-21 31 Z" fill="url(#gFoil)"/>
+        <path d="M-6 12 V31 M6 12 V31 M-19 22 H19" stroke="#3f3212" stroke-width=".6" opacity=".6" fill="none"/>
+        <path d="M-52 -7 Q0 36 52 -7 L52 -10 Q0 26 -52 -10 Z" fill="url(#gWhite)"/>
+        <ellipse cx="0" cy="-8.5" rx="52" ry="5.5" fill="#eef2f6" opacity=".4"/>
+        <path d="M-52 -8.5 Q0 -3 52 -8.5" fill="none" stroke="#59626d" stroke-width=".6"/>
+        <path d="M-31 2 L0 -44 L31 2 M0 8 L0 -44" stroke="#aeb6c0" stroke-width="1.1" fill="none"/>
+        <rect x="-4.5" y="-51" width="9" height="9" rx="1.5" fill="url(#gDark)"/>
+      </g>
+      <g id="sc-surveyor">
+        <g class="sc-dep" data-ox="-16"><path d="M-16 14 L-58 45 M-16 31 L-58 45" stroke="#aeb6c0" stroke-width="1.6" fill="none"/><ellipse cx="-60" cy="48" rx="10" ry="3.5" fill="url(#gDark)"/></g>
+        <g class="sc-dep" data-ox="16"><path d="M16 14 L58 45 M16 31 L58 45" stroke="#aeb6c0" stroke-width="1.6" fill="none"/><ellipse cx="60" cy="48" rx="10" ry="3.5" fill="url(#gDark)"/></g>
+        <path d="M-5 34 L5 34 L8 45 L-8 45 Z" fill="url(#gDark)"/>
+        <circle cx="0" cy="25" r="10" fill="url(#gFoil)"/>
+        <path d="M-23 12 H23 L16 33 H-16 Z" fill="none" stroke="#c9d0d8" stroke-width="1.4"/>
+        <path d="M-23 12 L16 33 M23 12 L-16 33" stroke="#8a929c" stroke-width=".8" fill="none"/>
+        <rect x="-33" y="-4" width="19" height="17" rx="1.5" fill="url(#gWhite)"/><rect x="14" y="-4" width="19" height="17" rx="1.5" fill="url(#gWhite)"/>
+        <path d="M-33 4 H-14 M14 4 H33" stroke="#59626d" stroke-width=".5" opacity=".6" fill="none"/>
+        <path d="M0 13 L0 -42" stroke="#c9d0d8" stroke-width="1.8" fill="none"/>
+        <g transform="rotate(-14 -19 -50)"><rect x="-35" y="-60" width="31" height="21" fill="url(#gCell)"/><path d="M-35 -53 H-4 M-35 -46 H-4 M-27 -60 V-39 M-19 -60 V-39 M-11 -60 V-39" stroke="#0a1322" stroke-width=".5" opacity=".7" fill="none"/></g>
+        <g transform="rotate(12 19 -50)"><rect x="4" y="-60" width="31" height="21" fill="url(#gWhite)"/><path d="M4 -53 H35 M4 -46 H35 M12 -60 V-39 M20 -60 V-39 M28 -60 V-39" stroke="#59626d" stroke-width=".5" fill="none"/></g>
+        <path d="M30 -4 L46 -26" stroke="#aeb6c0" stroke-width="1" fill="none"/><circle cx="46" cy="-27" r="2.4" fill="url(#gDark)"/>
+      </g>
+      <g id="sc-near">
+        <g class="sc-dep" data-ox="-18"><rect x="-96" y="-9" width="78" height="27" fill="url(#gCell)"/><path d="M-70 -9 V18 M-44 -9 V18 M-96 4.5 H-18" stroke="#0a1322" stroke-width=".7" opacity=".7" fill="none"/></g>
+        <g class="sc-dep" data-ox="18"><rect x="18" y="-9" width="78" height="27" fill="url(#gCell)"/><path d="M70 -9 V18 M44 -9 V18 M96 4.5 H18" stroke="#0a1322" stroke-width=".7" opacity=".7" fill="none"/></g>
+        <rect x="-13" y="33" width="10" height="9" fill="url(#gDark)"/><rect x="4" y="33" width="13" height="7" fill="url(#gWhite)"/>
+        <path d="M-18 -13 L18 -13 L22 33 L-22 33 Z" fill="url(#gFoil)"/>
+        <path d="M-19 3 H19 M-21 18 H21 M-7 -13 V33 M7 -13 V33" stroke="#3f3212" stroke-width=".6" opacity=".55" fill="none"/>
+        <path d="M-35 -31 Q0 3 35 -31 L35 -34 Q0 -7 -35 -34 Z" fill="url(#gWhite)"/>
+        <ellipse cx="0" cy="-32.5" rx="35" ry="4" fill="#eef2f6" opacity=".4"/>
+        <path d="M0 -17 L0 -45" stroke="#aeb6c0" stroke-width="1.2" fill="none"/><circle cx="0" cy="-46" r="3" fill="url(#gDark)"/>
+        <path d="M22 22 L31 28 L31 16 Z" fill="url(#gDark)"/>
+      </g>
+      <g id="sc-dawn">
+        <g class="sc-dep" data-ox="-16"><rect x="-100" y="-10" width="84" height="20" fill="url(#gCell)"/><path d="M-83 -10 V10 M-66 -10 V10 M-49 -10 V10 M-32 -10 V10 M-100 0 H-16" stroke="#0a1322" stroke-width=".6" opacity=".7" fill="none"/></g>
+        <g class="sc-dep" data-ox="16"><rect x="16" y="-10" width="84" height="20" fill="url(#gCell)"/><path d="M83 -10 V10 M66 -10 V10 M49 -10 V10 M32 -10 V10 M100 0 H16" stroke="#0a1322" stroke-width=".6" opacity=".7" fill="none"/></g>
+        <path d="M-9 32 Q0 76 9 32 Z" fill="url(#gFlame2)"/>
+        <path d="M-7 23 L7 23 L10 33 L-10 33 Z" fill="url(#gDark)"/>
+        <rect x="-17" y="-23" width="34" height="46" rx="2" fill="url(#gFoil)"/>
+        <path d="M-17 8 H17 M-17 -12 H17" stroke="#3f3212" stroke-width=".6" opacity=".5" fill="none"/>
+        <circle cx="0" cy="-3" r="12.5" fill="url(#gWhite)"/><circle cx="0" cy="-3" r="12.5" fill="none" stroke="#59626d" stroke-width=".6"/><circle cx="0" cy="-3" r="2.4" fill="url(#gDark)"/>
+        <path d="M-9 -23 L-9 -42 M9 -23 L9 -36" stroke="#aeb6c0" stroke-width="1" fill="none"/><rect x="-12" y="-47" width="6" height="6" fill="url(#gDark)"/>
+      </g>
+      <g id="sc-kepler">
+        <rect x="-9" y="42" width="18" height="7" fill="url(#gDark)"/>
+        <path d="M-25 24 H25 L21 42 H-21 Z" fill="url(#gFoil)"/>
+        <path d="M-9 24 V42 M9 24 V42" stroke="#3f3212" stroke-width=".6" opacity=".55" fill="none"/>
+        <path d="M-21 -56 L21 -42 L21 24 L-21 24 Z" fill="url(#gWhite)"/>
+        <path d="M-21 -56 L21 -42" stroke="#59626d" stroke-width="1.2" fill="none"/>
+        <path d="M-21 -8 H21 M-21 10 H21" stroke="#59626d" stroke-width=".5" opacity=".6" fill="none"/>
+        <path d="M-21 -32 L3 -25 L3 24 L-21 24 Z" fill="url(#gCell)"/>
+        <path d="M-21 -14 H3 M-21 5 H3 M-9 -28.5 V24" stroke="#0a1322" stroke-width=".6" opacity=".7" fill="none"/>
+        <path d="M25 30 L37 30" stroke="#aeb6c0" stroke-width="1.2" fill="none"/><circle cx="41" cy="30" r="8" fill="url(#gWhite)"/><circle cx="41" cy="30" r="8" fill="none" stroke="#59626d" stroke-width=".6"/><circle cx="41" cy="30" r="1.6" fill="url(#gDark)"/>
+      </g>
+
+      <g id="rkSrb">
+        <path d="M-3.2 150 L3.2 150 L4.6 158 L-4.6 158 Z" fill="url(#gDark)"/>
+        <path d="M-4.6 150 L-4.6 52 C-4.6 46 -2.6 41 0 37 C2.6 41 4.6 46 4.6 52 L4.6 150 Z" fill="url(#gWhite)"/>
+        <path d="M-2.9 44 C-1.6 41 -0.8 39 0 37 C0.8 39 1.6 41 2.9 44 Z" fill="#2a2f36"/>
+        <rect x="-4.6" y="141" width="9.2" height="2.6" fill="#15181c" opacity=".8"/>
+        <rect x="-4.6" y="62" width="9.2" height="1.2" fill="#15181c" opacity=".4"/>
+        <rect x="-4.6" y="100" width="9.2" height="1.2" fill="#15181c" opacity=".3"/>
+        <path d="M-1.6 54 V139" stroke="#ffffff" stroke-opacity=".35" stroke-width=".7" fill="none"/>
+      </g>
+      <!-- Cohete apuntando hacia arriba: punta en y=-150, salida de tobera en y=161. Unidades: 300 = 38,9 m. -->
+      <g id="rkArt" class="rk-delta">
+        <g id="rkFlame1">
+          <path d="M-5.8 158 C-10 194 -4 240 0 270 C4 240 10 194 5.8 158 Z" fill="url(#gFlame)"/>
+          <path d="M-3 158 C-4.6 178 -1.6 200 0 214 C1.6 200 4.6 178 3 158 Z" fill="#ffffff" opacity=".85"/>
+          <ellipse cx="0" cy="176" rx="2.6" ry="4.5" fill="#fff6d8" opacity=".9"/>
+          <ellipse cx="0" cy="192" rx="2" ry="3.6" fill="#ffe2a8" opacity=".7"/>
+          <ellipse cx="0" cy="206" rx="1.5" ry="3" fill="#ffd08a" opacity=".5"/>
+        </g>
+        <g id="rkUp">
+          <g id="rkFlame2" style="opacity:0"><path d="M-3.6 -44 C-6.5 -24 -2 0 0 16 C2 0 6.5 -24 3.6 -44 Z" fill="url(#gFlame2)"/><path d="M-1.6 -44 C-2.6 -34 -0.8 -24 0 -16 C0.8 -24 2.6 -34 1.6 -44 Z" fill="#ffffff" opacity=".8"/></g>
+          <g class="d2-only">
+            <path d="M-2.6 -60 L2.6 -60 L4.8 -44 L-4.8 -44 Z" fill="url(#gDark)"/>
+            <path d="M-3.4 -54 H3.4 M-4.1 -49 H4.1" stroke="#8a929c" stroke-width=".4" opacity=".7" fill="none"/>
+            <rect x="-9" y="-84" width="18" height="24" fill="url(#gGold)"/>
+            <rect x="-9" y="-72" width="18" height="1.4" fill="#15181c" opacity=".5"/>
+            <circle cx="-5.6" cy="-64.5" r="2.4" fill="url(#gWhite)"/><circle cx="5.6" cy="-64.5" r="2.4" fill="url(#gWhite)"/>
+          </g>
+          <g class="ac-only">
+            <path d="M-6.4 -48 L-2.2 -48 L-1.2 -37 L-7.4 -37 Z M2.2 -48 L6.4 -48 L7.4 -37 L1.2 -37 Z" fill="url(#gDark)"/>
+            <rect x="-10" y="-84" width="20" height="36" fill="url(#gFair)"/>
+            <path d="M-10 -72 H10 M-10 -60 H10 M-4 -84 V-48 M4 -84 V-48" stroke="#59626d" stroke-width=".45" opacity=".7" fill="none"/>
+            <rect x="-10" y="-50.5" width="20" height="2.5" fill="#2a2f36"/>
+          </g>
+          <path d="M-6.5 -84 L6.5 -84 L4.6 -95 L-4.6 -95 Z" fill="url(#gDark)"/>
+          <rect x="-11" y="-86" width="22" height="2.4" fill="#2a2f36"/>
+          <g id="rkPay"><use id="rkPayUse" href="#sc-aeroshell" transform="translate(0 -104) scale(.19)"/></g>
+          <path id="rkFairL" d="M0 -150 C-6 -141 -12 -130 -12 -116 L-12 -84 L0 -84 Z" fill="url(#gFair)"/>
+          <path id="rkFairR" d="M0 -150 C6 -141 12 -130 12 -116 L12 -84 L0 -84 Z" fill="url(#gFair)"/>
+          <g id="rkSeam">
+            <path d="M0 -149 L0 -84" stroke="#59626d" stroke-width=".5" fill="none"/>
+            <path d="M-12 -116 H12 M-12 -100 H12 M-7.4 -138 H7.4" stroke="#59626d" stroke-width=".4" opacity=".6" fill="none"/>
+            <rect x="3.4" y="-112" width="4.6" height="6" rx=".8" fill="none" stroke="#59626d" stroke-width=".4" opacity=".7"/>
+            <path d="M-12 -85.4 H12" stroke="#2a2f36" stroke-width="1.3" fill="none"/>
+          </g>
+        </g>
+        <g id="rkS1">
+          <g id="rkB1" class="rk-srb"><g transform="translate(-14.4 0)"><path class="rk-fa" d="M-3.4 157 C-5.6 178 -2 198 0 212 C2 198 5.6 178 3.4 157 Z" fill="url(#gFlame)"/><use href="#rkSrb"/></g></g>
+          <g id="rkB5" class="rk-srb"><g transform="translate(14.4 0)"><path class="rk-fa" d="M-3.4 157 C-5.6 178 -2 198 0 212 C2 198 5.6 178 3.4 157 Z" fill="url(#gFlame)"/><use href="#rkSrb"/></g></g>
+          <path class="d2-only" d="M-8.8 149 L-6.6 149 L-5.8 156 L-9.6 156 Z M6.6 149 L8.8 149 L9.6 156 L5.8 156 Z" fill="url(#gDark)"/>
+          <path d="M-3.4 148 L3.4 148 L6.8 161 L-6.8 161 Z" fill="url(#gDark)"/>
+          <path d="M-4.3 152 H4.3 M-5.4 156.5 H5.4" stroke="#8a929c" stroke-width=".45" opacity=".7" fill="none"/>
+          <rect class="rk-core" x="-10" y="-48" width="20" height="198"/>
+          <g class="d2-only">
+            <rect x="-10" y="40" width="20" height="78" fill="url(#gFrost)"/>
+            <rect x="-10" y="22" width="20" height="10" fill="#082126" opacity=".6"/>
+            <rect x="-10" y="134" width="20" height="16" fill="#06191c" opacity=".5"/>
+            <path d="M-10 -22 H10 M-10 22 H10 M-10 32 H10 M-10 118 H10 M-10 134 H10" stroke="#04151a" stroke-opacity=".5" stroke-width=".6" fill="none"/>
+            <path d="M5.6 -46 V134" stroke="#c9f2f5" stroke-opacity=".32" stroke-width="1" fill="none"/>
+            <path d="M-6.5 -46 V20" stroke="#04151a" stroke-opacity=".25" stroke-width=".5" fill="none"/>
+            <path d="M-12 -84 L12 -84 L10 -76 L10 -48 L-10 -48 L-10 -76 Z" fill="url(#gFair)"/>
+            <path d="M-6 -75 V-49 M-2 -75 V-49 M2 -75 V-49 M6 -75 V-49" stroke="#59626d" stroke-width=".35" opacity=".6" fill="none"/>
+            <rect x="-10" y="-58" width="20" height="4.4" fill="#15181c" opacity=".85"/>
+          </g>
+          <g class="ac-only">
+            <rect x="-10" y="-48" width="20" height="24" fill="#2a2f36"/>
+            <path d="M-10 -40 H10 M-10 -32 H10" stroke="#59626d" stroke-width=".4" fill="none"/>
+            <rect x="-10" y="-10" width="20" height="92" fill="url(#gFrost)"/>
+            <path d="M-10 -24 H10 M-10 -2 H10 M-10 20 H10 M-10 42 H10 M-10 64 H10 M-10 86 H10 M-10 108 H10" stroke="#20262d" stroke-opacity=".45" stroke-width=".5" fill="none"/>
+            <path d="M6.2 -22 V116" stroke="#ffffff" stroke-opacity=".3" stroke-width=".9" fill="none"/>
+          </g>
+          <g id="rkB2" class="rk-srb"><g transform="translate(-7 0)"><path class="rk-fa" d="M-3.4 157 C-5.6 178 -2 198 0 212 C2 198 5.6 178 3.4 157 Z" fill="url(#gFlame)"/><use href="#rkSrb"/></g></g>
+          <g id="rkB4" class="rk-srb"><g transform="translate(7 0)"><path class="rk-fa" d="M-3.4 157 C-5.6 178 -2 198 0 212 C2 198 5.6 178 3.4 157 Z" fill="url(#gFlame)"/><use href="#rkSrb"/></g></g>
+          <g id="rkB3" class="rk-srb"><g><path class="rk-fb" d="M-3.4 157 C-5.6 178 -2 198 0 212 C2 198 5.6 178 3.4 157 Z" fill="url(#gFlame)"/><use href="#rkSrb"/></g></g>
+          <g id="rkSkirt" class="ac-only">
+            <path class="sk-fl" d="M-12 159 C-14.5 180 -10.5 204 -9 220 C-7.5 204 -3.5 180 -6 159 Z M6 159 C3.5 180 7.5 204 9 220 C10.5 204 14.5 180 12 159 Z" fill="url(#gFlame)"/>
+            <path d="M-10 116 L-13.5 152 L13.5 152 L10 116 Z" fill="url(#gSteel)"/>
+            <path d="M-11.2 128 H11.2 M-12.4 140 H12.4" stroke="#20262d" stroke-opacity=".5" stroke-width=".5" fill="none"/>
+            <path d="M-11.5 152 L-6.5 152 L-5.5 160 L-12.5 160 Z M6.5 152 L11.5 152 L12.5 160 L5.5 160 Z" fill="url(#gDark)"/>
+          </g>
+        </g>
+      </g>
+    </defs>
+  </svg>
+
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <svg id="leaders" aria-hidden="true"></svg>
+  <div class="callouts" id="callouts"></div>
+
+  <div class="lens" id="lens" aria-hidden="true">
+    <div class="lens-label">
+      <span class="lens-row"><span class="lens-live"><i></i><b data-i18n="live">En vivo</b></span><span class="lens-clock" id="lensClock"></span></span>
+      <strong id="lensName"></strong><span id="lensCarry"></span><em id="lensTag"></em>
+    </div>
+    <div class="lens-glass">
+      <svg id="lensScene" viewBox="300 80 360 360" preserveAspectRatio="xMidYMid slice"></svg>
+    </div>
+  </div>
+
+  <div class="live" id="live" role="dialog" aria-modal="true" aria-labelledby="lvRocket" hidden>
+    <div class="live-frame">
+      <svg id="lvScene" viewBox="0 0 960 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <div class="lv-top">
+        <span class="lv-badge"><i aria-hidden="true"></i><span data-i18n="live">En vivo</span></span>
+        <span class="lv-date" id="lvDate"></span>
+        <span class="lv-cam" data-i18n="cam">Cámara de seguimiento</span>
+        <button class="lv-close" id="lvClose" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <div class="lv-lower"><strong id="lvRocket"></strong><span id="lvCarry"></span></div>
+      <div class="lv-tele">
+        <div><span data-i18n="speed">Velocidad</span><b id="lvSpeed">0</b><em>km/h</em></div>
+        <div><span data-i18n="alt">Altitud</span><b id="lvAlt">0</b><em>km</em></div>
+      </div>
+      <p class="lv-caption" id="lvCaption" aria-live="polite"></p>
+      <div class="lv-clockrow"><span class="lv-clock" id="lvClock">T− 00:06</span><span class="lv-fast" id="lvFast"></span></div>
+      <span class="lv-next" id="lvNext"></span>
+      <p class="lv-note" data-i18n="teleNote">Animación ilustrativa: la telemetría es aproximada.</p>
+      <div class="lv-events" id="lvEvents"><i class="lv-now" id="lvNow"></i></div>
+      <div class="lv-end" id="lvEnd" hidden>
+        <svg viewBox="-110 -110 220 220" aria-hidden="true"><use id="lvEndCraft" href="#sc-aeroshell"/></svg>
+        <p id="lvEndText"></p>
+        <button class="start" id="lvBack" type="button"><span data-i18n="back">Volver a la Tierra</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui">
+    <header class="top">
+      <button class="brand" id="brand" type="button"><i aria-hidden="true"></i><span data-i18n="title">Siguen ahí</span></button>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" id="langEs" aria-pressed="true">ES</button>
+        <button type="button" id="langEn" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    <section class="hero" id="hero">
+      <p class="eyebrow" data-i18n="eyebrow">NASA Space Apps Challenge 2026 · Salta</p>
+      <h1 data-i18n="title">Siguen ahí</h1>
+      <p class="lede" data-i18n="lede">Cada luz es una máquina que dejamos allá afuera.</p>
+      <button class="start" id="start" type="button"><span data-i18n="start">Empezar el recorrido</span><span aria-hidden="true">→</span></button>
+    </section>
+
+    <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+    <footer class="timeline">
+      <div class="tl-read">
+        <span class="tl-year" id="tlYear">2003</span>
+        <span class="tl-month" id="tlMonth">sep</span>
+        <span class="tl-slow" id="tlSlow" hidden>Tiempo lento</span>
+        <p class="tl-note"><span class="hint" id="hint" data-i18n="hint">Arrastrá para girar la Tierra. Rueda para acercar.</span><span data-i18n="note">Despegues ilustrativos. Viajes: JPL Horizons. Fechas: NASA.</span></p>
+      </div>
+      <button class="tl-play" id="tlPlay" type="button" aria-label="Reproducir">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path id="tlPlayIcon" d="M2 1 L11 6 L2 11 Z"/></svg>
+      </button>
+      <div class="tl-track" id="tlTrack" role="slider" tabindex="0" aria-valuemin="1958" aria-valuemax="2026" aria-valuenow="2003" aria-label="Línea de tiempo, año">
+        <div class="tl-line"></div>
+        <div class="tl-cursor" id="tlCursor"></div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+var DAY_URI='__DAY_URI__', NIGHT_URI='__NIGHT_URI__';
+var NS='http://www.w3.org/2000/svg';
+var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+function $(s){return document.querySelector(s);}
+function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+function add(parent,tag,cls){var e=document.createElement(tag);if(cls)e.className=cls;parent.appendChild(e);return e;}
+
+var stage=$('#stage'),canvas=$('#gl'),leaders=$('#leaders'),calloutsEl=$('#callouts'),lens=$('#lens'),
+    lensName=$('#lensName'),lensCarry=$('#lensCarry'),
+    tlYear=$('#tlYear'),tlMonth=$('#tlMonth'),tlSlow=$('#tlSlow'),tlPlay=$('#tlPlay'),tlPlayIcon=$('#tlPlayIcon'),
+    track=$('#tlTrack'),cursor=$('#tlCursor'),toast=$('#toast');
+
+var YEAR=365.25*864e5,T0=Date.UTC(1958,0,1),T1=Date.UTC(2026,10,15),REST=Date.UTC(2003,8,20);
+/* Ritmo: entre eventos corren BASE años por segundo; cada lanzamiento dura ASCENT_S segundos de ascenso
+   (en los que pasa un solo día) y CRUISE_S segundos de viaje. */
+var DAY=864e5,BASE=2*YEAR,ASCENT_S=6,CRUISE_S=5,U_ASC=0.09,ASC=600e3; /* ASC: los 10 minutos de ascenso, en ms */
+
+var STR={
+  es:{title:'Siguen ahí',eyebrow:'NASA Space Apps Challenge 2026 · Salta',lede:'Cada luz es una máquina que dejamos allá afuera.',
+      start:'Empezar el recorrido',follow:'Seguir',followNote:'En la versión final, la cámara acompaña a la nave hasta su destino.',
+      slow:'Tiempo lento',launching:'Lanzamiento',live:'En vivo',cam:'Cámara de seguimiento',speed:'Velocidad',alt:'Altitud',next:'Próximo',watch:'Ver lanzamiento',lensHint:'Clic para ampliar',lensBack:'Clic para ver su lanzamiento',day:'Día {d} de viaje',inFlorida:' en Florida',padWord:', plataforma ',teleNote:'Animación ilustrativa: la telemetría es aproximada.',back:'Volver a la Tierra',close:'Cerrar',fast:'Avance ×{x}',countdown:'Faltan {s} segundos. Todo listo en la plataforma.',liveEnd:'Fin de la transmisión. {n} ya está en el espacio y sigue viaje a {d}.',ev_liftoff:'Despegue',ev_maxq:'Máxima presión del aire',ev_srb1:'Se sueltan los primeros propulsores',ev_srb2:'Se sueltan los últimos propulsores',ev_beco:'Se suelta el módulo de propulsores',ev_meco:'Se apaga la primera etapa',ev_sep:'Se separa la primera etapa',ev_ses:'Enciende la segunda etapa',ev_fairing:'Se abre la cofia',ev_seco:'En el espacio',cap_liftoff:'Despegue. El {r} deja la plataforma con {n} en la punta.',cap_maxq:'Este es el momento en que el aire empuja más fuerte contra el cohete.',cap_srb1:'Los propulsores que se encendieron en tierra ya gastaron su combustible y se sueltan.',cap_srb2:'Se sueltan los propulsores que se habían encendido en el aire.',cap_beco:'El módulo de propulsores terminó su trabajo y se suelta.',cap_meco:'El motor principal se apaga.',cap_sep:'La primera etapa queda atrás.',cap_ses:'Enciende la segunda etapa.',cap_fairing:'Ya casi no hay aire que frene. La cofia se abre y se ve a {n}.',cap_seco:'El motor se apaga. {n} ya está en el espacio.',hint:'Arrastrá para girar la Tierra. Rueda para acercar.',note:'Despegues ilustrativos. Viajes: JPL Horizons. Fechas: NASA.',play:'Reproducir',pause:'Pausar',
+      toward:'En viaje a {d}',carries:'lleva a {n}',siteName:'Cabo Cañaveral',siteSub:'Florida · 28,5° N 80,6° O',siteStatus:'Sitio de lanzamiento',
+      trackLabel:'Línea de tiempo, año',months:['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']},
+  en:{title:'Still There',eyebrow:'NASA Space Apps Challenge 2026 · Salta',lede:'Every light is a machine we left out there.',
+      start:'Start the journey',follow:'Follow',followNote:'In the final version, the camera rides along with the spacecraft to its destination.',
+      slow:'Slow time',launching:'Launch',live:'Live',cam:'Tracking camera',speed:'Speed',alt:'Altitude',next:'Next',watch:'Watch the launch',lensHint:'Click to enlarge',lensBack:'Click to watch its launch',day:'Day {d} of the trip',inFlorida:' in Florida',padWord:', pad ',teleNote:'Illustrative animation: telemetry is approximate.',back:'Back to Earth',close:'Close',fast:'Fast forward ×{x}',countdown:'{s} seconds to go. All set on the pad.',liveEnd:'End of the broadcast. {n} is in space and on its way to {d}.',ev_liftoff:'Liftoff',ev_maxq:'Maximum air pressure',ev_srb1:'First boosters released',ev_srb2:'Last boosters released',ev_beco:'Booster section released',ev_meco:'First stage shuts down',ev_sep:'First stage separates',ev_ses:'Second stage ignites',ev_fairing:'Fairing opens',ev_seco:'In space',cap_liftoff:'Liftoff. The {r} leaves the pad with {n} on top.',cap_maxq:'This is when the air pushes hardest against the rocket.',cap_srb1:'The boosters lit on the ground have burned out and drop away.',cap_srb2:'The boosters lit in the air drop away.',cap_beco:'The booster section has done its job and drops away.',cap_meco:'The main engine shuts down.',cap_sep:'The first stage falls behind.',cap_ses:'The second stage ignites.',cap_fairing:'Almost no air left to slow it down. The fairing opens and there is {n}.',cap_seco:'The engine shuts down. {n} is in space.',hint:'Drag to turn the Earth. Scroll to zoom.',note:'Illustrative launches. Journeys: JPL Horizons. Dates: NASA.',play:'Play',pause:'Pause',
+      toward:'On its way to {d}',carries:'carrying {n}',siteName:'Cape Canaveral',siteSub:'Florida · 28.5° N 80.6° W',siteStatus:'Launch site',
+      trackLabel:'Timeline, year',months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}
+};
+/* Diez misiones para probar el diseño. Una fila por misión; el número, el lugar en pantalla, las fechas
+   escritas y la luz del Sol se calculan. tz: horas de la hora de Florida respecto de UTC en ese lanzamiento. */
+var MISSIONS=[
+  {id:'surveyor1',name:'Surveyor 1',rocket:'Atlas-Centaur',rocketFull:'Atlas-Centaur',ev:'atlas',sc:'surveyor',tz:-5,pad:'36A',
+   launch:Date.UTC(1966,4,30,14,41),legEnd:Date.UTC(1966,5,2,6,17),lastSignal:Date.UTC(1967,0,7),
+   dest:{es:'la Luna',en:'the Moon'},operating:{es:'Operando en la Luna',en:'Operating on the Moon'},silent:{es:'Última señal: 7 ene 1967',en:'Last signal: 7 Jan 1967'}},
+  {id:'pioneer10',name:'Pioneer 10',rocket:'Atlas-Centaur',rocketFull:'Atlas-Centaur',ev:'atlas',sc:'pioneer',tz:-5,pad:'36A',
+   launch:Date.UTC(1972,2,3,1,49),legEnd:Date.UTC(1973,11,4,2,26),lastSignal:Date.UTC(2003,0,23),
+   dest:{es:'Júpiter',en:'Jupiter'},operating:{es:'Sigue transmitiendo',en:'Still transmitting'},silent:{es:'Última señal: ene 2003',en:'Last signal: Jan 2003'}},
+  {id:'pioneer11',name:'Pioneer 11',rocket:'Atlas-Centaur',rocketFull:'Atlas-Centaur',ev:'atlas',sc:'pioneer',tz:-5,pad:'36B',
+   launch:Date.UTC(1973,3,6,2,11),legEnd:Date.UTC(1974,11,3,5,22),lastSignal:Date.UTC(1995,10,24),
+   dest:{es:'Júpiter',en:'Jupiter'},operating:{es:'Sigue transmitiendo',en:'Still transmitting'},silent:{es:'Última señal: nov 1995',en:'Last signal: Nov 1995'}},
+  {id:'near',name:'NEAR Shoemaker',rocket:'Delta II',rocketFull:'Delta II 7925-8',ev:'delta',sc:'near',tz:-5,pad:'17B',
+   launch:Date.UTC(1996,1,17,20,43),legEnd:Date.UTC(2000,1,14,15,33),lastSignal:Date.UTC(2001,1,28),
+   dest:{es:'el asteroide Eros',en:'asteroid Eros'},operating:{es:'Operando en Eros',en:'Operating at Eros'},silent:{es:'Última señal: 28 feb 2001',en:'Last signal: 28 Feb 2001'}},
+  {id:'pathfinder',name:'Mars Pathfinder',rocket:'Delta II',rocketFull:'Delta II 7925',ev:'delta',sc:'aeroshell',tz:-5,pad:'17B',
+   launch:Date.UTC(1996,11,4,6,58),legEnd:Date.UTC(1997,6,4,16,57),lastSignal:Date.UTC(1997,8,27),
+   dest:{es:'Marte',en:'Mars'},operating:{es:'Operando en Marte',en:'Operating on Mars'},silent:{es:'Última señal: 27 sep 1997',en:'Last signal: 27 Sep 1997'}},
+  {id:'spirit',name:'Spirit',rocket:'Delta II',rocketFull:'Delta II 7925',ev:'delta',sc:'aeroshell',tz:-4,pad:'17A',
+   launch:Date.UTC(2003,5,10,17,58),legEnd:Date.UTC(2004,0,4,4,35),lastSignal:Date.UTC(2010,2,22),
+   dest:{es:'Marte',en:'Mars'},operating:{es:'Operando en Marte',en:'Operating on Mars'},silent:{es:'Última señal: 22 mar 2010',en:'Last signal: 22 Mar 2010'}},
+  {id:'opportunity',name:'Opportunity',rocket:'Delta II',rocketFull:'Delta II 7925H',ev:'deltaH',sc:'aeroshell',tz:-4,pad:'17B',
+   launch:Date.UTC(2003,6,8,3,18),legEnd:Date.UTC(2004,0,25,5,5),lastSignal:Date.UTC(2018,5,10),
+   dest:{es:'Marte',en:'Mars'},operating:{es:'Operando en Marte',en:'Operating on Mars'},silent:{es:'Última señal: 10 jun 2018',en:'Last signal: 10 Jun 2018'}},
+  {id:'phoenix',name:'Phoenix',rocket:'Delta II',rocketFull:'Delta II 7925',ev:'delta',sc:'aeroshell',tz:-4,pad:'17A',
+   launch:Date.UTC(2007,7,4,9,26),legEnd:Date.UTC(2008,4,25,23,38),lastSignal:Date.UTC(2008,10,2),
+   dest:{es:'Marte',en:'Mars'},operating:{es:'Operando en Marte',en:'Operating on Mars'},silent:{es:'Última señal: 2 nov 2008',en:'Last signal: 2 Nov 2008'}},
+  {id:'dawn',name:'Dawn',rocket:'Delta II',rocketFull:'Delta II 7925H',ev:'deltaH',sc:'dawn',tz:-4,pad:'17B',
+   launch:Date.UTC(2007,8,27,11,34),legEnd:Date.UTC(2011,6,16),lastSignal:Date.UTC(2018,9,31),
+   dest:{es:'Vesta y Ceres',en:'Vesta and Ceres'},operating:{es:'Operando en el cinturón de asteroides',en:'Operating in the asteroid belt'},silent:{es:'Última señal: 31 oct 2018',en:'Last signal: 31 Oct 2018'}},
+  {id:'kepler',name:'Kepler',rocket:'Delta II',rocketFull:'Delta II 7925-10L',ev:'delta',sc:'kepler',tz:-5,pad:'17B',
+   launch:Date.UTC(2009,2,7,3,49),legEnd:Date.UTC(2009,4,12),lastSignal:Date.UTC(2018,10,15),
+   dest:{es:'su órbita alrededor del Sol',en:'its orbit around the Sun'},operating:{es:'Buscando planetas',en:'Hunting for planets'},silent:{es:'Apagado: 15 nov 2018',en:'Switched off: 15 Nov 2018'}}
+];
+/* Lugares de las luces lejanas: dos columnas a los costados, lejos del título y de la Tierra. */
+var SLOT_W=[[-0.58,0.62],[0.58,0.62],[-0.58,0.36],[0.58,0.36],[-0.58,0.10],[0.58,0.10],[-0.58,-0.16],[0.58,-0.16],[-0.58,-0.42],[0.58,-0.42]];
+var SLOT_N=[[-0.55,0.74],[0.55,0.74],[-0.55,0.59],[0.55,0.59],[-0.55,0.44],[0.55,0.44],[-0.55,0.29],[0.55,0.29],[-0.55,0.14],[0.55,0.14]];
+/* Dónde estaba el Sol en el instante del lanzamiento: latitud y longitud del punto con el Sol justo arriba. */
+function unitLL(la,lo){return [Math.cos(la)*Math.cos(lo),Math.sin(la),-Math.cos(la)*Math.sin(lo)];}
+function sunLL(ms){
+  var d=new Date(ms),doy=(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())-Date.UTC(d.getUTCFullYear(),0,0))/864e5;
+  return [-23.44*Math.cos(2*Math.PI*(doy+10)/365)*Math.PI/180,-15*(d.getUTCHours()+d.getUTCMinutes()/60-12)*Math.PI/180];
+}
+var CAPE_U=unitLL(28.5*Math.PI/180,-80.6*Math.PI/180);
+MISSIONS.forEach(function(m,i){
+  m.n=(i<9?'00':'0')+(i+1);m.slot=i;m.side=i%2?'right':'left';
+  var ll=sunLL(m.launch),u=unitLL(ll[0],ll[1]);m.sunL=u;
+  m.sunEl=Math.asin(clamp(u[0]*CAPE_U[0]+u[1]*CAPE_U[1]+u[2]*CAPE_U[2],-1,1))*57.2958;   /* altura del Sol sobre el horizonte, en grados */
+  m.dl=smooth((m.sunEl+6)/14);                                                            /* 0 de noche, 1 de día */
+});
+function fmtDate(ms,lg){var d=new Date(ms);return d.getUTCDate()+' '+STR[lg].months[d.getUTCMonth()]+' '+d.getUTCFullYear();}
+/* fecha y hora de Florida del lanzamiento */
+function fmtLocal(m,lg){
+  var ms=m.launch+m.tz*36e5,d=new Date(ms),hh=d.getUTCHours(),mm=two(d.getUTCMinutes());
+  return fmtDate(ms,lg)+' · '+(lg==='es'?two(hh)+':'+mm:((hh+11)%12+1)+':'+mm+(hh<12?' am':' pm'))+STR[lg].inFlorida;
+}
+
+
+/* idioma: ?lang=es|en en la dirección; si no, el del navegador (español si empieza con "es", inglés si no) */
+var lang=(function(){try{var q=(location.search.match(/[?&]lang=(es|en)\b/)||[])[1];if(q)return q;}catch(e){}var n=String(navigator.language||'es').toLowerCase();return n.indexOf('es')===0?'es':'en';})(),sim=REST,playing=false,rate=0,dragging=false,W=1,H=1;
+var k=0,lensM=null,pinned=null,focusM=null,pointer={x:-999,y:-999,type:'mouse'};
+function t(key){return STR[lang][key];}
+
+/* ---------- carteles ---------- */
+function makeCallout(kind,side){
+  var el=add(calloutsEl,'div','callout');el.dataset.kind=kind;el.dataset.side=side;
+  var path=document.createElementNS(NS,'path');leaders.appendChild(path);
+  return {el:el,path:path,side:side,key:''};
+}
+MISSIONS.forEach(function(m){
+  var c=makeCallout('mission',m.side);
+  c.n=add(c.el,'span','c-n');c.name=add(c.el,'strong','c-name');c.sub=add(c.el,'span','c-sub');
+  c.status=add(c.el,'span','c-status');add(c.status,'i','');c.stext=add(c.status,'span','');
+  c.act=add(c.el,'div','c-actions');c.watch=add(c.act,'button','c-go');c.watch.type='button';
+  c.watch.addEventListener('click',function(){openLive(m,c.watch);});
+  c.go=add(c.act,'button','c-go c-follow');c.go.type='button';
+  c.go.addEventListener('click',function(){showToast(t('followNote'));});
+  c.go.addEventListener('focus',function(){focusM=m;});
+  c.go.addEventListener('blur',function(){if(focusM===m)focusM=null;});
+  m.c=c;m.state='pre';m.scr={x:0,y:0,vis:false};m.phase=Math.random()*6.28;
+});
+var site=makeCallout('site','left');
+site.name=add(site.el,'strong','c-name');site.sub=add(site.el,'span','c-sub');
+site.status=add(site.el,'span','c-status');add(site.status,'i','');site.stext=add(site.status,'span','');
+site.scr={x:0,y:0,vis:false};
+
+function statusOf(m){
+  if(m.state==='dep')return {live:true,text:t('toward').replace('{d}',m.dest[lang])};
+  if(sim<m.lastSignal)return {live:true,text:m.operating[lang]};
+  return {live:false,text:m.silent[lang]};
+}
+function refreshCallout(m){
+  var st=statusOf(m),key=lang+'|'+m.state+'|'+st.text;
+  if(key===m.c.key)return;m.c.key=key;
+  m.c.n.textContent=m.n;m.c.name.textContent=m.name;
+  m.c.sub.textContent=m.rocket+' · '+fmtDate(m.launch,lang);
+  m.c.stext.textContent=st.text;m.c.go.textContent=t('follow')+' ↗';m.c.watch.textContent=t('watch')+' ↗';
+  m.c.el.classList.toggle('is-live',st.live);m.c.el.classList.toggle('is-far',m.state==='far');
+}
+function place(c,sx,sy,reach,above,dir){
+  var el=c.el,w=el.offsetWidth,h=el.offsetHeight,s=c.side==='left'?-1:1,run=56;
+  if(above){var ax=clamp(sx-w/2,16,Math.max(16,W-16-w)),ay=sy-26-h;el.dataset.side='above';
+    c.box=[ax,ay,w,h];el.style.transform='translate('+Math.round(ax)+'px,'+Math.round(ay)+'px)';
+    c.path.setAttribute('d','M'+sx.toFixed(1)+' '+(sy-9).toFixed(1)+' L'+sx.toFixed(1)+' '+(ay+h+4).toFixed(1));return;}
+  if(reach){var sd=dir||-1;if(sd<0?(sx-reach-8-w>16):(sx+reach+8+w<W-16)){s=sd;run=Math.max(56,reach);}}
+  function lxFor(sign){var hx=sx+sign*run;return sign>0?hx+8:hx-8-w;}
+  var lx=lxFor(s);
+  if((s>0&&lx+w>W-16)||(s<0&&lx<16)){s=-s;lx=lxFor(s);}
+  var ly=clamp(sy-32,58,Math.max(58,H-118-(PICK_H||0)-h)),ey=ly+10,ex=sx+s*22,hx=sx+s*run;
+  el.dataset.side=s>0?'right':'left';
+  c.box=[lx,ly,w,h];el.style.transform='translate('+Math.round(lx)+'px,'+Math.round(ly)+'px)';
+  c.path.setAttribute('d','M'+sx.toFixed(1)+' '+sy.toFixed(1)+' L'+ex.toFixed(1)+' '+ey.toFixed(1)+' L'+hx.toFixed(1)+' '+ey.toFixed(1));
+}
+function hide(c,on){c.el.classList.toggle('is-hidden',on);c.path.style.opacity=on?0:1;}
+
+/* ---------- textos ---------- */
+function applyLang(){
+  document.documentElement.lang=lang;
+  var nodes=document.querySelectorAll('[data-i18n]');
+  for(var i=0;i<nodes.length;i++)nodes[i].textContent=t(nodes[i].getAttribute('data-i18n'));
+  $('#langEs').setAttribute('aria-pressed',String(lang==='es'));$('#langEn').setAttribute('aria-pressed',String(lang==='en'));
+  track.setAttribute('aria-label',t('trackLabel'));
+  site.name.textContent=t('siteName');site.sub.textContent=t('siteSub');site.stext.textContent=t('siteStatus');
+  MISSIONS.forEach(function(m){m.c.key='';});
+  setPlaying(playing);lensFor=null;liveTexts();$('#lvClose').setAttribute('aria-label',t('close'));
+}
+var toastTimer=0;
+function showToast(msg){toast.textContent=msg;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.hidden=true;},4500);}
+
+/* ---------- línea de tiempo ---------- */
+(function buildTrack(){
+  for(var y=1958;y<=2026;y++){
+    var tk=add(track,'div','tl-tick');tk.style.left=((Date.UTC(y,0,1)-T0)/(T1-T0)*100)+'%';
+    if(y%10===0){tk.classList.add('dec');if(y%20===0)tk.classList.add('dec2');add(tk,'span','').textContent=String(y);}
+  }
+  var prevPct=-9,prevUp=false;
+  MISSIONS.forEach(function(m){
+    var pct=(m.launch-T0)/(T1-T0)*100,up=(pct-prevPct<1.1)&&!prevUp;prevPct=pct;prevUp=up;
+    var b=add(track,'button','tl-mark'+(up?' up':''));b.type='button';b.style.left=pct+'%';
+    b.setAttribute('aria-label',m.name+', '+new Date(m.launch).getUTCFullYear());b.title=m.name;
+    b.addEventListener('click',function(e){e.stopPropagation();sim=m.launch;rate=0;stage.classList.add('is-running');setPlaying(true);});
+    m.mark=b;
+  });
+})();
+function setPlaying(on){
+  playing=on;tlPlay.setAttribute('aria-label',on?t('pause'):t('play'));
+  tlPlayIcon.setAttribute('d',on?'M2 1 H5 V11 H2 Z M7 1 H10 V11 H7 Z':'M2 1 L11 6 L2 11 Z');
+}
+function simFromX(cx){var r=track.getBoundingClientRect();sim=T0+clamp((cx-r.left)/r.width,0,1)*(T1-T0);}
+track.addEventListener('pointerdown',function(e){
+  if(e.target.closest&&e.target.closest('.tl-mark'))return;
+  dragging=true;try{track.setPointerCapture(e.pointerId);}catch(err){}
+  setPlaying(false);stage.classList.add('is-running');simFromX(e.clientX);
+});
+track.addEventListener('pointermove',function(e){if(dragging)simFromX(e.clientX);});
+track.addEventListener('pointerup',function(){dragging=false;});
+track.addEventListener('pointercancel',function(){dragging=false;});
+track.addEventListener('keydown',function(e){
+  var d=e.key==='ArrowRight'?1:(e.key==='ArrowLeft'?-1:0);
+  if(e.key==='Home'){sim=T0;}else if(e.key==='End'){sim=T1;}else if(!d){return;}
+  e.preventDefault();setPlaying(false);stage.classList.add('is-running');sim=clamp(sim+d*YEAR,T0,T1);
+});
+tlPlay.addEventListener('click',function(){
+  if(!playing&&sim>=T1)sim=T0;
+  stage.classList.add('is-running');setPlaying(!playing);
+});
+$('#start').addEventListener('click',function(){sim=T0;rate=BASE;stage.classList.add('is-running');setPlaying(true);tlPlay.focus();});
+$('#brand').addEventListener('click',function(){sim=REST;setPlaying(false);stage.classList.remove('is-running');orbitHome();});
+$('#langEs').addEventListener('click',function(){lang='es';applyLang();});
+$('#langEn').addEventListener('click',function(){lang='en';applyLang();});
+
+window.addEventListener('pointermove',function(e){var r=stage.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;pointer.type=e.pointerType||'mouse';});
+stage.addEventListener('pointerleave',function(){pointer.x=-999;pointer.y=-999;});
+stage.addEventListener('pointerdown',function(e){
+  if(e.pointerType!=='touch')return;
+  var r=stage.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,hit=null;
+  MISSIONS.forEach(function(m){if(m.state==='dep'&&m.scr.vis&&Math.hypot(x-m.scr.x,y-m.scr.y)<70)hit=m;});
+  if(hit&&pinned===hit){pinned=null;openLive(hit,null);}else{pinned=hit;}
+});
+
+/* ---------- órbita: arrastrar gira, la rueda acerca, y queda con inercia ---------- */
+var HOME={th:0,ph:1.539,r:9.5};
+var orb={th:HOME.th,ph:HOME.ph,r:HOME.r,thT:HOME.th,phT:HOME.ph,rT:HOME.r,vth:0,vph:0,drag:false,pts:{},lx:0,ly:0,lt:0,pinch:0};
+function orbitHome(){orb.thT=HOME.th+Math.round((orb.th-HOME.th)/6.2832)*6.2832;orb.phT=HOME.ph;orb.rT=HOME.r;orb.vth=0;orb.vph=0;}
+function used(){var h=$('#hint');if(h)h.hidden=true;}
+canvas.addEventListener('pointerdown',function(e){
+  orb.pts[e.pointerId]={x:e.clientX,y:e.clientY};
+  try{canvas.setPointerCapture(e.pointerId);}catch(err){}
+  orb.drag=true;orb.lx=e.clientX;orb.ly=e.clientY;orb.lt=e.timeStamp;orb.vth=0;orb.vph=0;orb.pinch=0;orb.dist=0;orb.pick=(k>0.45&&lensM)?lensM:null;stage.classList.add('is-grabbing');
+});
+canvas.addEventListener('pointermove',function(e){
+  if(!orb.pts[e.pointerId])return;
+  orb.pts[e.pointerId].x=e.clientX;orb.pts[e.pointerId].y=e.clientY;
+  var ids=Object.keys(orb.pts);
+  if(ids.length>=2){
+    var a=orb.pts[ids[0]],b=orb.pts[ids[1]],dd=Math.hypot(a.x-b.x,a.y-b.y);
+    if(orb.pinch>0&&dd>0)orb.rT=clamp(orb.rT*orb.pinch/dd,2.6,24);
+    orb.pinch=dd;used();return;
+  }
+  var dx=e.clientX-orb.lx,dy=e.clientY-orb.ly,dtm=Math.max(8,e.timeStamp-orb.lt)/1000,kk=0.0055*clamp(orb.r/HOME.r,0.35,1.6);
+  orb.lx=e.clientX;orb.ly=e.clientY;orb.lt=e.timeStamp;orb.dist+=Math.abs(dx)+Math.abs(dy);
+  orb.thT-=dx*kk;orb.phT=clamp(orb.phT-dy*kk,0.2,Math.PI-0.2);
+  orb.vth=clamp(0.6*orb.vth+0.4*(-dx*kk/dtm),-4,4);orb.vph=clamp(0.6*orb.vph+0.4*(-dy*kk/dtm),-3,3);
+  if(Math.abs(dx)+Math.abs(dy)>2)used();
+});
+function orbEnd(e){
+  delete orb.pts[e.pointerId];var left=Object.keys(orb.pts);orb.pinch=0;
+  if(left.length){orb.lx=orb.pts[left[0]].x;orb.ly=orb.pts[left[0]].y;orb.lt=e.timeStamp;return;}
+  orb.drag=false;stage.classList.remove('is-grabbing');
+  if(orb.dist<6&&orb.pick&&e.type==='pointerup'&&e.pointerType!=='touch')openLive(orb.pick,null);
+  if(e.timeStamp-orb.lt>90||reduce){orb.vth=0;orb.vph=0;}
+}
+canvas.addEventListener('pointerup',orbEnd);canvas.addEventListener('pointercancel',orbEnd);
+canvas.addEventListener('dblclick',orbitHome);
+function overPanel(e){return !!(e.target&&e.target.closest&&e.target.closest('.jr-card,.credits,.ph-box,.home,.lx-card'));}
+stage.addEventListener('wheel',function(e){if(overPanel(e))return;e.preventDefault();if(JR.active||EX.active||(typeof HOME!=='undefined'&&HOME&&HOME.active))return;
+  /* alejarse más allá del tope sigue hacia el espacio, sin corte */
+  if(e.deltaY>0&&orb.rT>=23.9&&orb.r>22.5&&!live){exFromGlobe();return;}
+  orb.rT=clamp(orb.rT*Math.exp(e.deltaY*0.0012),2.6,24);used();},{passive:false});
+function applyOrbit(dt){
+  if(!orb.drag){orb.thT+=orb.vth*dt;orb.phT=clamp(orb.phT+orb.vph*dt,0.2,Math.PI-0.2);var f=Math.exp(-dt*3);orb.vth*=f;orb.vph*=f;}
+  var a=dt?Math.min(1,dt*14):1,b=dt?Math.min(1,dt*7):1;
+  orb.th+=(orb.thT-orb.th)*a;orb.ph+=(orb.phT-orb.ph)*a;orb.r+=(orb.rT-orb.r)*b;
+  var sn=Math.sin(orb.ph);
+  camera.position.set(orb.r*sn*Math.sin(orb.th),orb.r*Math.cos(orb.ph),orb.r*sn*Math.cos(orb.th));
+  camera.lookAt(0,0,0);camera.updateMatrixWorld(true);
+}
+/* ¿la Tierra tapa este punto? */
+function occluded(pt){
+  var c=camera.position,dx=pt.x-c.x,dy=pt.y-c.y,dz=pt.z-c.z,tt=-(c.x*dx+c.y*dy+c.z*dz)/(dx*dx+dy*dy+dz*dz);
+  if(tt<=0||tt>=1)return false;
+  var x=c.x+dx*tt,y=c.y+dy*tt,z=c.z+dz*tt;return x*x+y*y+z*z<1;
+}
+
+/* ---------- escena ---------- */
+var renderer=null,scene,camera,earth,earthMat,atmoMat,capeLocal,capeWorld,launchPoint,VEC,ZERO,ready=false,sunV,HERO_SUN,sunFor=null;
+/* SUN_REAL: en cada lanzamiento la luz se acomoda a donde estaba el Sol ese día y a esa hora. Con false queda fija. */
+var SUN_REAL=true;
+function initGL(){
+  renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false});
+  renderer.setClearColor(0x05070b,1);
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(35,1,0.1,400);
+  applyOrbit(0);
+  VEC=new THREE.Vector3();ZERO=new THREE.Vector3(0,0,0);
+  sunV=new THREE.Vector3(-0.74,0.36,0.56).normalize();HERO_SUN=sunV.clone();
+
+  /* estrellas */
+  var n=1500,pos=new Float32Array(n*3),col=new Float32Array(n*3);
+  for(var i=0;i<n;i++){
+    var u=Math.random()*2-1,a=Math.random()*6.2832,r=Math.sqrt(1-u*u),b=0.25+Math.pow(Math.random(),2.6)*0.75;
+    pos[i*3]=r*Math.cos(a)*120;pos[i*3+1]=u*120;pos[i*3+2]=r*Math.sin(a)*120;col[i*3]=b*0.92;col[i*3+1]=b*0.95;col[i*3+2]=b;
+  }
+  var sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(pos,3));sg.setAttribute('color',new THREE.BufferAttribute(col,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({size:1.5,sizeAttenuation:false,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false})));
+
+  /* Tierra: mapa de día y luces de noche de NASA, con el terminador según la dirección del Sol */
+  var loader=new THREE.TextureLoader();
+  function tex(uri){var x=loader.load(uri,function(){ready=true;});x.anisotropy=renderer.capabilities.getMaxAnisotropy();return x;}
+  earthMat=new THREE.ShaderMaterial({
+    uniforms:{uDay:{value:tex(DAY_URI)},uNight:{value:tex(NIGHT_URI)},uSun:{value:sunV}},
+    vertexShader:'varying vec2 vUv;varying vec3 vNw;varying vec3 vPw;void main(){vUv=uv;vNw=normalize(mat3(modelMatrix)*normal);vec4 p=modelMatrix*vec4(position,1.0);vPw=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}',
+    fragmentShader:'uniform sampler2D uDay;uniform sampler2D uNight;uniform vec3 uSun;varying vec2 vUv;varying vec3 vNw;varying vec3 vPw;'+
+      'void main(){vec3 n=normalize(vNw);float ndl=dot(n,uSun);float day=smoothstep(-0.12,0.24,ndl);'+
+      'vec3 dayC=texture2D(uDay,vUv).rgb;vec3 nightC=texture2D(uNight,vUv).rgb;'+
+      'vec3 lit=dayC*(0.07+1.08*clamp(ndl,0.0,1.0));vec3 dark=dayC*0.03+pow(nightC,vec3(1.35))*1.3;'+
+      'vec3 c=mix(dark,lit,day);vec3 v=normalize(cameraPosition-vPw);float f=pow(1.0-clamp(dot(n,v),0.0,1.0),3.4);'+
+      'c+=vec3(0.24,0.5,1.0)*f*(0.14+0.86*day)*0.6;gl_FragColor=vec4(c,1.0);}'
+  });
+  var tilt=new THREE.Group();tilt.rotation.x=0.32;tilt.rotation.z=-0.2;scene.add(tilt);
+  earth=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),earthMat);earth.rotation.y=0.2;tilt.add(earth);
+  atmoMat=new THREE.ShaderMaterial({
+    side:THREE.BackSide,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+    uniforms:{uSun:{value:sunV},uColor:{value:new THREE.Color(0x5fa8ff)}},
+    vertexShader:'varying vec3 vN;varying vec3 vDw;void main(){vN=normalize(normalMatrix*normal);vDw=normalize((modelMatrix*vec4(position,1.0)).xyz);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+    fragmentShader:'uniform vec3 uSun;uniform vec3 uColor;varying vec3 vN;varying vec3 vDw;void main(){float i=pow(clamp(-dot(normalize(vN),vec3(0.0,0.0,1.0))*2.1,0.0,1.0),2.2);float s=0.22+0.78*smoothstep(-0.35,0.6,dot(vDw,uSun));gl_FragColor=vec4(uColor*i*s,1.0);}'
+  });
+  var atmo=new THREE.Mesh(new THREE.SphereGeometry(1.13,64,48),atmoMat);scene.add(atmo);
+
+  /* Cabo Cañaveral: 28,5° N, 80,6° O */
+  var la=28.5*Math.PI/180,lo=-80.6*Math.PI/180;
+  capeLocal=new THREE.Vector3(Math.cos(la)*Math.cos(lo),Math.sin(la),-Math.cos(la)*Math.sin(lo));
+  capeWorld=new THREE.Vector3();
+  scene.updateMatrixWorld(true);
+  launchPoint=earth.localToWorld(capeLocal.clone());
+  MISSIONS.forEach(function(m){m.sunW=new THREE.Vector3(m.sunL[0],m.sunL[1],m.sunL[2]).transformDirection(earth.matrixWorld);});
+
+  /* luces y estelas */
+  var cv=document.createElement('canvas');cv.width=cv.height=128;var g=cv.getContext('2d'),gr=g.createRadialGradient(64,64,0,64,64,64);
+  gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(0.08,'rgba(255,246,228,.95)');gr.addColorStop(0.26,'rgba(255,208,138,.38)');gr.addColorStop(1,'rgba(255,208,138,0)');
+  g.fillStyle=gr;g.fillRect(0,0,128,128);var glow=new THREE.CanvasTexture(cv);
+  MISSIONS.forEach(function(m){
+    m.sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:glow,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,sizeAttenuation:false}));
+    m.lineMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uHead:{value:0},uDim:{value:1},uColor:{value:new THREE.Color(0xdfe7f5)}},
+      vertexShader:'attribute float aT;varying float vT;void main(){vT=aT;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+      fragmentShader:'uniform float uHead;uniform float uDim;uniform vec3 uColor;varying float vT;void main(){if(vT>uHead)discard;float a=mix(0.07,0.62,pow(vT/max(uHead,0.0001),4.0));gl_FragColor=vec4(uColor,a*uDim);}'});
+    m.line=new THREE.Line(new THREE.BufferGeometry(),m.lineMat);m.line.frustumCulled=false;
+    m.pos=new THREE.Vector3();scene.add(m.line);scene.add(m.sprite);
+  });
+}
+function homeCamera(){
+  var c=new THREE.PerspectiveCamera(camera.fov,W/H,0.1,400),sn=Math.sin(HOME.ph);
+  c.setViewOffset(W,H,0,-Math.round(H*0.14),W,H);
+  c.position.set(HOME.r*sn*Math.sin(HOME.th),HOME.r*Math.cos(HOME.ph),HOME.r*sn*Math.cos(HOME.th));
+  c.lookAt(0,0,0);c.updateMatrixWorld(true);return c;
+}
+function farPoint(cam,nx,ny,dist){
+  var p=new THREE.Vector3(nx,ny,0.5).unproject(cam).sub(cam.position).normalize();
+  return cam.position.clone().add(p.multiplyScalar(dist));
+}
+function buildPaths(){
+  var narrow=W/H<0.8,S=launchPoint,up=new THREE.Vector3(0,1,0),hc=homeCamera();
+  MISSIONS.forEach(function(m){
+    var nd=(narrow?SLOT_N:SLOT_W)[m.slot],F=farPoint(hc,nd[0],nd[1],17.5);
+    var sideV=new THREE.Vector3().crossVectors(up,S).normalize();if(F.x<0)sideV.multiplyScalar(-1);
+    var p0=S.clone().multiplyScalar(1.005),p1=S.clone().multiplyScalar(1.16).add(sideV.clone().multiplyScalar(0.34)),
+        p2=S.clone().multiplyScalar(1.5).add(sideV.clone().multiplyScalar(1.15)),
+        p3=p2.clone().lerp(F,0.45).add(new THREE.Vector3(0,0.55,0));
+    m.curve=new THREE.CatmullRomCurve3([p0,p1,p2,p3,F],false,'catmullrom',0.5);
+    var pts=m.curve.getSpacedPoints(200),arr=new Float32Array(pts.length*3),ts=new Float32Array(pts.length);
+    for(var i=0;i<pts.length;i++){arr[i*3]=pts[i].x;arr[i*3+1]=pts[i].y;arr[i*3+2]=pts[i].z;ts[i]=i/(pts.length-1);}
+    m.line.geometry.dispose();var geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(arr,3));geo.setAttribute('aT',new THREE.BufferAttribute(ts,1));m.line.geometry=geo;
+  });
+}
+function resize(){
+  W=stage.clientWidth||1;H=stage.clientHeight||1;
+  if(!renderer)return;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(W,H,false);
+  /* la vista se corre hacia abajo para que la Tierra quede en el tercio inferior, girando sobre su centro */
+  camera.aspect=W/H;camera.setViewOffset(W,H,0,-Math.round(H*0.14),W,H);camera.updateMatrixWorld(true);buildPaths();
+}
+var earthScr={x:0,y:0,r:0};
+function toScreen(v,out){VEC.copy(v).project(camera);out.x=(VEC.x*0.5+0.5)*W;out.y=(-VEC.y*0.5+0.5)*H;out.vis=VEC.z<1;return out;}
+
+/* ---------- lanzadores, escena del despegue y transmisión ---------- */
+/* Segundos desde el despegue de cada evento. En este boceto son ilustrativos. */
+var ROCKETS={
+  delta:{cls:'rk-delta',ev:[[0,'liftoff'],[50,'maxq'],[66,'srb1'],[132,'srb2'],[263,'meco'],[272,'sep'],[277,'ses'],[282,'fairing'],[578,'seco']]},
+  deltaH:{cls:'rk-delta',ev:[[0,'liftoff'],[50,'maxq'],[80,'srb1'],[160,'srb2'],[263,'meco'],[272,'sep'],[277,'ses'],[282,'fairing'],[578,'seco']]},
+  atlas:{cls:'rk-atlas',ev:[[0,'liftoff'],[60,'maxq'],[150,'beco'],[205,'fairing'],[245,'meco'],[250,'sep'],[260,'ses'],[578,'seco']]}
+};
+Object.keys(ROCKETS).forEach(function(q){var R=ROCKETS[q];R.t={};R.ev.forEach(function(e){R.t[e[1]]=e[0];});});
+/* tiempo (s), altitud (km), velocidad (km/h): perfil ilustrativo de un ascenso */
+var TELE=[[0,0,0],[2,0.006,22],[4,0.026,52],[6,0.062,90],[8,0.12,140],[10,0.2,200],[14,0.42,330],[20,1.0,520],[30,3.2,900],[50,9.5,1650],[80,24,3200],[160,62,7900],[263,118,19800],[282,128,20100],[400,155,23500],[578,167,28000],[600,167,28000]];
+var ASC_S=ASC/1000,liveEl=$('#live'),art=$('#rkArt'),payUse=$('#rkPayUse'),P={},live=null,liveRT={},liveCap=0,liveOpener=null,liveLr=1,liveEndT=0,artFor='',depState={};
+var lv={clock:$('#lvClock'),fast:$('#lvFast'),speed:$('#lvSpeed'),alt:$('#lvAlt'),cap:$('#lvCaption'),next:$('#lvNext'),date:$('#lvDate'),
+  rocket:$('#lvRocket'),carry:$('#lvCarry'),evs:$('#lvEvents'),now:$('#lvNow'),end:$('#lvEnd'),endText:$('#lvEndText'),craft:$('#lvEndCraft')};
+var lensTag=$('#lensTag'),lensClock=$('#lensClock');
+['rkB1','rkB2','rkB3','rkB4','rkB5','rkS1','rkUp','rkFairL','rkFairR','rkSeam','rkSkirt','rkFlame1','rkFlame2'].forEach(function(id){P[id]=document.getElementById(id);});
+var flA=art.querySelectorAll('.rk-fa'),flB=art.querySelectorAll('.rk-fb'),flS=art.querySelectorAll('.sk-fl');
+
+/* La misma escena se arma dos veces: en la lupa (recortada sobre el cohete) y en la transmisión. */
+var SCENE='<rect width="960" height="540" fill="#030408"/>'+
+  '<rect class="sv-air" width="960" height="540" fill="url(#lvSkyN)"/>'+
+  '<rect class="sv-day" width="960" height="540" fill="url(#lvSkyD)" style="opacity:0"/>'+
+  '<g class="sv-stars"></g>'+
+  '<g class="sv-limb"><circle cx="480" cy="3000" r="2400" fill="#0a1830"/><circle class="sv-limbday" cx="480" cy="3000" r="2400" fill="#2f74c4" style="opacity:0"/>'+
+    '<circle cx="480" cy="3000" r="2402" fill="none" stroke="#5fa8ff" stroke-opacity=".55" stroke-width="3"/></g>'+
+  '<g class="sv-ground">'+
+    '<rect x="-300" y="424" width="1560" height="900" fill="#0b0e13"/>'+
+    '<rect class="sv-gday" x="-300" y="424" width="1560" height="900" fill="#5d6b58" style="opacity:0"/>'+
+    '<path d="M-300 424 H1260" stroke="#2c343f" stroke-width="1.5" fill="none"/>'+
+    '<path d="M700 424V214H762V424M700 284H762M700 354H762M700 214L762 284L700 354L762 424" fill="none" stroke="#3c4550" stroke-width="2"/>'+
+    '<path d="M560 424V150M592 424V150M560 150H592M560 378L592 332L560 286L592 240L560 194L592 150" fill="none" stroke="#56606d" stroke-width="2"/>'+
+    '<rect x="550" y="138" width="52" height="13" fill="#39414c"/>'+
+    '<path d="M576 138V84M576 96L556 138M576 96L596 138" fill="none" stroke="#56606d" stroke-width="1.4"/>'+
+    '<path d="M560 196H494M560 250H496M560 330H496M560 196L530 214M560 250L530 268" fill="none" stroke="#56606d" stroke-width="2"/>'+
+    '<path d="M436 424L456 410H504L524 424Z" fill="#2a313a"/>'+
+    '<rect x="424" y="418" width="112" height="9" fill="#39414c"/>'+
+    '<path d="M150 424V396H178V424M186 424V404H206V424M840 424V400H872V424" fill="none" stroke="#2c343f" stroke-width="1.5"/>'+
+    '<g class="sv-lights"><circle cx="576" cy="84" r="2.4" fill="#ff5a4a"/><circle cx="556" cy="148" r="2" fill="#ffe6b8"/><circle cx="596" cy="148" r="2" fill="#ffe6b8"/>'+
+      '<circle cx="731" cy="214" r="2" fill="#ffe6b8"/><circle cx="164" cy="402" r="1.6" fill="#ffe6b8"/><circle cx="856" cy="406" r="1.6" fill="#ffe6b8"/>'+
+      '<circle cx="60" cy="421" r="1.4" fill="#ffe6b8"/><circle cx="300" cy="421" r="1.4" fill="#ffe6b8"/><circle cx="930" cy="421" r="1.4" fill="#ffe6b8"/></g>'+
+    '<circle class="sv-glow" cx="480" cy="424" r="190" fill="url(#lvGlow)"/>'+
+    '<g class="sv-smoke" transform="translate(480 424)" style="opacity:0"><circle cx="-70" cy="-6" r="46" fill="url(#lvSmoke)"/><circle cx="-30" cy="-16" r="52" fill="url(#lvSmoke)"/>'+
+      '<circle cx="20" cy="-18" r="56" fill="url(#lvSmoke)"/><circle cx="66" cy="-8" r="46" fill="url(#lvSmoke)"/><circle cx="0" cy="-2" r="40" fill="url(#lvSmoke)"/></g>'+
+  '</g>'+
+  '<g class="sv-ship" transform="translate(480 260)"><path class="sv-trail" d="M-7 166 L-30 900 L30 900 L7 166 Z" fill="url(#lvTrailG)" style="opacity:0"/><use href="#rkArt"/></g>'+
+  '<g class="sv-craft" style="display:none"><use class="sv-craftuse" href="#sc-aeroshell"/></g>';
+function buildScene(svg){
+  svg.innerHTML=SCENE;var V={};
+  ['air','day','stars','limb','limbday','ground','gday','lights','glow','smoke','ship','trail','craft','craftuse'].forEach(function(n){V[n]=svg.querySelector('.sv-'+n);});
+  for(var i=0;i<120;i++){var c=document.createElementNS(NS,'circle');c.setAttribute('cx',(Math.random()*960).toFixed(1));c.setAttribute('cy',(Math.random()*540).toFixed(1));
+    c.setAttribute('r',(0.4+Math.random()*0.9).toFixed(2));c.setAttribute('fill','#ffffff');c.setAttribute('opacity',(0.25+Math.random()*0.65).toFixed(2));V.stars.appendChild(c);}
+  return V;
+}
+var PV=buildScene($('#lvScene')),LV=buildScene($('#lensScene'));
+
+function smooth(x){x=clamp(x,0,1);return x*x*(3-2*x);}
+function tele(T,i){
+  if(T<=0)return 0;
+  for(var j=1;j<TELE.length;j++){if(T<=TELE[j][0]){var a=TELE[j-1],b=TELE[j];return a[i]+(b[i]-a[i])*(T-a[0])/(b[0]-a[0]);}}
+  return TELE[TELE.length-1][i];
+}
+/* Los primeros segundos van a velocidad real; después avanza rápido y vuelve a frenar cerca de cada evento. */
+function liveRate(m,T){
+  if(T<6)return 1;
+  var base=1+15*smooth((T-6)/40),L=ROCKETS[m.ev].ev,near=1e9;
+  for(var i=1;i<L.length;i++)near=Math.min(near,Math.abs(T-L[i][0]));
+  return Math.max(1,base*(0.14+0.86*smooth((near-2)/12)));
+}
+/* El dibujo del cohete es uno solo y lo comparten la lupa y la transmisión: se viste para la misión que se está mirando. */
+function setArt(m){
+  if(artFor===m.id)return;artFor=m.id;
+  art.setAttribute('class',ROCKETS[m.ev].cls);payUse.setAttribute('href','#sc-'+m.sc);
+  PV.craftuse.setAttribute('href','#sc-'+m.sc);LV.craftuse.setAttribute('href','#sc-'+m.sc);
+}
+/* paneles, patas y brazos: plegados dentro de la cofia (0) o desplegados (1) */
+function setDeploy(m,s){
+  s=Math.round(clamp(s,0,1)*100)/100;if(depState[m.sc]===s)return;depState[m.sc]=s;
+  var els=document.querySelectorAll('#sc-'+m.sc+' .sc-dep');
+  for(var i=0;i<els.length;i++){var ox=+els[i].getAttribute('data-ox');
+    els[i].setAttribute('transform','translate('+ox+' 0) scale('+Math.max(0.001,s)+' 1) translate('+(-ox)+' 0)');
+    els[i].style.opacity=s<0.03?'0':'1';}
+}
+function still(id){P[id].removeAttribute('transform');P[id].style.opacity='';}
+function fall(id,sec,dx,rot){
+  if(sec===undefined){still(id);return;}
+  var e=P[id];
+  e.setAttribute('transform','translate('+(dx*(12*sec+9*sec*sec)).toFixed(1)+' '+(24*sec*sec).toFixed(1)+') rotate('+(rot*(6+16*sec)).toFixed(1)+' '+(dx*12).toFixed(1)+' 100)');
+  e.style.opacity=String(1-smooth((sec-2.2)/1.6));
+}
+/* Pose del cohete en el segundo T de la misión. secOf(evento) da los segundos de animación desde que pasó ese evento. */
+function poseShip(m,T,secOf,now,h){
+  var E=ROCKETS[m.ev].t,i;
+  var fl=0.9+0.2*Math.abs(Math.sin(now*0.045)*Math.sin(now*0.013+1)),wide=1+2.4*smooth(h/95),lng=(1+0.5*smooth(h/60))*fl;
+  P.rkFlame1.setAttribute('transform','translate(0 158) scale('+wide.toFixed(3)+' '+lng.toFixed(3)+') translate(0 -158)');
+  P.rkFlame1.style.opacity=(T>=-0.3&&T<E.meco)?'1':'0';
+  var a=(E.srb1!==undefined&&T>=-0.3&&T<E.srb1-4)?'1':'0',b=(E.srb2!==undefined&&T>=E.srb1-1&&T<E.srb2-4)?'1':'0',
+      tf='translate(0 157) scale(1 '+fl.toFixed(3)+') translate(0 -157)';
+  for(i=0;i<flA.length;i++){flA[i].style.opacity=a;flA[i].setAttribute('transform',tf);}
+  for(i=0;i<flB.length;i++){flB[i].style.opacity=b;flB[i].setAttribute('transform',tf);}
+  for(i=0;i<flS.length;i++)flS[i].style.opacity=T>=-0.3?'1':'0';
+  P.rkFlame2.style.opacity=(T>=E.ses&&T<E.seco)?'1':'0';
+  P.rkFlame2.setAttribute('transform','translate(0 -44) scale('+(1+1.6*smooth(h/140)).toFixed(3)+' '+(0.9+0.2*Math.abs(Math.sin(now*0.05))).toFixed(3)+') translate(0 44)');
+  var s1=secOf('srb1'),s2=secOf('srb2'),sb=secOf('beco'),ss=secOf('sep'),f=secOf('fairing');
+  fall('rkB1',s1,-1,-1);fall('rkB2',s1,-0.7,-1);fall('rkB4',s1,0.7,1);fall('rkB5',s1,1,1);fall('rkB3',s2,0,0.4);
+  if(sb!==undefined){P.rkSkirt.setAttribute('transform','translate(0 '+(26*sb*sb).toFixed(1)+')');P.rkSkirt.style.opacity=String(1-smooth((sb-2)/1.5));}else{still('rkSkirt');}
+  if(ss!==undefined){P.rkS1.setAttribute('transform','translate(0 '+(14*ss+26*ss*ss).toFixed(1)+')');P.rkS1.style.opacity=String(1-smooth((ss-2.6)/1.6));}else{still('rkS1');}
+  if(f!==undefined){var fo=String(1-smooth((f-2)/1.6));
+    P.rkFairL.setAttribute('transform','translate('+(-(14*f+9*f*f)).toFixed(1)+' '+(5*f*f).toFixed(1)+') rotate('+(-26*f).toFixed(1)+' -12 -84)');
+    P.rkFairR.setAttribute('transform','translate('+(14*f+9*f*f).toFixed(1)+' '+(5*f*f).toFixed(1)+') rotate('+(26*f).toFixed(1)+' 12 -84)');
+    P.rkFairL.style.opacity=fo;P.rkFairR.style.opacity=fo;P.rkSeam.style.opacity='0';}
+  else{still('rkFairL');still('rkFairR');still('rkSeam');}
+}
+function pitchOf(T){return T<12?0:(T<300?66*smooth((T-12)/288):66+14*smooth((T-300)/278));}
+/* Una vista de la escena. La cámara sigue al cohete, así que lo que se mueve es el suelo.
+   cruise: sin valor durante el ascenso; con valor, ya no hay cohete y se ve la nave sola. */
+function drawView(V,m,T,secOf,now,ampK,cruise){
+  if(cruise!==undefined){
+    V.ship.style.display='none';V.ground.style.display='none';V.limb.style.display='none';V.craft.style.display='';
+    V.air.style.opacity='0';V.day.style.opacity='0';V.stars.style.opacity='1';
+    var q=reduce?0:1;
+    V.craft.setAttribute('transform','translate('+(480+5*q*Math.sin(now*0.0011)).toFixed(1)+' '+(262+4*q*Math.sin(now*0.0016+1)).toFixed(1)+') rotate('+(7*q*Math.sin(now*0.0007)).toFixed(2)+') scale(1.5)');
+    return;
+  }
+  V.ship.style.display='';V.ground.style.display='';V.limb.style.display='';V.craft.style.display='none';
+  var h=tele(T,1),dl=m.dl,airF=1-0.9*smooth(h/45);
+  /* vibración: suave en el despegue y en la máxima presión, casi nada después */
+  var amp=reduce?0:ampK*((T>-0.5&&T<7)?1.1*smooth((T+0.5)*2):((T>44&&T<60)?0.8:0.25));
+  var ss=secOf('sep')||0,zoom=1+0.9*smooth(ss/2.5),yo=97*smooth(ss/2.5);
+  V.ship.setAttribute('transform','translate('+(480+amp*Math.sin(now*0.038)).toFixed(1)+' '+(260+amp*Math.sin(now*0.047+2)).toFixed(1)+') rotate('+pitchOf(T).toFixed(2)+') scale('+zoom.toFixed(3)+') translate(0 '+yo.toFixed(1)+')');
+  V.ground.setAttribute('transform','translate(0 '+Math.min(1200,h*7700).toFixed(1)+')');
+  V.air.style.opacity=String(airF);V.day.style.opacity=String(dl*airF);
+  V.stars.style.opacity=String(0.35*(1-dl)+0.65*smooth(h/40));
+  V.limb.setAttribute('transform','translate(0 '+(-170*smooth((h-50)/110)).toFixed(1)+')');
+  V.limbday.style.opacity=String(0.85*dl);V.gday.style.opacity=String(dl);V.lights.style.opacity=String(1-dl);
+  V.glow.style.opacity=String((0.45+0.55*smooth((T+1)/2))*(1-0.6*dl));
+  var sm=smooth((T+1)/7);
+  V.smoke.setAttribute('transform','translate(480 424) scale('+(0.2+2.6*sm).toFixed(3)+' '+(0.2+1.5*sm).toFixed(3)+')');
+  V.smoke.style.opacity=T<-1?'0':'0.95';
+  V.trail.style.opacity=String(0.55*smooth((T-1)/5)*(1-smooth((h-45)/40)));
+}
+function whereOf(m){return t('siteName')+(m.pad?t('padWord')+m.pad:'');}
+function liveTexts(){
+  if(!live)return;
+  lv.rocket.textContent=live.rocketFull;lv.carry.textContent=t('carries').replace('{n}',live.name)+' · '+whereOf(live);
+  lv.date.textContent=fmtLocal(live,lang);lv.endText.textContent=t('liveEnd').replace('{n}',live.name).replace('{d}',live.dest[lang]);
+}
+function openLive(m,opener){
+  live=m;liveRT={};liveCap=0;liveLr=1;liveEndT=0;liveOpener=opener||null;pinned=null;
+  sim=m.launch-6000;rate=0;stage.classList.add('is-running');setPlaying(true);
+  setArt(m);setDeploy(m,0);lv.craft.setAttribute('href','#sc-'+m.sc);
+  var old=lv.evs.querySelectorAll('.lv-ev');for(var i=0;i<old.length;i++)old[i].remove();
+  ROCKETS[m.ev].ev.forEach(function(e){var d=add(lv.evs,'i','lv-ev');d.style.left=(e[0]/ASC_S*100)+'%';d.setAttribute('data-t',String(e[0]));});
+  lv.end.hidden=true;lv.cap.textContent='';liveTexts();liveEl.hidden=false;$('#lvClose').focus();
+}
+function closeLive(){
+  if(!live)return;var op=liveOpener,m=live;live=null;liveEl.hidden=true;setDeploy(m,0);lensFor=null;
+  if(sim<T1)setPlaying(true);if(op&&op.isConnected)op.focus();
+}
+$('#lvClose').addEventListener('click',closeLive);$('#lvBack').addEventListener('click',closeLive);
+liveEl.addEventListener('pointerdown',function(e){if(e.target===liveEl)closeLive();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&live)closeLive();});
+function two(n){return (n<10?'0':'')+n;}
+function fmt(n){return Math.round(n).toLocaleString(lang==='es'?'es-AR':'en-US');}
+function liveSec(key){return liveRT[key];}
+function renderLive(dt,now){
+  var m=live,T=(sim-m.launch)/1000,L=ROCKETS[m.ev].ev,h=tele(T,1),v=tele(T,2),i,nextEv=null,rt=liveRT;
+  /* reloj y telemetría */
+  var sec=T<0?Math.ceil(-T):Math.floor(T),ck=(T<0?'T− ':'T+ ')+two(Math.floor(sec/60))+':'+two(sec%60);
+  if(lv.clock.textContent!==ck)lv.clock.textContent=ck;
+  var fx=(playing&&liveLr>1.5)?t('fast').replace('{x}',String(Math.round(liveLr))):'';if(lv.fast.textContent!==fx)lv.fast.textContent=fx;
+  lv.speed.textContent=fmt(v);lv.alt.textContent=h<10?h.toFixed(1).replace('.',lang==='es'?',':'.'):fmt(h);
+  /* eventos y relato; las separaciones se miden en segundos reales desde que ocurrió cada evento */
+  for(i=0;i<L.length;i++){
+    if(T>=L[i][0]){
+      if(rt[L[i][1]]===undefined){rt[L[i][1]]=Math.min(6,(T-L[i][0])/Math.max(1,liveLr));liveCap=0;lv.cap.textContent=t('cap_'+L[i][1]).replace('{r}',m.rocketFull).replace('{n}',m.name);}
+      else{rt[L[i][1]]+=dt;}
+    }else{if(rt[L[i][1]]!==undefined)delete rt[L[i][1]];if(!nextEv)nextEv=L[i];}
+  }
+  if(T<0){var cd=t('countdown').replace('{s}',String(Math.ceil(-T)));if(lv.cap.textContent!==cd)lv.cap.textContent=cd;}
+  else{liveCap+=dt;if(liveCap>7&&lv.cap.textContent)lv.cap.textContent='';}
+  var marks=lv.evs.querySelectorAll('.lv-ev');
+  for(i=0;i<marks.length;i++)marks[i].classList.toggle('is-done',T>=+marks[i].getAttribute('data-t'));
+  lv.now.style.left=(clamp(T/ASC_S,0,1)*100)+'%';
+  var nt=nextEv?(t('next')+': '+t('ev_'+nextEv[1])+' · T+ '+two(Math.floor(nextEv[0]/60))+':'+two(nextEv[0]%60)):'';
+  if(lv.next.textContent!==nt)lv.next.textContent=nt;
+  setArt(m);poseShip(m,T,liveSec,now,h);drawView(PV,m,T,liveSec,now,1);
+  /* al final se presenta la nave y despliega lo que llevaba plegado */
+  PV.ship.style.opacity=lv.end.hidden?'':'0';
+  if(!lv.end.hidden){liveEndT+=dt;setDeploy(m,smooth((liveEndT-0.5)/2.4));}else{setDeploy(m,0);}
+}
+
+/* ---------- cuadro ---------- */
+var last=0,lensFor=null,lastYear=-1,lastMonth=-1;
+/* El tiempo frena antes de cada lanzamiento, casi se detiene durante el ascenso y vuelve a acelerar en el viaje. */
+function desiredRate(){
+  var r=BASE,RA=ASC/ASCENT_S;
+  for(var i=0;i<MISSIONS.length;i++){var m=MISSIONS[i];
+    if(sim<m.launch)r=Math.min(r,Math.max(RA,(m.launch-sim)/0.16));
+    else if(sim<m.launch+ASC)r=Math.min(r,RA);
+    else if(sim<m.legEnd)r=Math.min(r,(m.legEnd-m.launch-ASC)/CRUISE_S);}
+  return r;
+}
+function pathU(m){
+  var x=sim-m.launch;if(x<=0)return 0;if(sim>=m.legEnd)return 1;
+  if(x<ASC){var a=x/ASC;return U_ASC*a*a;}
+  var b=(x-ASC)/(m.legEnd-m.launch-ASC);return U_ASC+(1-U_ASC)*(1-Math.pow(1-b,1.8));
+}
+function step(now){var dt=last?clamp((now-last)/1000,0,0.05):0;last=now;tick(dt,now);}
+function tick(dt,now){
+  if(renderer)applyOrbit(dt);
+
+  /* lupa: cuanto más cerca el puntero de un cohete que sale, más zoom y más lento el tiempo */
+  var best=null,bd=1e9,target=0;
+  MISSIONS.forEach(function(m){if(m.state!=='dep'||!m.scr.vis)return;var d=Math.hypot(pointer.x-m.scr.x,pointer.y-m.scr.y);if(d<bd){bd=d;best=m;}});
+  if(pinned&&pinned.state==='dep'){best=pinned;target=1;}
+  else if(focusM&&focusM.state==='dep'){best=focusM;target=1;}
+  else if(best&&pointer.type!=='touch'){target=clamp((170-bd)/(170-46),0,1);}
+  if(target>0&&(!lensM||k<0.15||best===lensM))lensM=best;
+  if((lensM&&lensM.state!=='dep')||orb.drag||live)target=0;
+  k+=(target-k)*(dt?Math.min(1,dt*8):1);if(k<0.01&&target===0){k=0;lensM=null;}
+
+  /* tiempo */
+  if(playing&&!dragging&&live){
+    /* durante la transmisión manda el reloj de la misión */
+    liveLr=liveRate(live,(sim-live.launch)/1000);rate=liveLr*1000;sim+=rate*dt;
+    if(sim>=live.launch+ASC){sim=live.launch+ASC;setPlaying(false);lv.end.hidden=false;$('#lvBack').focus();}
+  }else if(playing&&!dragging){
+    var want=desiredRate();rate=want<rate?want:rate+(want-rate)*Math.min(1,dt*2.2);
+    sim+=rate*dt*(1-0.88*k);
+    if(sim>=T1){sim=T1;setPlaying(false);}
+  }
+  var d=new Date(sim),yr=d.getUTCFullYear(),mo=d.getUTCMonth();
+  if(yr!==lastYear){lastYear=yr;tlYear.textContent=String(yr);track.setAttribute('aria-valuenow',String(yr));}
+  var near=false;for(var q=0;q<MISSIONS.length;q++){if(sim>=MISSIONS[q].launch-2*DAY&&sim<MISSIONS[q].launch+ASC)near=true;}
+  var mtxt=(near?d.getUTCDate()+' ':'')+t('months')[mo];
+  if(tlMonth.textContent!==mtxt)tlMonth.textContent=mtxt;
+  cursor.style.left=((sim-T0)/(T1-T0)*100)+'%';
+  var chip=(playing&&k>0.25)?t('slow'):((playing&&near)?t('launching'):'');
+  if(chip){if(tlSlow.textContent!==chip)tlSlow.textContent=chip;tlSlow.hidden=false;}else{tlSlow.hidden=true;}
+
+  MISSIONS.forEach(function(m){
+    var p=(sim-m.launch)/(m.legEnd-m.launch);
+    m.state=p<0?'pre':(p<1?'dep':'far');m.u=pathU(m);m.asc=(p>=0&&sim<m.launch+ASC)?(sim-m.launch)/ASC:1;
+    m.mark.classList.toggle('is-past',p>=0);
+  });
+
+  if(renderer){
+    var sunT=HERO_SUN;
+    /* manda la misión que está despegando; si no hay, la próxima que está por salir; si no, la última que sigue en viaje.
+       Cuando no hay ninguna en vuelo, la luz vuelve a la de la portada. */
+    sunFor=null;
+    if(SUN_REAL&&stage.classList.contains('is-running')){
+      var sA=null,sN=null,sR=null;
+      for(var q2=0;q2<MISSIONS.length;q2++){var mq=MISSIONS[q2];
+        if(sim>=mq.launch&&sim<mq.launch+ASC)sA=mq;
+        else if(sim<mq.launch){if(!sN&&sim>=mq.launch-0.9*YEAR)sN=mq;}
+        else if(sim<mq.legEnd)sR=mq;}
+      var sM=sA||sN||sR;if(sM){sunT=sM.sunW;sunFor=sM.id;}
+    }
+    sunV.lerp(sunT,dt?Math.min(1,dt*2.2):1);if(sunV.lengthSq()<1e-4)sunV.set(0,1,0);sunV.normalize();
+    earth.localToWorld(capeWorld.copy(capeLocal));
+    MISSIONS.forEach(function(m){
+      var on=m.state!=='pre';m.sprite.visible=on;m.line.visible=on;if(!on){m.scr.vis=false;return;}
+      m.curve.getPointAt(m.u,m.pos);m.sprite.position.copy(m.pos);
+      var tw=reduce?1:0.82+0.18*Math.sin(now*0.004+m.phase),base=m.state==='dep'?(0.03+0.028*m.asc):0.036,lensed=(m===lensM)?(1-0.7*k):1;
+      m.sprite.scale.set(base*tw*lensed,base*tw*lensed,1);
+      m.sprite.material.opacity=(m.state==='far'?0.8:1)*tw;
+      m.lineMat.uniforms.uHead.value=m.u;m.lineMat.uniforms.uDim.value=m.state==='far'?0.5:1;
+      toScreen(m.pos,m.scr);if(occluded(m.pos))m.scr.vis=false;
+    });
+    renderer.render(scene,camera);
+    toScreen(ZERO,earthScr);earthScr.r=Math.tan(Math.asin(Math.min(0.999,1/orb.r)))*(H/2)/Math.tan(camera.fov*Math.PI/360);
+    toScreen(capeWorld,site.scr);
+    site.scr.vis=capeWorld.clone().normalize().dot(camera.position.clone().sub(capeWorld).normalize())>0.18;
+  }
+
+  /* carteles */
+  var lastDep=null;MISSIONS.forEach(function(m){if(m.state==='dep')lastDep=m;});
+  MISSIONS.forEach(function(m){
+    /* en pantallas angostas, en la portada, las luces lejanas van sin nombre para no pisar el título */
+    var show=renderer&&m.state!=='pre'&&m.scr.vis&&!(m===lensM&&k>0.3)&&!(m.state==='far'&&!stage.classList.contains('is-running'));
+    /* y si hay dos naves saliendo a la vez, solo la última lleva el cartel completo */
+    var mini=W<=640&&m.state==='dep'&&m!==lastDep;m.c.el.classList.toggle('is-mini',mini);
+    hide(m.c,!show);if(m.state!=='pre')refreshCallout(m);if(show)place(m.c,m.scr.x,m.scr.y,0,W<=640&&(m.state==='far'||mini));
+  });
+  var siteOn=renderer&&site.scr.vis&&site.el.offsetParent!==null;hide(site,!siteOn);
+  if(siteOn){var sdir=site.scr.x<earthScr.x?-1:1,rim=earthScr.r*1.17+12;
+    place(site,site.scr.x,site.scr.y,sdir<0?site.scr.x-(earthScr.x-rim):(earthScr.x+rim)-site.scr.x,false,sdir);
+    for(var j=0;j<MISSIONS.length;j++){var o=MISSIONS[j].c,a=site.box,b=o.box;
+      if(b&&!o.el.classList.contains('is-hidden')&&a[0]<b[0]+b[2]+8&&a[0]+a[2]+8>b[0]&&a[1]<b[1]+b[3]+6&&a[1]+a[3]+6>b[1]){hide(site,true);break;}}}
+
+  /* lupa: muestra el despegue de esa misión en el segundo exacto en que está; después del ascenso, la nave en viaje */
+  if(lensM&&k>0){
+    var LT=(sim-lensM.launch)/1000,cr=LT>=ASC_S,lkey=lensM.id+lang+(cr?'c':'a');
+    if(lensFor!==lkey){lensFor=lkey;lens.classList.toggle('is-cruise',cr);
+      lensTag.textContent=cr?t('lensBack'):t('lensHint');lensName.textContent=cr?lensM.name:lensM.rocket;
+      lensCarry.textContent=cr?t('toward').replace('{d}',lensM.dest[lang]):t('carries').replace('{n}',lensM.name);}
+    lens.style.opacity=String(clamp(k*2.4,0,1));lens.classList.toggle('is-below',lensM.scr.y<250);
+    lens.style.transform='translate('+lensM.scr.x.toFixed(1)+'px,'+lensM.scr.y.toFixed(1)+'px) scale('+(0.3+0.7*k).toFixed(3)+')';
+    if(!live){
+      var LE=ROCKETS[lensM.ev].t,lsec=function(key){return LT>=LE[key]?(LT-LE[key])/12:undefined;},lck;
+      setArt(lensM);
+      if(cr){
+        var cb=(sim-lensM.launch-ASC)/(lensM.legEnd-lensM.launch-ASC);
+        setDeploy(lensM,smooth(cb/0.08));drawView(LV,lensM,LT,lsec,now,0.3,cb);
+        lck=t('day').replace('{d}',String(Math.max(1,Math.ceil((sim-lensM.launch)/DAY))));
+      }else{
+        setDeploy(lensM,0);poseShip(lensM,LT,lsec,now,tele(LT,1));drawView(LV,lensM,LT,lsec,now,0.3);
+        lck='T+ '+two(Math.floor(LT/60))+':'+two(Math.floor(LT%60));
+      }
+      if(lensClock.textContent!==lck)lensClock.textContent=lck;
+    }
+  }else{lens.style.opacity='0';}
+  if(live)renderLive(dt,now);
+}
+function loop(now){step(now);requestAnimationFrame(loop);}
+
+try{initGL();}catch(err){renderer=null;add(stage,'p','nogl-note').textContent='Este navegador no puede dibujar la escena 3D.';}
+applyLang();resize();step(0);
+window.addEventListener('resize',resize);
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+requestAnimationFrame(loop);
+window.__siguenAhi={step:step,open:function(i){openLive(MISSIONS[i],null);},close:closeLive,seek:function(T){if(live)sim=live.launch+T*1000;},advance:function(sec){for(var i=0,n=Math.round(sec*60);i<n;i++){last+=16.667;tick(1/60,last);}},
+  hover:function(x,y){pointer.x=x;pointer.y=y;pointer.type='mouse';},sun:function(on){SUN_REAL=!!on;},
+  runLength:function(){var s0=sim,r0=rate,n=0;sim=T0;rate=BASE;while(sim<T1&&n<90000){var w=desiredRate();rate=w<rate?w:rate+(w-rate)*Math.min(1,2.2/60);sim+=rate/60;n++;}sim=s0;rate=r0;return n/60;},
+  goto:function(ms){sim=ms;},launches:function(){return MISSIONS.map(function(m){return [m.id,m.launch,m.legEnd];});},
+  state:function(){return {sunFor:sunFor,lens:lensM?lensM.id:null,lensT:lensM?(sim-lensM.launch)/1000:null,rate:rate,dl:MISSIONS.map(function(m){return +m.dl.toFixed(2);}),live:live?live.id:null,T:live?(sim-live.launch)/1000:null,lr:liveLr,sim:new Date(sim).toISOString(),playing:playing,k:k,ready:ready,W:W,H:H,orb:[orb.th,orb.ph,orb.r],
+  missions:MISSIONS.map(function(m){return {id:m.id,state:m.state,x:Math.round(m.scr.x),y:Math.round(m.scr.y)};})};}};
+})();
+</script>

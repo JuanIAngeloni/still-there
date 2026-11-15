@@ -1,0 +1,766 @@
+{
+  "ROCKETS_INFO": {
+    "atlasCentaur": {
+      "name": {
+        "es": "Atlas-Centaur (Atlas LV-3C + Centaur D)",
+        "en": "Atlas-Centaur (Atlas LV-3C + Centaur D)"
+      },
+      "family": "Atlas-Centaur",
+      "heightM": 34.4,
+      "firstYear": 1962,
+      "blurb": {
+        "es": "Su etapa superior Centaur fue el primer cohete de alta energía de Estados Unidos: quema hidrógeno líquido, que rinde cerca de un 40 % más que los combustibles de tipo queroseno.",
+        "en": "Its Centaur upper stage was the first high-energy rocket of the United States: it burns liquid hydrogen, which performs about 40 percent better than kerosene-type fuels."
+      },
+      "src": "https://ntrs.nasa.gov/api/citations/19660022877/downloads/19660022877.pdf"
+    },
+    "atlasCentaurTE": {
+      "name": {
+        "es": "Atlas-Centaur con tercera etapa TE-M-364-4",
+        "en": "Atlas-Centaur with TE-M-364-4 third stage"
+      },
+      "family": "Atlas-Centaur",
+      "heightM": 40.3,
+      "firstYear": 1972,
+      "blurb": {
+        "es": "En 1972 voló por primera vez con una tercera etapa TE-M-364-4: un motor de combustible sólido que giraba como un trompo y dio a la Pioneer 10 unos 51.800 km/h, más que ninguna nave anterior.",
+        "en": "In 1972 it flew for the first time with a TE-M-364-4 third stage: a solid-fuel motor that spun like a top and gave Pioneer 10 about 51,800 km/h, more than any spacecraft before it."
+      },
+      "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+    }
+  },
+  "LAUNCH_SEQ": {
+    "surveyor1": {
+      "rocket": "atlasCentaur",
+      "site": "cape",
+      "pad": "LC-36A",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "El Atlas-Centaur AC-10 espera en la plataforma 36A de Cabo Kennedy (hoy Cabo Cañaveral). Mide 34 metros y pesa unas 137 toneladas. Tras varios vuelos de prueba, este es su primer trabajo de verdad: llevar a Surveyor 1.",
+            "en": "Atlas-Centaur AC-10 waits on pad 36A at Cape Kennedy (now Cape Canaveral). It is 34 meters tall and weighs about 137 metric tons. After several test flights, this is its first real job: carrying Surveyor 1."
+          },
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue hacia la Luna",
+            "en": "Liftoff for the Moon"
+          },
+          "text": {
+            "es": "30 de mayo de 1966, 14:41 (hora universal). Los tres motores grandes del Atlas se encienden juntos en el suelo: dos impulsores y uno central, el sustentador. Queman queroseno y oxígeno líquido.",
+            "en": "30 May 1966, 14:41 (Universal Time). The three big Atlas engines light together on the ground: two boosters and one in the middle, the sustainer. They burn kerosene and liquid oxygen."
+          },
+          "ignite": [
+            "boosterSection",
+            "stage1"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "boosterSection",
+          "t": 145.1,
+          "title": {
+            "es": "Se sueltan dos motores",
+            "en": "Two engines drop away"
+          },
+          "text": {
+            "es": "A los 142 segundos se apagan los dos motores impulsores y 3 segundos después se sueltan con su sección. El motor central sigue empujando. La pieza suelta vuelve a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "At 142 seconds the two booster engines shut down, and 3 seconds later they drop away with their section. The middle engine keeps pushing. The dropped piece falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "boosterSection"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 202.76,
+          "title": {
+            "es": "Fuera la cofia",
+            "en": "Nose fairing off"
+          },
+          "text": {
+            "es": "La cofia era el escudo de Surveyor contra el aire. A los 176 segundos se van los cuatro paneles aislantes del Centaur y a los 203 la cofia se abre en dos mitades. Todo vuelve a caer a la Tierra; no encontramos dónde.",
+            "en": "The nose fairing was Surveyor's shield against the air. At 176 seconds the Centaur's four insulation panels come off, and at 203 the fairing opens into two halves. It all falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 241.3,
+          "title": {
+            "es": "Adiós al Atlas",
+            "en": "Goodbye to the Atlas"
+          },
+          "text": {
+            "es": "A los 239 segundos el Atlas agota su oxígeno líquido y se apaga, a unos 12.540 km/h. Una carga explosiva corta la unión y ocho cohetes chicos lo empujan hacia atrás. Vuelve a caer a la Tierra; no encontramos dónde.",
+            "en": "At 239 seconds the Atlas uses up its liquid oxygen and shuts down, at about 12,540 km/h. An explosive charge cuts the joint and eight small rockets push it backward. It falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "speed_kmh": 12540,
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "stage2Start",
+          "t": 250.9,
+          "title": {
+            "es": "Se enciende el Centaur",
+            "en": "The Centaur lights up"
+          },
+          "text": {
+            "es": "Casi 10 segundos después arrancan los dos motores RL-10 del Centaur. Queman hidrógeno y oxígeno líquidos, una mezcla muy potente, y van a empujar durante más de 7 minutos.",
+            "en": "Almost 10 seconds later the Centaur's two RL-10 engines start. They burn liquid hydrogen and liquid oxygen, a very powerful mix, and will push for more than 7 minutes."
+          },
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "stage2Cutoff",
+          "t": 689.2,
+          "title": {
+            "es": "Directo a la Luna",
+            "en": "Straight to the Moon"
+          },
+          "text": {
+            "es": "A los 689 segundos el Centaur se apaga cuando ya va a unos 37.850 km/h. No hizo falta dar vueltas a la Tierra: fue un ascenso directo, con un solo encendido, hacia el lugar donde iba a estar la Luna.",
+            "en": "At 689 seconds the Centaur shuts down, now going about 37,850 km/h. No laps around Earth were needed: it was a direct ascent, with a single burn, toward the place where the Moon would be."
+          },
+          "speed_kmh": 37850,
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 756.9,
+          "title": {
+            "es": "Surveyor vuela solo",
+            "en": "Surveyor flies alone"
+          },
+          "text": {
+            "es": "A los 757 segundos tres resortes empujan a Surveyor 1, ya con las patas abiertas. El Centaur gira y suelta el combustible que le sobra para no chocar con la Luna. Quedó en una órbita muy alargada alrededor de la Tierra.",
+            "en": "At 757 seconds three springs push Surveyor 1 away, its legs already open. The Centaur turns and dumps its leftover propellant so it will not hit the Moon. It was left in a very stretched orbit around Earth."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "boosterSection",
+          "name": {
+            "es": "Sección de impulsores del Atlas (dos motores)",
+            "en": "Atlas booster section (two engines)"
+          },
+          "fate": {
+            "es": "Se soltó a los 145 segundos, mucho antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 145 seconds, long before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose fairing, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 203 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 203 seconds, before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose fairing, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 203 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 203 seconds, before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Atlas (etapa central con el motor sustentador)",
+            "en": "Atlas (core stage with the sustainer engine)"
+          },
+          "fate": {
+            "es": "Se apagó cuando iba a unos 12.540 km/h, se separó a los 241 segundos y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It shut down while going about 12,540 km/h, separated at 241 seconds and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Adaptador entre etapas",
+            "en": "Interstage adapter"
+          },
+          "fate": {
+            "es": "Quedó unido al Atlas cuando una carga explosiva lo cortó cerca de su borde de arriba, y volvió a caer con él a la Tierra; no encontramos en qué lugar.",
+            "en": "It stayed attached to the Atlas when an explosive charge cut it near its top edge, and fell back to Earth with it; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Centaur (segunda etapa)",
+            "en": "Centaur (second stage)"
+          },
+          "fate": {
+            "es": "Después de soltar a Surveyor 1 giró y vació sus tanques para no chocar con la Luna, y quedó en una órbita muy alargada alrededor de la Tierra, de 12,4 días por vuelta; no encontramos qué fue de él después.",
+            "en": "After releasing Surveyor 1 it turned around and emptied its tanks so it would not hit the Moon, and it was left in a very stretched orbit around Earth, 12.4 days per lap; we could not find what became of it afterward."
+          },
+          "where": "earthOrbit",
+          "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
+        }
+      ],
+      "left": [
+        {
+          "name": {
+            "es": "Radar de marcación de altitud",
+            "en": "Altitude marking radar"
+          },
+          "fate": {
+            "es": "Iba en la tobera del retrocohete principal, avisó que la Luna estaba cerca y estaba hecho para salir despedido cuando ese motor se encendía; siguió cayendo hacia la Luna y no encontramos dónde chocó.",
+            "en": "It sat in the nozzle of the main retro-rocket, signaled that the Moon was near and was built to be blown out when that motor fired; it kept falling toward the Moon and we could not find where it hit."
+          },
+          "where": "moonImpact",
+          "src": "https://ntrs.nasa.gov/api/citations/19660022877/downloads/19660022877.pdf"
+        },
+        {
+          "name": {
+            "es": "Carcasa del retrocohete principal",
+            "en": "Main retro-rocket case"
+          },
+          "fate": {
+            "es": "Frenó a Surveyor 1 durante unos 40 segundos y, ya vacía, fue expulsada a 31.000 pies de altura (unos 9,4 km); siguió cayendo hacia la Luna y no encontramos dónde chocó.",
+            "en": "It slowed Surveyor 1 for about 40 seconds and, once empty, was ejected 31,000 feet up (about 9.4 km); it kept falling toward the Moon and we could not find where it hit."
+          },
+          "where": "moonImpact",
+          "src": "https://www.jpl.nasa.gov/news/surveyor-i-mission/"
+        }
+      ]
+    },
+    "pioneer10": {
+      "rocket": "atlasCentaurTE",
+      "site": "cape",
+      "pad": "LC-36A",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "El Atlas-Centaur AC-27 espera en la plataforma 36A de Cabo Kennedy (hoy Cabo Cañaveral). Sobre el Centaur lleva algo que se usa por primera vez: una tercera etapa de combustible sólido. Encima viaja la Pioneer 10.",
+            "en": "Atlas-Centaur AC-27 waits on pad 36A at Cape Kennedy (now Cape Canaveral). On top of the Centaur it carries something used for the first time: a solid-fuel third stage. Pioneer 10 rides above it."
+          },
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue rumbo a Júpiter",
+            "en": "Liftoff for Jupiter"
+          },
+          "text": {
+            "es": "3 de marzo de 1972, 01:49 (hora universal), al cuarto intento: tres cuentas regresivas anteriores se suspendieron. Empujan los tres motores grandes del Atlas: dos impulsores y uno central, el sustentador.",
+            "en": "3 March 1972, 01:49 (Universal Time), on the fourth try: three earlier countdowns were called off. The three big Atlas engines do the pushing: two boosters and one in the middle, the sustainer."
+          },
+          "ignite": [
+            "boosterSection",
+            "stage1"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "boosterSection",
+          "t": 152.12,
+          "title": {
+            "es": "Se sueltan dos motores",
+            "en": "Two engines drop away"
+          },
+          "text": {
+            "es": "A los 149 segundos se apagan los dos motores impulsores y 3 segundos después se sueltan con su sección. A los 194 se van los paneles aislantes del Centaur. Todo vuelve a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "At 149 seconds the two booster engines shut down, and 3 seconds later they drop away with their section. At 194 the Centaur's insulation panels go too. It all falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "boosterSection"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 245.82,
+          "title": {
+            "es": "Adiós al Atlas",
+            "en": "Goodbye to the Atlas"
+          },
+          "text": {
+            "es": "A los 243 segundos se apaga el motor central y, casi 3 segundos después, el Atlas se separa junto con el adaptador entre etapas. Vuelve a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "At 243 seconds the middle engine shuts down and, almost 3 seconds later, the Atlas separates together with the interstage adapter. It falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "stage2Start",
+          "t": 256.22,
+          "title": {
+            "es": "Se enciende el Centaur",
+            "en": "The Centaur lights up"
+          },
+          "text": {
+            "es": "A los 256 segundos arrancan los dos motores RL-10 del Centaur, que queman hidrógeno y oxígeno líquidos. Van a empujar durante casi siete minutos y medio.",
+            "en": "At 256 seconds the Centaur's two RL-10 engines start, burning liquid hydrogen and liquid oxygen. They will push for almost seven and a half minutes."
+          },
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 267.12,
+          "title": {
+            "es": "Fuera la cofia",
+            "en": "Nose fairing off"
+          },
+          "text": {
+            "es": "Once segundos después, ya fuera de la atmósfera, la cofia de fibra de vidrio que protegía a la Pioneer se suelta en dos mitades. Vuelven a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "Eleven seconds later, already out of the atmosphere, the fiberglass fairing that protected Pioneer comes off in two halves. They fall back to Earth; we could not find where."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 777.31,
+          "title": {
+            "es": "El Centaur se despide",
+            "en": "The Centaur lets go"
+          },
+          "text": {
+            "es": "A los 705 segundos el Centaur se apaga. Unos cohetes chicos hacen girar la tercera etapa a unas 60 vueltas por minuto y, a los 777 segundos, el Centaur la suelta. Él quedó en una órbita alargada alrededor de la Tierra.",
+            "en": "At 705 seconds the Centaur shuts down. Small rockets spin the third stage to about 60 turns per minute and, at 777 seconds, the Centaur lets it go. The Centaur was left in a stretched orbit around Earth."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "stage3Burn",
+          "t": 790.72,
+          "title": {
+            "es": "El último empujón",
+            "en": "The last push"
+          },
+          "text": {
+            "es": "A los 791 segundos se enciende la tercera etapa y quema su combustible sólido en unos 43 segundos. Deja a la Pioneer 10 a unos 51.800 km/h, más rápido que cualquier nave anterior.",
+            "en": "At 791 seconds the third stage ignites and burns its solid fuel in about 43 seconds. It leaves Pioneer 10 going about 51,800 km/h, faster than any spacecraft before it."
+          },
+          "ignite": [
+            "stage3"
+          ],
+          "speed_kmh": 51800,
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 935.42,
+          "title": {
+            "es": "Pioneer 10 vuela sola",
+            "en": "Pioneer 10 flies alone"
+          },
+          "text": {
+            "es": "A los 935 segundos la Pioneer 10 se separa. La tercera etapa, ya vacía, sale de la Tierra por el mismo camino de escape que la nave. No encontramos ningún informe de la NASA que diga dónde terminó.",
+            "en": "At 935 seconds Pioneer 10 separates. The empty third stage leaves Earth on the same escape path as the spacecraft. We could not find any NASA report that says where it ended up."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "boosterSection",
+          "name": {
+            "es": "Sección de impulsores del Atlas (dos motores)",
+            "en": "Atlas booster section (two engines)"
+          },
+          "fate": {
+            "es": "Se soltó a los 152 segundos, mucho antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 152 seconds, long before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Atlas (etapa central con el motor sustentador)",
+            "en": "Atlas (core stage with the sustainer engine)"
+          },
+          "fate": {
+            "es": "Se separó a los 246 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It separated at 246 seconds, before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Adaptador entre etapas",
+            "en": "Interstage adapter"
+          },
+          "fate": {
+            "es": "Formaba parte de la primera etapa, se fue con el Atlas y volvió a caer con él a la Tierra; no encontramos en qué lugar.",
+            "en": "It was part of the first stage, left with the Atlas and fell back to Earth with it; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose fairing, first half"
+          },
+          "fate": {
+            "es": "Se soltó con pernos explosivos y resortes a los 267 segundos, junto con la otra mitad, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was released by explosive bolts and springs at 267 seconds, together with the other half, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose fairing, second half"
+          },
+          "fate": {
+            "es": "Se soltó con pernos explosivos y resortes a los 267 segundos, junto con la otra mitad, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was released by explosive bolts and springs at 267 seconds, together with the other half, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Centaur (segunda etapa)",
+            "en": "Centaur (second stage)"
+          },
+          "fate": {
+            "es": "No salió de la Tierra: después de soltar la tercera etapa frenó para apartarse, y el rastreo lo encontró en una órbita alargada alrededor de la Tierra; no encontramos qué fue de él después.",
+            "en": "It did not leave Earth: after releasing the third stage it braked to back away, and tracking found it in a stretched orbit around Earth; we could not find what became of it afterward."
+          },
+          "where": "earthOrbit",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (motor sólido TE-M-364-4)",
+            "en": "Third stage (TE-M-364-4 solid motor)"
+          },
+          "fate": {
+            "es": "El rastreo mostró que salió de la Tierra por el mismo camino de escape que la Pioneer 10; no encontramos ningún informe de la NASA que diga dónde terminó.",
+            "en": "Tracking showed it left Earth on the same escape path as Pioneer 10; we could not find any NASA report that says where it ended up."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
+        }
+      ],
+      "left": []
+    },
+    "pioneer11": {
+      "rocket": "atlasCentaurTE",
+      "site": "cape",
+      "pad": "LC-36B",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": {
+            "es": "En la plataforma",
+            "en": "On the pad"
+          },
+          "text": {
+            "es": "El Atlas-Centaur AC-30 espera en la plataforma 36B de Cabo Kennedy (hoy Cabo Cañaveral). Su Centaur es del nuevo modelo D-1A, guiado por una computadora digital. Arriba van la tercera etapa sólida y la Pioneer 11.",
+            "en": "Atlas-Centaur AC-30 waits on pad 36B at Cape Kennedy (now Cape Canaveral). Its Centaur is the new D-1A model, guided by a digital computer. On top sit the solid-fuel third stage and Pioneer 11."
+          },
+          "src": "https://ntrs.nasa.gov/api/citations/19730017158/downloads/19730017158.pdf"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": {
+            "es": "Despegue rumbo a Júpiter",
+            "en": "Liftoff for Jupiter"
+          },
+          "text": {
+            "es": "6 de abril de 1973, 02:11 (hora universal). Después de una cuenta regresiva sin problemas, el Atlas despega a la hora prevista. Empujan sus dos motores impulsores y el sustentador.",
+            "en": "6 April 1973, 02:11 (Universal Time). After a smooth countdown the Atlas lifts off at the planned time. Its two booster engines and its sustainer engine do the pushing."
+          },
+          "ignite": [
+            "boosterSection",
+            "stage1"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "boosterSection",
+          "t": 143.5,
+          "title": {
+            "es": "Se sueltan dos motores",
+            "en": "Two engines drop away"
+          },
+          "text": {
+            "es": "A los 140 segundos se apagan los dos motores impulsores y 3 segundos después se sueltan con su sección. A los 186 se van los paneles aislantes del Centaur. Todo vuelve a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "At 140 seconds the two booster engines shut down, and 3 seconds later they drop away with their section. At 186 the Centaur's insulation panels go too. It all falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "boosterSection"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 247.6,
+          "title": {
+            "es": "Adiós al Atlas",
+            "en": "Goodbye to the Atlas"
+          },
+          "text": {
+            "es": "A los 244 segundos se apaga el motor central y, unos 3 segundos después, el Atlas se separa junto con el adaptador entre etapas. Vuelve a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "At 244 seconds the middle engine shuts down and, about 3 seconds later, the Atlas separates together with the interstage adapter. It falls back to Earth; we could not find where."
+          },
+          "drop": [
+            "stage1",
+            "interstage"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "stage2Start",
+          "t": 257.2,
+          "title": {
+            "es": "Se enciende el Centaur",
+            "en": "The Centaur lights up"
+          },
+          "text": {
+            "es": "A los 257 segundos arrancan los motores del Centaur, que queman hidrógeno y oxígeno líquidos. Van a empujar durante casi siete minutos y medio.",
+            "en": "At 257 seconds the Centaur's engines start, burning liquid hydrogen and liquid oxygen. They will push for almost seven and a half minutes."
+          },
+          "ignite": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 270.5,
+          "title": {
+            "es": "Fuera la cofia",
+            "en": "Nose fairing off"
+          },
+          "text": {
+            "es": "Unos 13 segundos después se suelta la cofia que protegía a la Pioneer durante el paso por la atmósfera. Sus dos mitades vuelven a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "About 13 seconds later the fairing that protected Pioneer on its way through the atmosphere is released. Its two halves fall back to Earth; we could not find where."
+          },
+          "drop": [
+            "fairingA",
+            "fairingB"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 777.6,
+          "title": {
+            "es": "El Centaur se despide",
+            "en": "The Centaur lets go"
+          },
+          "text": {
+            "es": "A los 705 segundos el Centaur se apaga. La tercera etapa empieza a girar como un trompo y, a los 778 segundos, el Centaur la suelta y se aparta soltando helio. Quedó en una órbita alargada alrededor de la Tierra.",
+            "en": "At 705 seconds the Centaur shuts down. The third stage starts spinning like a top and, at 778 seconds, the Centaur lets it go and backs away by venting helium. It was left in a stretched orbit around Earth."
+          },
+          "drop": [
+            "stage2"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "stage3Burn",
+          "t": 791.0,
+          "title": {
+            "es": "El último empujón",
+            "en": "The last push"
+          },
+          "text": {
+            "es": "A los 791 segundos se enciende la tercera etapa y quema su combustible sólido en unos 43 segundos. La Pioneer 11 alcanza unos 51.800 km/h, tan veloz como la Pioneer 10.",
+            "en": "At 791 seconds the third stage ignites and burns its solid fuel in about 43 seconds. Pioneer 11 reaches about 51,800 km/h, as fast as Pioneer 10."
+          },
+          "ignite": [
+            "stage3"
+          ],
+          "speed_kmh": 51800,
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 934.9,
+          "title": {
+            "es": "Pioneer 11 vuela sola",
+            "en": "Pioneer 11 flies alone"
+          },
+          "text": {
+            "es": "A los 935 segundos la Pioneer 11 se separa. La tercera etapa, ya vacía, sale de la Tierra por el mismo camino de escape que la nave. No encontramos ningún informe de la NASA que diga dónde terminó.",
+            "en": "At 935 seconds Pioneer 11 separates. The empty third stage leaves Earth on the same escape path as the spacecraft. We could not find any NASA report that says where it ended up."
+          },
+          "drop": [
+            "stage3"
+          ],
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "boosterSection",
+          "name": {
+            "es": "Sección de impulsores del Atlas (dos motores)",
+            "en": "Atlas booster section (two engines)"
+          },
+          "fate": {
+            "es": "Se soltó a los 143,5 segundos, mucho antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped at 143.5 seconds, long before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": {
+            "es": "Atlas (etapa central con el motor sustentador)",
+            "en": "Atlas (core stage with the sustainer engine)"
+          },
+          "fate": {
+            "es": "Se separó a los 248 segundos, antes de llegar a la órbita, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It separated at 248 seconds, before reaching orbit, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "part": "interstage",
+          "name": {
+            "es": "Adaptador entre etapas",
+            "en": "Interstage adapter"
+          },
+          "fate": {
+            "es": "Según el plan de vuelo se quedó con el Atlas cuando una carga explosiva separó al Centaur, y volvió a caer con él a la Tierra; no encontramos en qué lugar.",
+            "en": "According to the flight plan it stayed with the Atlas when an explosive charge separated the Centaur, and fell back to Earth with it; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19730017158/downloads/19730017158.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": {
+            "es": "Cofia, primera mitad",
+            "en": "Nose fairing, first half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 270,5 segundos, poco después de encenderse el Centaur, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 270.5 seconds, shortly after the Centaur started, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": {
+            "es": "Cofia, segunda mitad",
+            "en": "Nose fairing, second half"
+          },
+          "fate": {
+            "es": "Se soltó junto con la otra mitad a los 270,5 segundos, poco después de encenderse el Centaur, y volvió a caer a la Tierra; no encontramos en qué lugar.",
+            "en": "It was dropped together with the other half at 270.5 seconds, shortly after the Centaur started, and fell back to Earth; we could not find where."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": {
+            "es": "Centaur (segunda etapa)",
+            "en": "Centaur (second stage)"
+          },
+          "fate": {
+            "es": "No salió de la Tierra: se apartó de la tercera etapa soltando helio y, como estaba previsto, quedó en una órbita alargada alrededor de la Tierra, donde el rastreo lo encontró; no encontramos qué fue de él después.",
+            "en": "It did not leave Earth: it backed away from the third stage by venting helium and, as planned, stayed in a stretched orbit around Earth, where tracking found it; we could not find what became of it afterward."
+          },
+          "where": "earthOrbit",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        },
+        {
+          "part": "stage3",
+          "name": {
+            "es": "Tercera etapa (motor sólido TE-M-364-4)",
+            "en": "Third stage (TE-M-364-4 solid motor)"
+          },
+          "fate": {
+            "es": "El rastreo mostró que salió de la Tierra por el mismo camino de escape que la Pioneer 11; no encontramos ningún informe de la NASA que diga dónde terminó.",
+            "en": "Tracking showed it left Earth on the same escape path as Pioneer 11; we could not find any NASA report that says where it ended up."
+          },
+          "where": "unknown",
+          "src": "https://ntrs.nasa.gov/api/citations/19750013263/downloads/19750013263.pdf"
+        }
+      ],
+      "left": []
+    }
+  }
+}

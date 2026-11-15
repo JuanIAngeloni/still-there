@@ -1,0 +1,433 @@
+{
+  "ROCKETS_INFO": {
+    "atlasV401": {
+      "name": { "es": "Atlas V 401", "en": "Atlas V 401" },
+      "family": "Atlas V",
+      "heightM": 57.3,
+      "firstYear": 2002,
+      "blurb": {
+        "es": "El Atlas V funciona como un juego de armar: la misma primera etapa puede volar sola, como acá, o con hasta cinco propulsores sólidos, y los tres números de su nombre dicen cómo se armó (cofia de 4 metros, 0 propulsores, 1 motor en la etapa superior).",
+        "en": "Atlas V works like a building kit: the same first stage can fly alone, as here, or with up to five solid boosters, and the three digits in its name tell how it was put together (4-metre nose cone, 0 boosters, 1 upper-stage engine)."
+      },
+      "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+    },
+    "atlasV541": {
+      "name": { "es": "Atlas V 541", "en": "Atlas V 541" },
+      "family": "Atlas V",
+      "heightM": 60,
+      "firstYear": 2011,
+      "blurb": {
+        "es": "El mismo Atlas V con más fuerza: una cofia de 5 metros que también cubre la etapa superior Centaur y cuatro propulsores sólidos para dar más empuje en el despegue; este modelo ya había lanzado al rover Curiosity en 2011.",
+        "en": "The same Atlas V with more muscle: a 5-metre nose cone that also covers the Centaur upper stage, and four solid boosters for extra push at liftoff; this model had already launched the Curiosity rover in 2011."
+      },
+      "src": "https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/"
+    }
+  },
+  "LAUNCH_SEQ": {
+    "insight": {
+      "rocket": "atlasV401",
+      "site": "vandenberg",
+      "pad": "SLC-3E",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": { "es": "Espera en California", "en": "Waiting in California" },
+          "text": {
+            "es": "Un cohete Atlas V 401 de 57,3 metros de alto espera en la base Vandenberg, en California. Es el primer lanzamiento hacia otro planeta desde la costa oeste de Estados Unidos.",
+            "en": "An Atlas V 401 rocket, 57.3 metres tall, stands at Vandenberg Air Force Base in California. This is the first launch to another planet from the west coast of the United States."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/facts/"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": { "es": "Despegue desde Vandenberg", "en": "Liftoff from Vandenberg" },
+          "text": {
+            "es": "5 de mayo de 2018, 4:05 de la mañana en California. Se enciende el único motor RD-180 de la primera etapa, que quema querosén y oxígeno líquido, y el cohete se levanta de la plataforma.",
+            "en": "5 May 2018, 4:05 in the morning in California. The single RD-180 engine of the first stage lights up, burning kerosene and liquid oxygen, and lifts the rocket off the pad."
+          },
+          "ignite": ["stage1"],
+          "src": "https://science.nasa.gov/blogs/insight/2018/05/05/liftoff-atlas-v-clears-the-launch-pad-with-nasas-insight-spacecraft/"
+        },
+        {
+          "id": "stage1",
+          "t": 250,
+          "title": { "es": "Se suelta la primera etapa", "en": "First stage drops away" },
+          "text": {
+            "es": "A los 244 segundos el motor se apaga. Seis segundos después se sueltan la primera etapa, ya gastada, y los anillos que la unían al Centaur. Según el plan de la NASA, la etapa caería en el océano Pacífico.",
+            "en": "After 244 seconds the engine shuts down. Six seconds later the used-up first stage is let go, with the rings that joined it to the Centaur. NASA's launch plan said the stage would fall into the Pacific Ocean."
+          },
+          "drop": ["stage1", "interstage"],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "id": "stage2",
+          "t": 260,
+          "title": { "es": "El Centaur toma el relevo", "en": "Centaur takes over" },
+          "text": {
+            "es": "Diez segundos después de la separación, la etapa superior Centaur enciende su motor RL-10C. Quema hidrógeno y oxígeno líquidos, y puede apagarse y volver a encenderse en el espacio.",
+            "en": "Ten seconds after the stages separate, the Centaur upper stage lights its RL-10C engine. It burns liquid hydrogen and liquid oxygen, and it can be shut down and restarted in space."
+          },
+          "ignite": ["stage2"],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "id": "fairing",
+          "t": 268,
+          "title": { "es": "Se abre la cofia", "en": "The nose cone opens" },
+          "text": {
+            "es": "Ocho segundos después, ya por encima de casi todo el aire, el cohete suelta las dos mitades de la cofia que cubría a InSight. El dossier de la NASA no dice dónde cayeron.",
+            "en": "Eight seconds later, above most of the air, the rocket drops the two halves of the nose cone that covered InSight. NASA's launch kit does not say where they came down."
+          },
+          "drop": ["fairingA", "fairingB"],
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "id": "orbit",
+          "t": 796,
+          "title": { "es": "Órbita de espera", "en": "Parked around Earth" },
+          "text": {
+            "es": "A los 13 minutos y 16 segundos el Centaur apaga su motor. Ya está dando vueltas a la Tierra a 185 km de altura y sigue así, sin motor, durante cerca de una hora.",
+            "en": "13 minutes and 16 seconds after launch the Centaur shuts down its engine. It is now circling Earth at a height of 185 km, and it coasts like that for about an hour."
+          },
+          "alt_km": 185,
+          "src": "https://www.jpl.nasa.gov/news/bound-for-mars-countdown-to-first-interplanetary-launch-from-california/"
+        },
+        {
+          "id": "tmi",
+          "t": 4740,
+          "title": { "es": "Segundo encendido, rumbo a Marte", "en": "Second burn, toward Mars" },
+          "text": {
+            "es": "A 1 hora y 19 minutos del despegue el Centaur vuelve a encender su motor, cerca del Polo Norte. Unos cinco minutos de empuje sacan a InSight de la órbita terrestre y la mandan rumbo a Marte.",
+            "en": "One hour and 19 minutes after launch the Centaur lights its engine again, close to the North Pole. About five minutes of thrust send InSight out of Earth orbit and on its way to Mars."
+          },
+          "ignite": ["stage2"],
+          "src": "https://www.jpl.nasa.gov/news/bound-for-mars-countdown-to-first-interplanetary-launch-from-california/"
+        },
+        {
+          "id": "separation",
+          "t": 5580,
+          "title": { "es": "InSight queda libre", "en": "InSight flies free" },
+          "text": {
+            "es": "A unos 93 minutos del despegue, unos resortes separan a InSight del Centaur. Enseguida el Centaur suelta dos pequeños CubeSats, MarCO-A y MarCO-B, y se aparta. Como nunca apuntó a Marte, queda dando vueltas al Sol.",
+            "en": "About 93 minutes after liftoff, springs push InSight away from the Centaur. Soon after, the Centaur releases two small CubeSats, MarCO-A and MarCO-B, and steers aside. Never aimed at Mars, it stays circling the Sun."
+          },
+          "drop": ["stage2"],
+          "src": "https://www.jpl.nasa.gov/news/bound-for-mars-countdown-to-first-interplanetary-launch-from-california/"
+        }
+      ],
+      "fates": [
+        {
+          "part": "stage1",
+          "name": { "es": "Primera etapa (Common Core Booster)", "en": "First stage (Common Core Booster)" },
+          "fate": {
+            "es": "Según el plan de lanzamiento de la NASA, esta etapa de 32,5 metros de largo se soltaría unos cuatro minutos después del despegue y caería en el océano Pacífico.",
+            "en": "NASA's launch plan said this stage, 32.5 metres long, would be let go about four minutes after liftoff and fall into the Pacific Ocean."
+          },
+          "where": "ocean",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "part": "interstage",
+          "name": { "es": "Adaptador entre etapas", "en": "Interstage adapter" },
+          "fate": {
+            "es": "El dossier de lanzamiento de la NASA dice que los dos anillos adaptadores que unían la primera etapa con el Centaur también se sueltan cuando las etapas se separan, pero no dice dónde cayeron.",
+            "en": "NASA's launch kit says the two adapter rings that joined the first stage to the Centaur also fall away when the stages separate, but it does not say where they came down."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "part": "fairingA",
+          "name": { "es": "Cofia, primera mitad", "en": "Payload fairing, first half" },
+          "fate": {
+            "es": "Se soltó a los 268 segundos del lanzamiento; el dossier de la NASA no dice dónde cayó y, en general, las piezas que se sueltan antes de llegar a la órbita vuelven a caer a la Tierra.",
+            "en": "It was dropped 268 seconds after launch; NASA's launch kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "part": "fairingB",
+          "name": { "es": "Cofia, segunda mitad", "en": "Payload fairing, second half" },
+          "fate": {
+            "es": "Se soltó a los 268 segundos del lanzamiento; el dossier de la NASA no dice dónde cayó y, en general, las piezas que se sueltan antes de llegar a la órbita vuelven a caer a la Tierra.",
+            "en": "It was dropped 268 seconds after launch; NASA's launch kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
+        },
+        {
+          "part": "stage2",
+          "name": { "es": "Etapa superior Centaur", "en": "Centaur upper stage" },
+          "fate": {
+            "es": "Después de soltar a InSight y a los dos MarCO, salió de la Tierra por casi el mismo camino que InSight pero, como planeó la NASA, sin apuntar nunca a Marte, así que quedó en órbita alrededor del Sol.",
+            "en": "After releasing InSight and the two MarCOs it left Earth on almost the same path as InSight but, as NASA planned, never aimed at Mars, so it stays in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/landing/mission/spacecraft/"
+        }
+      ],
+      "left": [
+        {
+          "name": { "es": "Etapa de crucero", "en": "Cruise stage" },
+          "fate": {
+            "es": "InSight la soltó siete minutos antes de llegar a la atmósfera de Marte, y la NASA esperaba que atravesara el aire, calentándose mucho, y chocara contra Marte.",
+            "en": "InSight let it go seven minutes before reaching Mars's atmosphere, and NASA expected it to plunge through the air, getting very hot, and hit Mars."
+          },
+          "where": "marsImpact",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/insight/landing/mission/spacecraft/"
+        },
+        {
+          "name": { "es": "Escudo térmico", "en": "Heat shield" },
+          "fate": {
+            "es": "InSight lo soltó mientras colgaba del paracaídas, y en diciembre de 2018 la cámara HiRISE, en órbita de Marte, lo fotografió en el suelo, a unos cientos de metros del módulo.",
+            "en": "InSight dropped it while hanging from its parachute, and in December 2018 the HiRISE camera in Mars orbit photographed it on the ground, a few hundred metres from the lander."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/news/mars-insight-lander-seen-in-first-images-from-space/"
+        },
+        {
+          "name": { "es": "Carcasa trasera y paracaídas", "en": "Back shell and parachute" },
+          "fate": {
+            "es": "El módulo los soltó a 1 km del suelo, más o menos, y en diciembre de 2018 la cámara HiRISE fotografió el paracaídas tendido en Marte, a unos cientos de metros del módulo.",
+            "en": "The lander let go of them about 1 km above the ground, and in December 2018 the HiRISE camera photographed the parachute lying on Mars, a few hundred metres from the lander."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/news/mars-insight-lander-seen-in-first-images-from-space/"
+        },
+        {
+          "name": { "es": "CubeSats MarCO-A y MarCO-B", "en": "MarCO-A and MarCO-B CubeSats" },
+          "fate": {
+            "es": "Pasaron junto a Marte el 26 de noviembre de 2018 y siguieron de largo; la NASA los escuchó por última vez el 29 de diciembre de 2018 (MarCO-B) y el 4 de enero de 2019 (MarCO-A), y los dos están en órbita alrededor del Sol.",
+            "en": "They flew past Mars on 26 November 2018 and kept going; NASA last heard from MarCO-B on 29 December 2018 and from MarCO-A on 4 January 2019, and both are in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/the-marco-mission-comes-to-an-end/"
+        }
+      ]
+    },
+    "ingenuity": {
+      "rocket": "atlasV541",
+      "site": "cape",
+      "pad": "SLC-41",
+      "steps": [
+        {
+          "id": "pad",
+          "t": null,
+          "title": { "es": "Listo en Cabo Cañaveral", "en": "Ready at Cape Canaveral" },
+          "text": {
+            "es": "Un cohete Atlas V 541 de 60 metros de alto espera en el Complejo de Lanzamiento 41. Dentro de la cofia, la punta del cohete, viajan el rover Perseverance y, sujeto a su panza, el helicóptero Ingenuity.",
+            "en": "An Atlas V 541 rocket, 60 metres tall, stands at Space Launch Complex 41. Inside its nose cone ride the Perseverance rover and, attached to its belly, the Ingenuity helicopter."
+          },
+          "src": "https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/"
+        },
+        {
+          "id": "liftoff",
+          "t": 0,
+          "title": { "es": "Despegue con cuatro propulsores", "en": "Liftoff with four boosters" },
+          "text": {
+            "es": "30 de julio de 2020, 7:50 de la mañana en Florida. El motor principal RD-180 y cuatro propulsores de combustible sólido, sujetos a la primera etapa, levantan juntos al cohete.",
+            "en": "30 July 2020, 7:50 in the morning in Florida. The RD-180 main engine and four solid rocket boosters strapped to the first stage lift the rocket off the pad together."
+          },
+          "ignite": ["stage1", "srbGround"],
+          "src": "https://www.nasa.gov/news-release/nasa-ula-launch-mars-2020-perseverance-rover-mission-to-red-planet/"
+        },
+        {
+          "id": "srbGround",
+          "t": 109.3,
+          "title": { "es": "Se sueltan los propulsores", "en": "Boosters fall away" },
+          "text": {
+            "es": "Al minuto y 49 segundos se sueltan los cuatro propulsores, ya gastados. No encontramos dónde cayeron. Un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
+            "en": "At 1 minute 49 seconds the four spent boosters are let go. We could not find where they landed. A NASA study for this mission says the rocket's path ran over the Atlantic Ocean."
+          },
+          "drop": ["srbGround"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "fairing",
+          "t": 207.6,
+          "title": { "es": "Se suelta la cofia", "en": "Nose cone comes off" },
+          "text": {
+            "es": "A los 3 minutos y 28 segundos, con la primera etapa aún encendida, se sueltan las dos mitades de la cofia de 5 metros, que cubría a la nave y al Centaur. No encontramos dónde cayeron.",
+            "en": "At 3 minutes 28 seconds, with the first stage still firing, the two halves of the 5-metre nose cone that covered the spacecraft and the Centaur are dropped. We could not find where they fell."
+          },
+          "drop": ["fairingA", "fairingB"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "stage1",
+          "t": 268.1,
+          "title": { "es": "Se suelta la primera etapa", "en": "First stage lets go" },
+          "text": {
+            "es": "El RD-180 se apaga a los 4 minutos y 22 segundos y la primera etapa se separa seis segundos después. En el lanzamiento de Curiosity, con el mismo tipo de cohete, la NASA dijo que esta etapa cae en el Atlántico.",
+            "en": "The RD-180 shuts down at 4 minutes 22 seconds and the first stage separates six seconds later. For Curiosity's launch on the same type of rocket, NASA said this stage drops into the Atlantic Ocean."
+          },
+          "drop": ["stage1"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "stage2",
+          "t": 278.1,
+          "title": { "es": "Se enciende el Centaur", "en": "Centaur lights up" },
+          "text": {
+            "es": "Diez segundos después de la separación, la etapa superior Centaur enciende su único motor RL10, que quema hidrógeno y oxígeno líquidos. Este primer encendido dura casi siete minutos.",
+            "en": "Ten seconds after separation the Centaur upper stage starts its single RL10 engine, which burns liquid hydrogen and liquid oxygen. This first burn lasts almost seven minutes."
+          },
+          "ignite": ["stage2"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "orbit",
+          "t": 687.9,
+          "title": { "es": "Órbita de espera", "en": "Coasting around Earth" },
+          "text": {
+            "es": "A los 11 minutos y 28 segundos el Centaur se apaga. Ya está en una órbita de espera alrededor de la Tierra y sigue así, con el motor apagado, cerca de media hora.",
+            "en": "At 11 minutes 28 seconds the Centaur shuts down. It is now in a parking orbit around Earth, and it coasts with its engine off for about half an hour."
+          },
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "tmi",
+          "t": 2699.5,
+          "title": { "es": "El empujón hacia Marte", "en": "The push to Mars" },
+          "text": {
+            "es": "A los 45 minutos el motor del Centaur se enciende por segunda vez, durante casi ocho minutos. Este encendido le da a la nave la velocidad que necesita para dejar la Tierra y salir rumbo a Marte.",
+            "en": "At 45 minutes the Centaur's engine fires a second time, for almost eight minutes. This burn gives the spacecraft the speed it needs to leave Earth and head for Mars."
+          },
+          "ignite": ["stage2"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        },
+        {
+          "id": "separation",
+          "t": 3452.8,
+          "title": { "es": "Perseverance queda libre", "en": "Perseverance flies free" },
+          "text": {
+            "es": "A los 57 minutos y medio del despegue la nave se separa del Centaur. La NASA apuntó el Centaur para que no llegara a Marte, porque no estaba tan limpio como la nave. Por eso quedó dando vueltas al Sol.",
+            "en": "57 and a half minutes after liftoff the spacecraft separates from the Centaur. NASA aimed the Centaur to miss Mars on purpose, because it was not cleaned like the spacecraft. So it stays circling the Sun."
+          },
+          "drop": ["stage2"],
+          "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
+        }
+      ],
+      "fates": [
+        {
+          "part": "srbGround",
+          "name": { "es": "Cuatro propulsores de combustible sólido", "en": "Four solid rocket boosters" },
+          "fate": {
+            "es": "Se soltaron 1 minuto y 49 segundos después del despegue; no encontramos dónde cayeron, aunque un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
+            "en": "They were let go 1 minute 49 seconds after liftoff; we could not find where they landed, though a NASA study for this mission says the rocket's path ran over the Atlantic Ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/sites/default/files/atoms/files/mars_2020_public_draft_seis.pdf"
+        },
+        {
+          "part": "fairingA",
+          "name": { "es": "Cofia, primera mitad", "en": "Payload fairing, first half" },
+          "fate": {
+            "es": "Se soltó a los 3 minutos y 28 segundos del despegue; no encontramos dónde cayó, aunque un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
+            "en": "It was dropped 3 minutes 28 seconds after liftoff; we could not find where it fell, though a NASA study for this mission says the rocket's path ran over the Atlantic Ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/sites/default/files/atoms/files/mars_2020_public_draft_seis.pdf"
+        },
+        {
+          "part": "fairingB",
+          "name": { "es": "Cofia, segunda mitad", "en": "Payload fairing, second half" },
+          "fate": {
+            "es": "Se soltó a los 3 minutos y 28 segundos del despegue; no encontramos dónde cayó, aunque un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
+            "en": "It was dropped 3 minutes 28 seconds after liftoff; we could not find where it fell, though a NASA study for this mission says the rocket's path ran over the Atlantic Ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.nasa.gov/sites/default/files/atoms/files/mars_2020_public_draft_seis.pdf"
+        },
+        {
+          "part": "stage1",
+          "name": { "es": "Primera etapa (Common Core Booster)", "en": "First stage (Common Core Booster)" },
+          "fate": {
+            "es": "Se separó a los 4 minutos y 28 segundos del despegue; no encontramos dónde cayó en este vuelo, pero para el lanzamiento de Curiosity, con el mismo tipo de cohete, la NASA dijo que la primera etapa cae en el océano Atlántico.",
+            "en": "It separated 4 minutes 28 seconds after liftoff; we could not find where it fell on this flight, but for Curiosity's launch on the same type of rocket NASA said the first stage drops into the Atlantic Ocean."
+          },
+          "where": "unknown",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/MSLLaunch.pdf"
+        },
+        {
+          "part": "stage2",
+          "name": { "es": "Etapa superior Centaur", "en": "Centaur upper stage" },
+          "fate": {
+            "es": "La NASA apuntó el cohete por un camino que no llega a Marte y solo la nave corrigió después su rumbo hacia el planeta, así que el Centaur dejó la Tierra y quedó en órbita alrededor del Sol.",
+            "en": "NASA pointed the rocket along a path that does not meet Mars and only the spacecraft steered toward the planet afterwards, so the Centaur left Earth and stays in orbit around the Sun."
+          },
+          "where": "sunOrbit",
+          "src": "https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/spacecraft/biological_cleanliness/"
+        }
+      ],
+      "left": [
+        {
+          "name": { "es": "Etapa de crucero", "en": "Cruise stage" },
+          "fate": {
+            "es": "La nave la soltó unos 10 minutos antes de entrar en la atmósfera de Marte; un estudio de 2026, hecho con fotos tomadas desde la órbita, encontró que pedazos de esta etapa llegaron al suelo y abrieron cráteres de unos pocos metros al noroeste del cráter Jezero.",
+            "en": "The spacecraft shed it about 10 minutes before entering Mars's atmosphere; a 2026 study that used photos taken from orbit found that pieces of this stage reached the ground and dug craters a few metres across north-west of Jezero crater."
+          },
+          "where": "marsImpact",
+          "src": "https://doi.org/10.1029/2026GL122337"
+        },
+        {
+          "name": { "es": "Escudo térmico", "en": "Heat shield" },
+          "fate": {
+            "es": "Se desprendió 20 segundos después de que se abrió el paracaídas, y la cámara HiRISE, en órbita de Marte, lo fotografió en el suelo el 19 de febrero de 2021.",
+            "en": "It dropped away 20 seconds after the parachute opened, and the HiRISE camera in Mars orbit photographed it on the ground on 19 February 2021."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/images/pia24333-perseverance-and-mars-2020-spacecraft-components-on-the-surface/"
+        },
+        {
+          "name": { "es": "Carcasa trasera y paracaídas", "en": "Back shell and parachute" },
+          "fate": {
+            "es": "Se separaron a unos 2,1 km del suelo y la carcasa chocó contra la superficie a unos 126 km/h; Ingenuity fotografió las dos piezas desde el aire el 19 de abril de 2022, en su vuelo 26.",
+            "en": "They separated about 2.1 km above the ground and the back shell hit the surface at about 126 km/h; Ingenuity photographed both from the air on 19 April 2022, during its Flight 26."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/news/nasas-mars-helicopter-spots-gear-that-helped-perseverance-rover-land/"
+        },
+        {
+          "name": { "es": "Etapa de descenso (grúa aérea)", "en": "Descent stage (sky crane)" },
+          "fate": {
+            "es": "Después de bajar al rover con cuerdas se alejó volando para estrellarse a una distancia segura, y la cámara HiRISE fotografió su mancha de restos en forma de V el 19 de febrero de 2021.",
+            "en": "After lowering the rover on cords it flew off to crash at a safe distance, and the HiRISE camera photographed its V-shaped debris pattern on 19 February 2021."
+          },
+          "where": "marsImpact",
+          "src": "https://www.jpl.nasa.gov/images/pia24333-perseverance-and-mars-2020-spacecraft-components-on-the-surface/"
+        },
+        {
+          "name": { "es": "Tapa protectora de Ingenuity", "en": "Ingenuity's debris shield" },
+          "fate": {
+            "es": "Esta tapa protegió a Ingenuity bajo la panza del rover durante el aterrizaje, y Perseverance la soltó en el suelo el 21 de marzo de 2021.",
+            "en": "This cover protected Ingenuity under the rover's belly during the landing, and Perseverance dropped it on the ground on 21 March 2021."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/images/pia24448-perseverance-rover-drops-its-debris-shield/"
+        },
+        {
+          "name": { "es": "Rover Perseverance", "en": "Perseverance rover" },
+          "fate": {
+            "es": "No está abandonado: la NASA lo cuenta como misión activa, todavía en funcionamiento y recorriendo la superficie de Marte (página actualizada el 14 de octubre de 2026).",
+            "en": "It is not abandoned: NASA lists it as an active mission, still operational and moving across the surface of Mars (page updated on 14 October 2026)."
+          },
+          "where": "onMars",
+          "src": "https://science.nasa.gov/mission/mars-2020-perseverance/"
+        },
+        {
+          "name": { "es": "Helicóptero Ingenuity", "en": "Ingenuity helicopter" },
+          "fate": {
+            "es": "Hizo 72 vuelos, el último el 18 de enero de 2024, cuando un daño en las palas del rotor lo dejó sin poder volar, y se quedó en Marte donde aterrizó por última vez.",
+            "en": "It made 72 flights, the last one on 18 January 2024, when damage to its rotor blades left it unable to fly, and it stays on Mars where it last landed."
+          },
+          "where": "onMars",
+          "src": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
+        }
+      ]
+    }
+  }
+}

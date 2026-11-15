@@ -1,0 +1,51 @@
+/* ---------- portada: datos de las 14 máquinas para las tarjetas y la línea de tiempo ----------
+   Las frases en primera persona (q) están escritas para el sitio a partir de los datos verificados
+   (FUENTES.md, docs/verificacion_ciencia.md): no son citas reales.
+   L, A, E: despegue, llegada y última señal, en años con decimales. y: año para ordenar. */
+var HOME_WORLDS={
+  moon:{es:'Luna',en:'Moon',c:'#d6d6d0'},mars:{es:'Marte',en:'Mars',c:'#e0895a'},ast:{es:'Asteroides',en:'Asteroids',c:'#bfa98a'},
+  sun:{es:'Órbita solar',en:'Solar orbit',c:'#ffcf6a'},deep:{es:'Espacio profundo',en:'Deep space',c:'#93b6ff'}};
+var HOME_DATA=[
+  {id:'surveyor1',w:'moon',photo:'surveyor1_1',y:1966,L:1966.41,A:1966.42,E:1967.02,
+   q:{es:'Fui la primera nave de Estados Unidos en posarse suave en la Luna.',en:'I was the first US spacecraft to land softly on the Moon.'},
+   when:{es:'Llegó en 1966',en:'Arrived in 1966'},st:{es:'en silencio desde 1967',en:'silent since 1967'},life:{es:'trabajó 7 meses',en:'worked for 7 months'}},
+  {id:'apollo11',w:'moon',photo:'apollo11_1',y:1969,L:1969.54,A:1969.55,E:1969.65,mirror:true,
+   q:{es:'Soy la parte de abajo del Eagle. La de arriba despegó con los astronautas.',en:'I am the bottom half of Eagle. The top half took off with the astronauts.'},
+   when:{es:'Llegó en 1969',en:'Arrived in 1969'},st:{es:'su espejo sigue en uso',en:'its mirror is still in use'},life:{es:'su espejo láser se sigue usando',en:'its laser mirror is still in use'}},
+  {id:'viking1',w:'mars',photo:'viking1_1',y:1976,L:1975.63,A:1976.55,E:1982.87,
+   q:{es:'Saqué la primera foto desde el suelo de Marte. Salió una de mis patas.',en:'I took the first picture from the ground on Mars. One of my feet is in it.'},
+   when:{es:'Llegó en 1976',en:'Arrived in 1976'},st:{es:'en silencio desde 1982',en:'silent since 1982'},life:{es:'6 años en Marte',en:'6 years on Mars'}},
+  {id:'pathfinder',w:'mars',photo:'pathfinder_2',y:1997,L:1996.92,A:1997.51,E:1997.74,
+   q:{es:'Llegué rebotando en airbags y traje a Sojourner, el primer rover de Marte.',en:'I landed bouncing on airbags and brought Sojourner, the first Mars rover.'},
+   when:{es:'Llegó en 1997',en:'Arrived in 1997'},st:{es:'en silencio desde 1997',en:'silent since 1997'},life:{es:'casi 3 meses',en:'almost 3 months'}},
+  {id:'spirit',w:'mars',photo:'spirit_1',y:2004,L:2003.44,A:2004.01,E:2010.22,
+   q:{es:'Se me trabó una rueda. Arrastrándola, destapé una pista de agua.',en:'One of my wheels jammed. Dragging it, I uncovered a clue about water.'},
+   when:{es:'Llegó en 2004',en:'Arrived in 2004'},st:{es:'en silencio desde 2010',en:'silent since 2010'},life:{es:'6 años',en:'6 years'}},
+  {id:'opportunity',w:'mars',photo:'opportunity_1',y:2004.1,L:2003.52,A:2004.07,E:2018.44,
+   q:{es:'Me hicieron para 90 días marcianos. Trabajé más de 14 años.',en:'I was built for 90 Martian days. I worked for more than 14 years.'},
+   when:{es:'Llegó en 2004',en:'Arrived in 2004'},st:{es:'en silencio desde 2018',en:'silent since 2018'},life:{es:'14 años (el plan era 90 días)',en:'14 years (the plan was 90 days)'}},
+  {id:'phoenix',w:'mars',photo:'phoenix_1',y:2008,L:2007.59,A:2008.40,E:2008.84,
+   q:{es:'Raspé el suelo cerca del polo norte y apareció hielo de agua.',en:'I scraped the ground near the north pole and found water ice.'},
+   when:{es:'Llegó en 2008',en:'Arrived in 2008'},st:{es:'en silencio desde 2008',en:'silent since 2008'},life:{es:'5 meses',en:'5 months'}},
+  {id:'insight',w:'mars',photo:'insight_1',y:2018,L:2018.34,A:2018.90,E:2022.96,
+   q:{es:'Apoyé un sismómetro en el suelo y sentí 1.319 temblores de Marte.',en:'I set a seismometer on the ground and felt 1,319 marsquakes.'},
+   when:{es:'Llegó en 2018',en:'Arrived in 2018'},st:{es:'en silencio desde 2022',en:'silent since 2022'},life:{es:'4 años',en:'4 years'}},
+  {id:'ingenuity',w:'mars',photo:'ingenuity_2',y:2021,L:2020.58,A:2021.13,E:2024.05,
+   q:{es:'Iba a hacer hasta 5 vuelos de prueba. Hice 72.',en:'I was meant to make up to 5 test flights. I made 72.'},
+   when:{es:'Llegó en 2021',en:'Arrived in 2021'},st:{es:'no vuela desde 2024',en:'grounded since 2024'},life:{es:'72 vuelos (el plan era 5)',en:'72 flights (the plan was 5)'}},
+  {id:'near',w:'ast',photo:'near_1',y:2000,L:1996.13,A:2000.12,E:2001.16,
+   q:{es:'Di vueltas un año alrededor de un asteroide y después me posé en él.',en:'I circled an asteroid for a year, and then I landed on it.'},
+   when:{es:'Llegó a Eros en 2000',en:'Reached Eros in 2000'},st:{es:'en silencio desde 2001',en:'silent since 2001'},life:{es:'1 año en Eros',en:'1 year at Eros'}},
+  {id:'dawn',w:'ast',photo:'dawn_1',note:{es:'Lo que vio en Ceres',en:'What it saw at Ceres'},y:2011,L:2007.74,A:2007.74,E:2018.83,
+   q:{es:'Orbité dos mundos, Vesta y Ceres. Sigo girando alrededor de Ceres.',en:'I orbited two worlds, Vesta and Ceres. I am still circling Ceres.'},
+   when:{es:'Llegó a Vesta en 2011',en:'Reached Vesta in 2011'},st:{es:'en silencio desde 2018',en:'silent since 2018'},life:{es:'11 años, dos mundos',en:'11 years, two worlds'}},
+  {id:'kepler',w:'sun',photo:'kepler_2',y:2009,L:2009.18,A:2009.18,E:2018.87,
+   q:{es:'Miré las mismas estrellas sin parar y encontré más de 2.600 planetas.',en:'I stared at the same stars nonstop and found more than 2,600 planets.'},
+   when:{es:'Empezó a mirar en 2009',en:'Started watching in 2009'},st:{es:'apagado en 2018',en:'switched off in 2018'},life:{es:'9 años mirando estrellas',en:'9 years watching stars'}},
+  {id:'pioneer10',w:'deep',photo:'pioneer10_3',note:{es:'Pintura de Rick Guidice',en:'Painting by Rick Guidice'},y:1973,L:1972.17,A:1972.17,E:2003.06,
+   q:{es:'Fui la primera en cruzar el cinturón de asteroides y en visitar Júpiter.',en:'I was the first to cross the asteroid belt and to visit Jupiter.'},
+   when:{es:'Pasó por Júpiter en 1973',en:'Flew past Jupiter in 1973'},st:{es:'en silencio desde 2003',en:'silent since 2003'},life:{es:'30 años en contacto',en:'30 years in contact'}},
+  {id:'pioneer11',w:'deep',photo:'pioneer10_1',note:{es:'Foto de su gemela, Pioneer 10',en:'Photo of its twin, Pioneer 10'},y:1974,L:1973.26,A:1973.26,E:1995.90,
+   q:{es:'Con un telescopio de 2,5 cm descubrí un anillo nuevo de Saturno.',en:'With a 2.5 cm telescope I discovered a new ring around Saturn.'},
+   when:{es:'Pasó por Júpiter en 1974',en:'Flew past Jupiter in 1974'},st:{es:'en silencio desde 1995',en:'silent since 1995'},life:{es:'22 años en contacto',en:'22 years in contact'}}
+];
