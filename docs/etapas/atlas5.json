@@ -78,7 +78,7 @@
           "title": { "es": "Se abre la cofia", "en": "The nose cone opens" },
           "text": {
             "es": "Ocho segundos después, ya por encima de casi todo el aire, el cohete suelta las dos mitades de la cofia que cubría a InSight. El dossier de la NASA no dice dónde cayeron.",
-            "en": "Eight seconds later, above most of the air, the rocket drops the two halves of the nose cone that covered InSight. NASA's launch kit does not say where they came down."
+            "en": "Eight seconds later, above most of the air, the rocket drops the two halves of the nose cone that covered InSight. NASA's press kit does not say where they came down."
           },
           "drop": ["fairingA", "fairingB"],
           "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
@@ -111,7 +111,7 @@
           "title": { "es": "InSight queda libre", "en": "InSight flies free" },
           "text": {
             "es": "A unos 93 minutos del despegue, unos resortes separan a InSight del Centaur. Enseguida el Centaur suelta dos pequeños CubeSats, MarCO-A y MarCO-B, y se aparta. Como nunca apuntó a Marte, queda dando vueltas al Sol.",
-            "en": "About 93 minutes after liftoff, springs push InSight away from the Centaur. Soon after, the Centaur releases two small CubeSats, MarCO-A and MarCO-B, and steers aside. Never aimed at Mars, it stays circling the Sun."
+            "en": "About 93 minutes after liftoff, springs push InSight away from the Centaur. Soon after, the Centaur releases two small CubeSats, MarCO-A and MarCO-B, and steers aside. Never aimed at Mars, it is left circling the Sun."
           },
           "drop": ["stage2"],
           "src": "https://www.jpl.nasa.gov/news/bound-for-mars-countdown-to-first-interplanetary-launch-from-california/"
@@ -133,27 +133,27 @@
           "name": { "es": "Adaptador entre etapas", "en": "Interstage adapter" },
           "fate": {
             "es": "El dossier de lanzamiento de la NASA dice que los dos anillos adaptadores que unían la primera etapa con el Centaur también se sueltan cuando las etapas se separan, pero no dice dónde cayeron.",
-            "en": "NASA's launch kit says the two adapter rings that joined the first stage to the Centaur also fall away when the stages separate, but it does not say where they came down."
+            "en": "NASA's press kit says the two adapter rings that joined the first stage to the Centaur also fall away when the stages separate, but it does not say where they came down."
           },
           "where": "unknown",
           "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
         },
         {
           "part": "fairingA",
-          "name": { "es": "Cofia, primera mitad", "en": "Payload fairing, first half" },
+          "name": { "es": "Cofia, primera mitad", "en": "Nose cone, first half" },
           "fate": {
             "es": "Se soltó a los 268 segundos del lanzamiento; el dossier de la NASA no dice dónde cayó y, en general, las piezas que se sueltan antes de llegar a la órbita vuelven a caer a la Tierra.",
-            "en": "It was dropped 268 seconds after launch; NASA's launch kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
+            "en": "It was dropped 268 seconds after launch; NASA's press kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
           },
           "where": "unknown",
           "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
         },
         {
           "part": "fairingB",
-          "name": { "es": "Cofia, segunda mitad", "en": "Payload fairing, second half" },
+          "name": { "es": "Cofia, segunda mitad", "en": "Nose cone, second half" },
           "fate": {
             "es": "Se soltó a los 268 segundos del lanzamiento; el dossier de la NASA no dice dónde cayó y, en general, las piezas que se sueltan antes de llegar a la órbita vuelven a caer a la Tierra.",
-            "en": "It was dropped 268 seconds after launch; NASA's launch kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
+            "en": "It was dropped 268 seconds after launch; NASA's press kit does not say where it came down, and in general parts dropped before the rocket reaches orbit fall back to Earth."
           },
           "where": "unknown",
           "src": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/"
@@ -305,7 +305,7 @@
           "title": { "es": "Perseverance queda libre", "en": "Perseverance flies free" },
           "text": {
             "es": "A los 57 minutos y medio del despegue la nave se separa del Centaur. La NASA apuntó el Centaur para que no llegara a Marte, porque no estaba tan limpio como la nave. Por eso quedó dando vueltas al Sol.",
-            "en": "57 and a half minutes after liftoff the spacecraft separates from the Centaur. NASA aimed the Centaur to miss Mars on purpose, because it was not cleaned like the spacecraft. So it stays circling the Sun."
+            "en": "57 and a half minutes after liftoff the spacecraft separates from the Centaur. NASA aimed the Centaur to miss Mars on purpose, because it was not as clean as the spacecraft. So it is left circling the Sun."
           },
           "drop": ["stage2"],
           "src": "https://www.ulalaunch.com/docs/default-source/launch-booklets/mars2020_mobrochure_200717.pdf"
@@ -324,7 +324,7 @@
         },
         {
           "part": "fairingA",
-          "name": { "es": "Cofia, primera mitad", "en": "Payload fairing, first half" },
+          "name": { "es": "Cofia, primera mitad", "en": "Nose cone, first half" },
           "fate": {
             "es": "Se soltó a los 3 minutos y 28 segundos del despegue; no encontramos dónde cayó, aunque un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
             "en": "It was dropped 3 minutes 28 seconds after liftoff; we could not find where it fell, though a NASA study for this mission says the rocket's path ran over the Atlantic Ocean."
@@ -334,7 +334,7 @@
         },
         {
           "part": "fairingB",
-          "name": { "es": "Cofia, segunda mitad", "en": "Payload fairing, second half" },
+          "name": { "es": "Cofia, segunda mitad", "en": "Nose cone, second half" },
           "fate": {
             "es": "Se soltó a los 3 minutos y 28 segundos del despegue; no encontramos dónde cayó, aunque un estudio de la NASA para esta misión dice que la trayectoria del cohete iba sobre el océano Atlántico.",
             "en": "It was dropped 3 minutes 28 seconds after liftoff; we could not find where it fell, though a NASA study for this mission says the rocket's path ran over the Atlantic Ocean."

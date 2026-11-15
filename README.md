@@ -2,9 +2,11 @@
 
 NASA Space Apps Challenge 2026, Salta (Argentina). Challenge: *Abandoned but not Forgotten: Storytelling about NASA's Discarded Equipment on the Moon and Mars*.
 
-**Still There: NASA's missions across time.** Fourteen machines that NASA left on the Moon, on Mars and beyond, each told as a whole mission you can fly through in 3D: the launch, the journey, the arrival and where the machine is today.
+**Still There: NASA's missions across time.** Fourteen machines that NASA left on the Moon, on Mars and beyond, each told as a mission you can fly through in 3D. All fourteen show the launch and where the machine is today; ten also show the journey and the arrival.
 
-**Live site:** https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce (no login needed; the language follows your browser).
+**Live site:** https://ginomoretta-creator.github.io/siguen-ahi/ (the language follows your browser; add `?lang=en` or `?lang=es` to force one).
+
+Mirror: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce
 
 Spanish version of this file: [README.es.md](README.es.md).
 
@@ -24,6 +26,7 @@ Spanish and English. The language follows the browser; `?lang=en` or `?lang=es` 
 - **Rockets.** Delta II and Atlas V are NASA's own 3D models (NASA VTAD, science.nasa.gov), already split into stages, fairing halves and boosters. Saturn V, Titan IIIE-Centaur and Atlas-Centaur have no official model that separates by stage, so they are built in code with real dimensions.
 - **Spacecraft.** NASA 3D models for the Spirit and Opportunity rovers, InSight, Viking 1, Ingenuity, the Apollo lunar module, Pioneer 10 and 11, NEAR Shoemaker, Dawn and Kepler. Surveyor 1, Phoenix and Mars Pathfinder with Sojourner are simplified models built in code.
 - **Times and fates.** T+ times and the fate of every stage come from NASA and manufacturer press kits and flight reports. Where we could not find the real time of a step, the clock is not shown.
+- **What is missing.** Apollo 11, Viking 1, InSight and Ingenuity show the launch and the machine today, with no journey in between.
 - **What is illustrative.** The climb profile of the launch (height and pitch), the Mars entry and the descents are animations, not flight telemetry. The site says so on screen.
 
 Every adaptation we made to a NASA model is listed in [SOURCES.md](SOURCES.md). The NASA rocket models came with the NASA insignia, a flag and another mission's patch painted on them; we covered those.
@@ -73,7 +76,7 @@ The site is plain JavaScript with three.js r128, no bundler. `tools/build.py` jo
 ## Sources, AI use and license
 
 - Data, maps, models, photos, audio and video: [SOURCES.md](SOURCES.md) (Spanish original: `FUENTES.md`).
-- Use of artificial intelligence: [AI_USE.md](AI_USE.md). The site also says it in its Credits dialog.
-- Code: Apache License 2.0, see [LICENSE](LICENSE). NASA material keeps NASA's own usage terms and is credited in the site and in SOURCES.md.
+- Use of artificial intelligence: [AI_USE.md](AI_USE.md). The site gives the short version in its Credits dialog.
+- Code: Apache License 2.0, see [LICENSE](LICENSE). NASA material keeps NASA's own usage terms and is credited on the site and in SOURCES.md.
 
 This project was made at the NASA Space Apps hackathon. NASA does not sponsor or endorse it.

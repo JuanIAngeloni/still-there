@@ -7,7 +7,7 @@
       },
       "family": "Delta II",
       "heightM": 39.6,
-      "firstYear": 1989,
+      "firstYear": null,
       "blurb": {
         "es": "Un cohete de tres etapas con nueve propulsores de combustible sólido, seis encendidos en tierra y tres en vuelo; para 2003 este modelo ya sumaba más de 40 lanzamientos exitosos.",
         "en": "A three-stage rocket with nine strap-on solid boosters, six lit on the pad and three in flight; by 2003 this model had more than 40 successful launches."
@@ -21,7 +21,7 @@
       },
       "family": "Delta II",
       "heightM": 39.6,
-      "firstYear": 1989,
+      "firstYear": 2003,
       "blurb": {
         "es": "La H es de heavy, pesado: un Delta II más nuevo y un poco más potente, con nueve propulsores más anchos que dan alrededor de un 25 por ciento más de empuje.",
         "en": "The H means heavy: a newer, slightly more powerful Delta II whose nine boosters are wider and give about 25 percent more thrust."
@@ -57,7 +57,7 @@
           },
           "text": {
             "es": "El 4 de diciembre de 1996, a la 1:58 de la madrugada de Florida, el Delta II despega de Cabo Cañaveral con Pathfinder en la punta.",
-            "en": "On December 4, 1996, at 1:58 in the morning in Florida, the Delta II lifts off from Cape Canaveral with Pathfinder on top."
+            "en": "On 4 December 1996, at 1:58 in the morning in Florida, the Delta II lifts off from Cape Canaveral with Pathfinder on top."
           },
           "ignite": [
             "stage1",
@@ -169,7 +169,7 @@
           },
           "text": {
             "es": "Unos cohetes chicos hacen girar la tercera etapa, la PAM-D, a unas 70 vueltas por minuto. Se separa de la segunda, que queda un tiempo en órbita de la Tierra, y se enciende. En el plan, a unos 70 minutos del despegue.",
-            "en": "Small rockets spin the third stage, the PAM-D, to about 70 turns per minute. It separates from the second stage, which stays in Earth orbit for a while, and fires. In the plan, about 70 minutes after liftoff."
+            "en": "Small rockets spin the third stage, the PAM-D, to about 70 turns per minute. It separates from the second stage, which stays in Earth orbit for a while, and fires. In the plan, that came about 70 minutes after liftoff."
           },
           "drop": [
             "stage2"
@@ -379,7 +379,7 @@
           },
           "text": {
             "es": "Spirit espera en la punta de un cohete Delta II de 39,6 metros de alto. Alrededor de la primera etapa hay nueve propulsores: seis se encienden al despegar y tres en pleno vuelo.",
-            "en": "Spirit waits on top of a Delta II rocket 39.6 meters tall. Nine solid boosters surround the first stage: six light at liftoff and three light in flight."
+            "en": "Spirit waits on top of a Delta II rocket 39.6 metres tall. Nine solid boosters surround the first stage: six light at liftoff and three light in flight."
           },
           "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
         },
@@ -392,7 +392,7 @@
           },
           "text": {
             "es": "El 10 de junio de 2003, a las 13:58 de Florida, el Delta II despega con un trueno de Cabo Cañaveral. Empieza un viaje de siete meses hasta Marte.",
-            "en": "On June 10, 2003, at 1:58 p.m. in Florida, the Delta II thunders away from Cape Canaveral. A seven-month trip to Mars begins."
+            "en": "On 10 June 2003, at 1:58 p.m. in Florida, the Delta II thunders away from Cape Canaveral. A seven-month trip to Mars begins."
           },
           "ignite": [
             "stage1",
@@ -504,7 +504,7 @@
           },
           "text": {
             "es": "Cohetes chicos hacen girar la tercera etapa a unas 63 vueltas por minuto. Se separa de la segunda, que queda en órbita de la Tierra, y empuja unos 87 segundos. En el plan del primer día posible, eso era a los 31 minutos.",
-            "en": "Small rockets spin the third stage to about 63 turns per minute. It leaves the second stage behind in Earth orbit and burns for about 87 seconds. In the plan for the first possible day, that came at 31 minutes."
+            "en": "Small rockets spin the third stage to about 63 turns per minute. It leaves the second stage behind in Earth orbit and burns for about 87 seconds. In the plan for the first possible launch day, that came 31 minutes after liftoff."
           },
           "drop": [
             "stage2"
@@ -645,7 +645,7 @@
           },
           "fate": {
             "es": "Dio electricidad y corrigió el rumbo durante el viaje, se soltó 15 minutos antes de entrar en la atmósfera y, según el plan de la misión, terminó chocando contra Marte.",
-            "en": "It gave power and steered during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
+            "en": "It supplied power and steered the spacecraft during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
           },
           "where": "marsImpact",
           "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
@@ -702,7 +702,7 @@
           },
           "text": {
             "es": "Opportunity espera en la punta de un Delta II pesado de 39,6 metros. Sus nueve propulsores son más anchos que los del cohete de Spirit y empujan alrededor de un 25 por ciento más.",
-            "en": "Opportunity waits on top of a heavy Delta II, 39.6 meters tall. Its nine boosters are wider than the ones on Spirit's rocket and give about 25 percent more thrust."
+            "en": "Opportunity waits on top of a heavy Delta II, 39.6 metres tall. Its nine boosters are wider than the ones on Spirit's rocket and give about 25 percent more thrust."
           },
           "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
         },
@@ -715,7 +715,7 @@
           },
           "text": {
             "es": "El 7 de julio de 2003, a las 23:18 de Florida (ya era 8 de julio en hora universal), el Delta II despega de Cabo Cañaveral. Opportunity sigue a su gemelo Spirit, que ya viaja a Marte.",
-            "en": "On July 7, 2003, at 11:18 p.m. in Florida (already July 8 in universal time), the Delta II lifts off from Cape Canaveral. Opportunity follows its twin Spirit, already bound for Mars."
+            "en": "On 7 July 2003, at 11:18 p.m. in Florida (already 8 July in Universal Time), the Delta II lifts off from Cape Canaveral. Opportunity follows its twin Spirit, already bound for Mars."
           },
           "ignite": [
             "stage1",
@@ -961,7 +961,7 @@
           },
           "fate": {
             "es": "Dio electricidad y corrigió el rumbo durante el viaje, se soltó 15 minutos antes de entrar en la atmósfera y, según el plan de la misión, terminó chocando contra Marte.",
-            "en": "It gave power and steered during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
+            "en": "It supplied power and steered the spacecraft during the trip, was cast off 15 minutes before entering the atmosphere and, according to the mission plan, ended up hitting Mars."
           },
           "where": "marsImpact",
           "src": "https://www.jpl.nasa.gov/news/press_kits/merlaunch.pdf"
@@ -1018,7 +1018,7 @@
           },
           "text": {
             "es": "Phoenix espera en la punta de un cohete Delta II 7925 de 39,6 metros. La primera etapa lleva nueve propulsores de unos 13 metros de alto cada uno.",
-            "en": "Phoenix waits on top of a Delta II 7925 rocket 39.6 meters tall. The first stage carries nine solid boosters, each about 13 meters tall."
+            "en": "Phoenix waits on top of a Delta II 7925 rocket 39.6 metres tall. The first stage carries nine solid boosters, each about 13 metres tall."
           },
           "src": "https://www.jpl.nasa.gov/news/press_kits/phoenix-launch-presskit.pdf"
         },
@@ -1031,7 +1031,7 @@
           },
           "text": {
             "es": "El 4 de agosto de 2007, a las 5:26 de la mañana de Florida, el Delta II despega de Cabo Cañaveral hacia el cielo todavía oscuro del este.",
-            "en": "On August 4, 2007, at 5:26 in the morning in Florida, the Delta II lifts off from Cape Canaveral into the still-dark eastern sky."
+            "en": "On 4 August 2007, at 5:26 in the morning in Florida, the Delta II lifts off from Cape Canaveral into the still-dark eastern sky."
           },
           "ignite": [
             "stage1",
@@ -1154,7 +1154,7 @@
           },
           "text": {
             "es": "Unas pesas con cables, como yoyós, frenan el giro y Phoenix se separa de la tercera etapa, que queda dando vueltas al Sol. En el plan del primer día posible era a los 84 minutos; según el día, entre 82 y 96.",
-            "en": "Weights on cables, like yo-yos, slow the spin and Phoenix separates from the third stage, which is left circling the Sun. In the plan for the first possible day that came at 84 minutes; depending on the day, 82 to 96."
+            "en": "Weights on cables, like yo-yos, slow the spin and Phoenix separates from the third stage, which is left circling the Sun. The plan put this at 84 minutes on the first possible launch day, or 82 to 96 on other days."
           },
           "drop": [
             "stage3"

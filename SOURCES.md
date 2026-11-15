@@ -95,7 +95,7 @@ Verified on 15 November 2026. The full notes, with the differences between sourc
 
 ## Machines added from the work of Juan Ignacio Angeloni (`src/js/47-extra-data.js`, `src/js/48-extra.js`)
 
-Apollo 11, Viking 1, InSight and Ingenuity appear only at their place today, with no journey from Earth. Their data were verified on 15 November 2026; the notes with the sources and the differences are in `docs/verificacion_ciencia.md`.
+Apollo 11, Viking 1, InSight and Ingenuity show their launch and their place today, with no journey in between. Their data were verified on 15 November 2026; the notes with the sources and the differences are in `docs/verificacion_ciencia.md`.
 
 - Apollo 11: 20 Jul 1969 20:17:40 UT, 0.67416° N, 23.47314° E (NSSDCA). The module is the NASA 3D Resources model; only the descent stage is shown. The retroreflector and the seismometer are simplified models, placed near the module but not at their real distance.
 - Viking 1: 20 Jul 1976 11:53:06 UT, 22.27° N, 47.95° W (NSSDCA, planetocentric). NASA 3D Resources model.
@@ -117,7 +117,7 @@ From the NASA Image and Video Library, downloaded on 15 November 2026 and trimme
 | Kepler | https://images.nasa.gov/details/ksc_030609_kep_launch | 0:00 to 0:40 | NASA |
 | Mars 2020 (carried Ingenuity) | "NASA's Perseverance Rover Launches to Mars", JPL-20200730-M2020f-0003 | 0:00 to 0:30, no sound (the original has added music) | NASA/JPL-Caltech |
 
-The library has no liftoff video of Surveyor 1, Pioneer 10 and 11, Viking 1, NEAR Shoemaker, Mars Pathfinder, Spirit, Opportunity or InSight; for those, the animated broadcast remains.
+The library has no liftoff video of Surveyor 1, Pioneer 10 and 11, Viking 1, NEAR Shoemaker, Mars Pathfinder, Spirit, Opportunity or InSight; for those, the site shows only the animated broadcast.
 
 ## Third-party code
 

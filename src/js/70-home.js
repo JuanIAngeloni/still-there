@@ -12,7 +12,7 @@ var hmApi=(function(){
   var STR={
     es:{brand:'Siguen ahí',navAria:'Portada',visited:'Visitaste {n} de {t}',map:'Ver el mapa 3D',credits:'Créditos',
         eye:'NASA Space Apps 2026 · Salta',h1a:'Siguen ahí:',h1b:'las misiones de NASA a través del tiempo',
-        lead:'Catorce máquinas que quedaron en la Luna, en Marte y más lejos. Elegí una para ver su misión completa: el despegue, el viaje y dónde está hoy.',
+        lead:'Catorce máquinas que quedaron en la Luna, en Marte y más lejos. Elegí una para seguir su misión, desde el despegue hasta donde está hoy.',
         sort:'Ordenar',byPlace:'Por lugar',byYear:'Por año',machines:'Máquinas',visitedWord:'visitada',art:'Ilustración',
         tlH:'Línea de tiempo',tlP:'Cada fila es una vida: el viaje, los años de trabajo y el silencio. Todas siguen ahí.',today:'hoy',
         leg:{trip:'Viaje',work:'Años de trabajo',silent:'En silencio',inUse:'Sigue en uso',now:'Hoy: sigue ahí'},
@@ -22,7 +22,7 @@ var hmApi=(function(){
         foot:'Las frases en primera persona están escritas para este sitio a partir de datos de NASA: no son citas reales. Fotos: NASA Image and Video Library. Fechas: NSSDCA y páginas de misión de NASA.'},
     en:{brand:'Still There',navAria:'Start page',visited:'Visited {n} of {t}',map:'Open the 3D map',credits:'Credits',
         eye:'NASA Space Apps 2026 · Salta',h1a:'Still There:',h1b:'NASA\'s missions across time',
-        lead:'Fourteen machines left on the Moon, on Mars and beyond. Pick one to see its whole mission: the launch, the journey and where it is today.',
+        lead:'Fourteen machines left on the Moon, on Mars and beyond. Pick one to follow its mission, from the launch to where it is today.',
         sort:'Sort',byPlace:'By place',byYear:'By year',machines:'Machines',visitedWord:'visited',art:'Artwork',
         tlH:'Timeline',tlP:'Each row is a life: the trip, the working years and the silence. They are all still there.',today:'today',
         leg:{trip:'Trip',work:'Working years',silent:'Silent',inUse:'Still in use',now:'Today: still there'},

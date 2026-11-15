@@ -15,7 +15,7 @@ var LEARN={
              en:'As it flew past Jupiter in December 1973, its instruments measured radiation belts so strong that they caused false commands and spoiled its pictures of the moon Io. Those measurements were used to design the Voyager and Galileo spacecraft.'},
     parts:[
       {n:'AO_dish',es:{t:'Antena',d:'Un plato de 2,74 m que hablaba con la Tierra. Detrás está la caja con los instrumentos.'},en:{t:'Antenna',d:'A 2.74 m dish that talked to Earth. The box with the instruments sits behind it.'}},
-      {n:'AO_rtg',f:[1,0.5,0.5],es:{t:'Energía nuclear',d:'Van en dos brazos, lejos del cuerpo. Hacen electricidad con el calor del plutonio, porque en Júpiter la luz del Sol es muy débil para usar paneles solares.'},en:{t:'Nuclear power',d:'They sit on two arms, away from the body. They make electricity from the heat of plutonium, because at Jupiter sunlight is too weak for solar panels.'}},
+      {n:'AO_rtg',f:[1,0.5,0.5],es:{t:'Energía nuclear',d:'Van en dos brazos, lejos del cuerpo. Hacen electricidad con el calor del plutonio, porque en Júpiter la luz del Sol es muy débil para usar paneles solares.'},en:{t:'Nuclear power',d:'The power units sit on two arms, away from the body. They make electricity from the heat of plutonium, because at Jupiter sunlight is too weak for solar panels.'}},
       {tip:'AO_dish',es:{t:'Magnetómetro',d:'En la punta del brazo más largo y fino, a 6,6 m del centro, lejos del magnetismo de la propia nave.'},en:{t:'Magnetometer',d:'At the tip of the longest, thinnest arm, 6.6 m from the centre, away from the spacecraft\'s own magnetism.'}}]},
   pioneer11:{
     q:{es:{s:'Pioneer 11 midió por primera vez el campo magnético de Saturno. El de la Tierra está inclinado unos 11 grados respecto de su eje de giro.',q:'¿Cómo está inclinado el de Saturno?',
@@ -41,7 +41,7 @@ var LEARN={
              en:'After landing, its gamma-ray spectrometer sat about 10 cm above the ground and measured what Eros is made of: the first experiment of its kind on the surface of another body. Eros turned out to be like the most common stony meteorites that fall on Earth.'},
     parts:[
       {f:[0.5,0.03,0.5],es:{t:'Instrumentos',d:'En esta punta van el espectrómetro de rayos gamma, la cámara y el telémetro láser.'},en:{t:'Instruments',d:'This end holds the gamma-ray spectrometer, the camera and the laser rangefinder.'}},
-      {f:[0.5,0.7,0.2],es:{t:'Paneles solares',d:'Cuatro paneles de 1,8 por 1,2 m. NEAR fue la primera nave que usó paneles solares más allá de la órbita de Marte. Probablemente quedó apoyada sobre sus puntas.'},en:{t:'Solar panels',d:'Four panels, 1.8 by 1.2 m. NEAR was the first spacecraft to rely on solar cells beyond the orbit of Mars. It probably came to rest on their tips.'}},
+      {f:[0.5,0.7,0.2],es:{t:'Paneles solares',d:'Cuatro paneles de 1,8 por 1,2 m. NEAR fue la primera nave que usó paneles solares más allá de la órbita de Marte. Probablemente quedó apoyada sobre sus puntas.'},en:{t:'Solar panels',d:'Four panels, 1.8 by 1.2 m. NEAR was the first spacecraft to rely on solar panels beyond the orbit of Mars. It probably came to rest on their tips.'}},
       {f:[0.5,0.97,0.5],es:{t:'Antena',d:'Un plato de 1,5 m en la otra punta, para hablar con la Tierra. En su centro va el magnetómetro.'},en:{t:'Antenna',d:'A 1.5 m dish on the other end, for talking to Earth. The magnetometer sits at its centre.'}}]},
   dawn:{
     q:{es:{s:'Al acercarse a Ceres, un mundo oscuro, Dawn vio unas manchas muy brillantes dentro del cráter Occator.',q:'¿Qué eran?',
@@ -78,7 +78,7 @@ var LEARN={
     learned:{es:'Sus patas tenían amortiguadores y sensores que midieron el golpe del alunizaje, y su cámara fotografió cómo habían quedado apoyadas. Así se supo por primera vez que el suelo de la Luna podía sostener al módulo lunar de Apolo, de más de 15 toneladas.',
              en:'Its legs had shock absorbers and sensors that measured the landing, and its camera photographed how they had settled. That was the first proof that the lunar soil could hold up the Apollo lunar module, which weighed more than 15 tonnes.'},
     parts:[
-      {p:[1.775,0.08,1.025],es:{t:'Pata',d:'Una en la punta de cada una de las tres patas. Aguantaron el golpe y mostraron qué tan firme era el suelo.'},en:{t:'Footpad',d:'One at the end of each of the three legs. They took the landing shock and showed how firm the ground was.'}},
+      {p:[1.775,0.08,1.025],es:{t:'Plato de la pata',d:'Uno en la punta de cada una de las tres patas. Aguantaron el golpe y mostraron qué tan firme era el suelo.'},en:{t:'Footpad',d:'One at the end of each of the three legs. They took the landing shock and showed how firm the ground was.'}},
       {p:[0.6,1.95,0.45],es:{t:'Cámara',d:'Una cámara de televisión que sacó las 11.240 fotos, entre ellas las de su propia pata.'},en:{t:'Camera',d:'A television camera that took the 11,240 pictures, including views of its own footpad.'}},
       {p:[0.2,2.64,0],es:{t:'Panel y antena',d:'Arriba del mástil: un panel solar de 792 celdas y una antena plana que mandaba las fotos a la Tierra.'},en:{t:'Panel and antenna',d:'On top of the mast: a solar panel with 792 cells and a flat antenna that sent the pictures to Earth.'}}]},
   pathfinder:{
@@ -89,11 +89,11 @@ var LEARN={
            o:['Rolled and worn smooth in running water, long ago','Pathfinder\'s airbags hit them while bouncing','Sojourner\'s wheels ground them down'],a:0,
            x:'The pebbles are also locked inside old rocks, so they were round long before any spacecraft arrived. NASA says this suggests they formed in running water, during a warmer past on Mars.'}},
     learned:{es:'Sojourner llevaba atrás un sensor, el APXS, que apoyó contra más de 15 rocas y suelos para medir de qué estaban hechos. Algunas rocas tenían mucha sílice y resultaron distintas de los meteoritos de Marte que conocíamos en la Tierra.',
-             en:'Sojourner carried a sensor on its back, the APXS, which it held against more than 15 rocks and soils to measure what they were made of. Some rocks were rich in silica and turned out different from the Martian meteorites known on Earth.'},
+             en:'Sojourner carried a sensor at the back, the APXS, which it held against more than 15 rocks and soils to measure what they were made of. Some rocks were rich in silica and turned out different from the Martian meteorites known on Earth.'},
     parts:[
       {p:[0,1.24,0],es:{t:'Cámara',d:'En el mástil del centro. Sacó más de 16.500 fotos en color y en 3D, y ayudaba a manejar a Sojourner.'},en:{t:'Camera',d:'On the central mast. It took more than 16,500 pictures in colour and 3D, and helped steer Sojourner.'}},
       {p:[0.38,0.14,0.66],es:{t:'Pétalos solares',d:'Tres pétalos que se abrieron como una flor. Sus celdas solares daban la energía, y Sojourner bajó por una rampa desde uno de ellos.'},en:{t:'Solar petals',d:'Three petals that opened like a flower. Their solar cells gave the power, and Sojourner rolled down a ramp from one of them.'}},
-      {p:[2.4,0.42,1.6],es:{t:'Sojourner',d:'Mide 65 cm de largo. Atrás lleva el APXS, el sensor que medía la química de las rocas.'},en:{t:'Sojourner',d:'It is 65 cm long. On its back is the APXS, the sensor that measured the chemistry of the rocks.'}}]},
+      {p:[2.4,0.42,1.6],es:{t:'Sojourner',d:'Mide 65 cm de largo. Atrás lleva el APXS, el sensor que medía la química de las rocas.'},en:{t:'Sojourner',d:'It is 65 cm long. At the back is the APXS, the sensor that measured the chemistry of the rocks.'}}]},
   spirit:{
     q:{es:{s:'A Spirit se le rompió una rueda de adelante y ya no giraba: raspaba el suelo como un arado. Detrás quedó una franja de tierra muy blanca, de justo debajo de la superficie. Spirit la tocó con el sensor químico de su brazo.',q:'¿Qué era?',
            o:['Agua congelada','Sílice casi pura, el mineral del ópalo y del vidrio','Polvo nuevo que acababa de traer el viento'],a:1,
@@ -119,7 +119,7 @@ var LEARN={
     parts:[
       {f:[0.48,0.28,0.06],es:{t:'Brazo',d:'En la punta: la amoladora RAT, que raspa la roca para ver por dentro, el sensor químico, un microscopio y un espectrómetro de hierro.'},en:{t:'Arm',d:'At its tip: the RAT grinder, which scrapes rock to see inside, the chemistry sensor, a microscope and an iron spectrometer.'}},
       {f:[0.52,0.97,0.22],es:{t:'Cámaras',d:'Las cámaras a color arriba del mástil, a unos 1,5 m. Fotografiaron la veta de yeso.'},en:{t:'Cameras',d:'The colour cameras on top of the mast, about 1.5 m up. They photographed the gypsum vein.'}},
-      {f:[0.8,0.5,0.55],es:{t:'Paneles solares',d:'Le daban la energía. En 2018 una tormenta de polvo tapó el Sol y no volvió a despertar.'},en:{t:'Solar panels',d:'They gave it power. In 2018 a dust storm blocked the Sun and it never woke up again.'}}]},
+      {f:[0.8,0.5,0.55],es:{t:'Paneles solares',d:'Le daban la energía. En 2018 una tormenta de polvo tapó el Sol y no volvió a despertar.'},en:{t:'Solar panels',d:'They gave it power. In 2018 a dust storm blocked the Sun and the rover never woke up again.'}}]},
   phoenix:{
     q:{es:{s:'El brazo robótico agrandó una zanja y dejó a la vista unos trozos blancos del tamaño de un dado. Cuatro días marcianos después, la cámara volvió a mirar y varios ya no estaban.',q:'¿Qué eran?',
            o:['Cristales de sal','Hielo de agua que pasó directo a vapor','Piedritas blancas'],a:1,

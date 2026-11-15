@@ -93,7 +93,7 @@ Verificados el 15 de noviembre de 2026. Las notas completas, con las diferencias
 
 ## Máquinas sumadas del trabajo de Juan Ignacio Angeloni (`src/js/47-extra-data.js`, `src/js/48-extra.js`)
 
-Apollo 11, Viking 1, InSight e Ingenuity aparecen solo en su lugar de hoy, sin viaje desde la Tierra. Sus datos se verificaron el 15 de noviembre de 2026; las notas con las fuentes y las diferencias están en `docs/verificacion_ciencia.md`.
+Apollo 11, Viking 1, InSight e Ingenuity muestran su lanzamiento y su lugar de hoy, sin el viaje en el medio. Sus datos se verificaron el 15 de noviembre de 2026; las notas con las fuentes y las diferencias están en `docs/verificacion_ciencia.md`.
 
 - Apollo 11: 20 jul 1969 20:17:40 UT, 0,67416° N, 23,47314° E (NSSDCA). El módulo es el modelo de NASA 3D Resources; se muestra solo la etapa de descenso. El retrorreflector y el sismómetro son modelos simplificados, ubicados cerca del módulo pero no a su distancia real.
 - Viking 1: 20 jul 1976 11:53:06 UT, 22,27° N, 47,95° O (NSSDCA, planetocéntrico). Modelo de NASA 3D Resources.

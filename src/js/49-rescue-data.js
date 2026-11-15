@@ -106,7 +106,7 @@ var RESCUE = {
      {"es": "En el lado oculto", "en": "On the far side"}
     ],
     "a": 0,
-    "x": {"es": "Bajó el 20 de julio de 1969 en el Mar de la Tranquilidad. Por eso Armstrong dijo «Tranquility Base».", "en": "It landed on July 20, 1969 in the Sea of Tranquility. That is why Armstrong said “Tranquility Base”."},
+    "x": {"es": "Bajó el 20 de julio de 1969 en el Mar de la Tranquilidad. Por eso Armstrong dijo «Tranquility Base».", "en": "It landed on 20 July 1969 in the Sea of Tranquility. That is why Armstrong said “Tranquility Base”."},
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
    },
    {
@@ -135,7 +135,7 @@ var RESCUE = {
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
    },
    {
-    "h": {"es": "21 de julio de 1969", "en": "July 21, 1969"},
+    "h": {"es": "21 de julio de 1969", "en": "21 July 1969"},
     "text": {"es": "Mi etapa de ascenso despegó de la Luna y se reunió con la nave principal.", "en": "My ascent stage lifted off the Moon and rejoined the main ship."},
     "scene": 4,
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
@@ -148,7 +148,7 @@ var RESCUE = {
    },
    {
     "h": {"es": "4,2 m de ancho", "en": "4.2 m across"},
-    "text": {"es": "El tamaño de la etapa que quedó, con sus cuatro patas.", "en": "The size of the stage that stayed, with its four legs."},
+    "text": {"es": "El ancho de la etapa que quedó, sin contar sus cuatro patas.", "en": "The width of the stage that stayed, not counting its four legs."},
     "scene": 5,
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
    }
@@ -157,7 +157,7 @@ var RESCUE = {
    {
     "name": {"es": "Etapa de ascenso", "en": "Ascent stage"},
     "what": {"es": "La cabina de los dos astronautas, con su propio motor para volver a la órbita.", "en": "The two astronauts' cabin, with its own engine to return to orbit."},
-    "found": {"es": "Despegó el 21 de julio de 1969. No se sabe dónde terminó.", "en": "It lifted off on July 21, 1969. Nobody knows where it ended up."},
+    "found": {"es": "Despegó el 21 de julio de 1969. No se sabe dónde terminó.", "en": "It lifted off on 21 July 1969. Nobody knows where it ended up."},
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C"
    },
    {
@@ -350,13 +350,13 @@ var RESCUE = {
      {"es": "Una tormenta de polvo dejó sin luz a sus paneles solares", "en": "A dust storm left its solar panels without light"}
     ],
     "a": 2,
-    "x": {"es": "Una tormenta de polvo cubrió el cielo. Su última comunicación fue el 10 de junio de 2018.", "en": "A dust storm covered the sky. Its last communication was on June 10, 2018."},
+    "x": {"es": "Una tormenta de polvo cubrió el cielo. Su última comunicación fue el 10 de junio de 2018.", "en": "A dust storm covered the sky. Its last communication was on 10 June 2018."},
     "src": "https://science.nasa.gov/mission/mer-opportunity/"
    }
   ],
   "facts": [
    {
-    "h": {"es": "7 de julio de 2003", "en": "July 7, 2003"},
+    "h": {"es": "7 de julio de 2003", "en": "7 July 2003"},
     "text": {"es": "Despegué de Cabo Cañaveral en un cohete Delta II.", "en": "I lifted off from Cape Canaveral on a Delta II rocket."},
     "scene": 1,
     "src": "https://science.nasa.gov/mission/mer-opportunity/",
@@ -369,7 +369,7 @@ var RESCUE = {
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2003-027A"
    },
    {
-    "h": {"es": "24 de enero de 2004", "en": "January 24, 2004"},
+    "h": {"es": "24 de enero de 2004", "en": "24 January 2004"},
     "text": {"es": "Aterricé en Meridiani Planum, cerca del ecuador de Marte.", "en": "I landed on Meridiani Planum, near the Martian equator."},
     "scene": 2,
     "src": "https://science.nasa.gov/mission/mer-opportunity/",
@@ -389,7 +389,7 @@ var RESCUE = {
     "src": "https://mars.nasa.gov/mer/mission/science/results/"
    },
    {
-    "h": {"es": "13 de febrero de 2019", "en": "February 13, 2019"},
+    "h": {"es": "13 de febrero de 2019", "en": "13 February 2019"},
     "text": {"es": "NASA dio la misión por terminada. Duré 60 veces más de lo previsto.", "en": "NASA declared the mission over. I lasted 60 times longer than planned."},
     "scene": 4,
     "src": "https://science.nasa.gov/mission/mer-opportunity/"
@@ -411,7 +411,7 @@ var RESCUE = {
    {
     "name": {"es": "Antenas", "en": "Antennas"},
     "what": {"es": "Con ellas recibía órdenes y mandaba fotos y datos a la Tierra.", "en": "With them I received commands and sent photos and data to Earth."},
-    "found": {"es": "Mi última comunicación llegó el 10 de junio de 2018.", "en": "My last communication arrived on June 10, 2018."},
+    "found": {"es": "Mi última comunicación llegó el 10 de junio de 2018.", "en": "My last communication arrived on 10 June 2018."},
     "src": "https://science.nasa.gov/mission/mer-opportunity/"
    }
   ]
@@ -615,7 +615,7 @@ var RESCUE = {
   ],
   "facts": [
    {
-    "h": {"es": "2 de marzo de 1972", "en": "March 2, 1972"},
+    "h": {"es": "2 de marzo de 1972", "en": "2 March 1972"},
     "text": {"es": "Despegué de Cabo Cañaveral en un cohete Atlas-Centaur.", "en": "I lifted off from Cape Canaveral on an Atlas-Centaur rocket."},
     "scene": 1,
     "src": "https://science.nasa.gov/mission/pioneer-10/",
@@ -628,13 +628,13 @@ var RESCUE = {
     "src": "https://science.nasa.gov/mission/pioneer-10/"
    },
    {
-    "h": {"es": "15 de julio de 1972", "en": "July 15, 1972"},
+    "h": {"es": "15 de julio de 1972", "en": "15 July 1972"},
     "text": {"es": "Entré al cinturón de asteroides. Salí en febrero de 1973.", "en": "I entered the asteroid belt. I came out in February 1973."},
     "scene": 2,
     "src": "https://science.nasa.gov/mission/pioneer-10/"
    },
    {
-    "h": {"es": "4 de diciembre de 1973", "en": "December 4, 1973"},
+    "h": {"es": "4 de diciembre de 1973", "en": "4 December 1973"},
     "text": {"es": "Mi punto más cercano a Júpiter: unos 200.000 km.", "en": "My closest point to Jupiter: about 200,000 km."},
     "scene": 2,
     "src": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-012A",

@@ -9,15 +9,15 @@ var LX={m:null,R:null,seq:null,T:[],k:-1,tau:0,az:0.75,el:0.1,zoom:1,dist:120,tg
   debris:[],flames:[],dropped:{},pend:null,ready:false};
 var LX_R=6371000;
 var LX_STR={
-  es:{chap:'Lanzamiento',fates:'Qué pasó con cada parte',rocket:'El cohete',tall:'{h} m de alto',since:'En uso desde {y}',
+  es:{chap:'Lanzamiento',fates:'Qué pasó con cada parte',rocket:'El cohete',tall:'{h} m de alto',since:'Primer vuelo: {y}',
       illus:'Animación ilustrativa. Los tiempos T+ son los reales; la subida y los tamaños están ajustados para que se vea.',
       drag:'Arrastrá para girar. Rueda para acercar.',later:'Más tarde',tplus:'T+',alt:'Altura',spd:'Velocidad',km:'km',kmh:'km/h',onpad:'En la plataforma',
       where:{ocean:'cayó al mar',burned:'se quemó al volver a entrar en el aire',earthOrbit:'quedó en órbita de la Tierra',sunOrbit:'quedó en órbita del Sol',
         moonImpact:'chocó contra la Luna',onMoon:'quedó en la Luna',moonOrbit:'quedó en órbita de la Luna',marsImpact:'chocó contra Marte',onMars:'quedó en Marte',
         marsAtmosphere:'se quemó al entrar en Marte',unknown:'no se sabe dónde terminó'},
       left:'También quedaron por ahí'},
-  en:{chap:'Launch',fates:'What happened to each part',rocket:'The rocket',tall:'{h} m tall',since:'In use since {y}',
-      illus:'Illustrative animation. T+ times are the real ones; the climb and sizes are adjusted so you can see.',
+  en:{chap:'Launch',fates:'What happened to each part',rocket:'The rocket',tall:'{h} m tall',since:'First flight: {y}',
+      illus:'Illustrative animation. The T+ times are real. The climb and the sizes are adjusted so you can see everything.',
       drag:'Drag to turn. Scroll to zoom.',later:'Later',tplus:'T+',alt:'Altitude',spd:'Speed',km:'km',kmh:'km/h',onpad:'On the pad',
       where:{ocean:'fell into the sea',burned:'burned up coming back into the air',earthOrbit:'stayed in orbit around Earth',sunOrbit:'stayed in orbit around the Sun',
         moonImpact:'crashed into the Moon',onMoon:'stayed on the Moon',moonOrbit:'stayed in orbit around the Moon',marsImpact:'crashed into Mars',onMars:'stayed on Mars',

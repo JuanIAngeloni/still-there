@@ -622,7 +622,7 @@
           },
           "text": {
             "es": "Los seis cohetes se apagan a los 63,1 segundos. A los 65,5 se encienden los otros tres y enseguida los seis vacíos se sueltan, de a tres. En general, en los Delta II estas piezas caen al océano.",
-            "en": "The six boosters burn out at 63.1 seconds. At 65.5 the other three light up and right after the six empty ones drop away, three at a time. In general, on a Delta II these pieces fall into the ocean."
+            "en": "The six boosters burn out at 63.1 seconds. At 65.5 the other three light up. Right after that, the six empty ones drop away, three at a time. In general, on a Delta II these pieces fall into the ocean."
           },
           "drop": [
             "srbGround"

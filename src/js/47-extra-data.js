@@ -6,7 +6,7 @@ var NEW_MACHINES = {
     site: [0.67416, 23.47314],
     silent: {
       es: 'Última señal: agosto de 1969. El sismómetro dejó de responder a las órdenes el 27 de agosto. El espejo no usa energía y se sigue usando.',
-      en: "Last signal: August 1969. The seismometer stopped answering commands on August 27. The mirror needs no power and is still in use."
+      en: "Last signal: August 1969. The seismometer stopped answering commands on 27 August. The mirror needs no power and is still in use."
     },
     lastYear: 1969,
     place: { es: 'Mar de la Tranquilidad (Base Tranquilidad), Luna', en: 'Sea of Tranquility (Tranquility Base), Moon' },
@@ -55,7 +55,7 @@ var NEW_MACHINES = {
     ],
     audio: {
       es: 'Neil Armstrong por radio a Houston, el 20 de julio de 1969, unos 18 segundos después de posarse en la Luna: «Houston, Tranquility Base here. The Eagle has landed». Está en inglés.',
-      en: "Neil Armstrong radioing Houston on July 20, 1969, about 18 seconds after touching down on the Moon: “Houston, Tranquility Base here. The Eagle has landed.”"
+      en: "Neil Armstrong radioing Houston on 20 July 1969, about 18 seconds after touching down on the Moon: “Houston, Tranquility Base here. The Eagle has landed.”"
     }
   },
 
@@ -89,7 +89,7 @@ var NEW_MACHINES = {
         x: 'El centro de la foto está a unos 1,4 m de la cámara. Se ven piedras, arena y polvo, y a la derecha el plato de una de sus patas, con un poco de polvo que cayó al aterrizar.'
       },
       en: {
-        s: "July 20, 1976. Viking 1 has just touched down on Mars. Just 25 seconds later, its camera starts sending the first picture ever taken on the surface of Mars.",
+        s: "20 July 1976. Viking 1 has just touched down on Mars. Just 25 seconds later, its camera starts sending the first picture ever taken on the surface of Mars.",
         q: "What does that first picture show?",
         o: ['The ground right next to it: rocks, dust and one of its own feet', 'A faraway landscape with mountains on the horizon', 'The Martian sky with the Sun'],
         a: 0,
@@ -106,7 +106,7 @@ var NEW_MACHINES = {
         en: { t: 'Sampler arm', d: "It dug up soil with a small scoop and carried it to the labs inside the lander." } },
       { where: 'Two upright cylinders standing on top of the base, near one of its long sides.',
         es: { t: 'Dos cámaras', d: 'Giraban para fotografiar todo alrededor. Con ellas llegó la primera foto tomada en el suelo de Marte.' },
-        en: { t: 'Two cameras', d: "They turned to photograph all the way around. They sent the first picture taken on the ground of Mars." } },
+        en: { t: 'Two cameras', d: "They turned to photograph all the way around. They sent the first picture taken on the surface of Mars." } },
       { where: 'The round dish on a short pole near one edge of the base.',
         es: { t: 'Antena parabólica', d: 'Se podía orientar hacia la Tierra para mandar datos y recibir órdenes.' },
         en: { t: 'Dish antenna', d: "It could be pointed at Earth to send data and receive commands." } }
@@ -118,7 +118,7 @@ var NEW_MACHINES = {
     site: [4.502, 135.623],
     silent: {
       es: 'Última señal: 15 de diciembre de 2022. El polvo sobre sus paneles solares fue dejando sin energía a sus baterías.',
-      en: "Last signal: December 15, 2022. Dust on its solar panels slowly left its batteries without power."
+      en: "Last signal: 15 December 2022. Dust built up on its solar panels until its batteries ran out of power."
     },
     lastYear: 2022,
     place: { es: 'Elysium Planitia, Marte', en: 'Elysium Planitia, Mars' },
@@ -130,7 +130,7 @@ var NEW_MACHINES = {
       ],
       en: [
         "It recorded 1,319 marsquakes.",
-        "On May 4, 2022 it detected a magnitude 5 quake: the largest measured on another planet up to then.",
+        "On 4 May 2022 it detected a magnitude 5 quake: the largest measured on another planet up to then.",
         "Each of its two round solar panels is 2.2 m across."
       ]
     },
@@ -143,7 +143,7 @@ var NEW_MACHINES = {
         x: 'El suelo de ese lugar se pegaba en terrones y el topo no lograba avanzar. Quedó apenas debajo de la superficie, pero igual midió cómo el suelo guarda y conduce el calor.'
       },
       en: {
-        s: "InSight's heat probe, nicknamed “the mole”, was a 40 cm spike that hammered itself into the ground. The plan was to reach 5 m deep to measure the heat coming out of the inside of Mars.",
+        s: "InSight's heat probe, nicknamed “the mole”, was a 40 cm spike that hammered itself into the ground. The plan was to reach 5 m deep to measure the heat coming from inside Mars.",
         q: "What happened when it tried?",
         o: ['It reached 5 m with no trouble', 'It hit a layer of ice and broke', 'The soil stuck together in clumps and it ended up just under the surface'],
         a: 2,
@@ -172,7 +172,7 @@ var NEW_MACHINES = {
     site: [18.44, 77.45],
     silent: {
       es: 'Último vuelo: 18 de enero de 2024. En ese vuelo se rompieron sus palas y ya no pudo volar más.',
-      en: "Last flight: January 18, 2024. Its rotor blades broke on that flight and it could never fly again."
+      en: "Last flight: 18 January 2024. Its rotor blades broke on that flight and it could never fly again."
     },
     lastYear: 2024,
     place: { es: 'Cráter Jezero, Marte (en un lugar apodado Valinor Hills)', en: 'Jezero crater, Mars (at a spot nicknamed Valinor Hills)' },
@@ -184,8 +184,8 @@ var NEW_MACHINES = {
       ],
       en: [
         "It made 72 flights, when it was planned for up to 5 test flights.",
-        "In total it flew 17 km for more than 2 hours, and climbed as high as 24 m.",
-        "Its first flight, on April 19, 2021, lasted 39.1 seconds at 3 m high."
+        "In total it flew 17 km, spent more than 2 hours in the air and climbed as high as 24 m.",
+        "Its first flight, on 19 April 2021, lasted 39.1 seconds at a height of 3 m."
       ]
     },
     q: {

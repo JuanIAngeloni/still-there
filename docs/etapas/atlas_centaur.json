@@ -24,7 +24,7 @@
       "firstYear": 1972,
       "blurb": {
         "es": "En 1972 voló por primera vez con una tercera etapa TE-M-364-4: un motor de combustible sólido que giraba como un trompo y dio a la Pioneer 10 unos 51.800 km/h, más que ninguna nave anterior.",
-        "en": "In 1972 it flew for the first time with a TE-M-364-4 third stage: a solid-fuel motor that spun like a top and gave Pioneer 10 about 51,800 km/h, more than any spacecraft before it."
+        "en": "In 1972 it flew for the first time with a TE-M-364-4 third stage: a solid-fuel motor that spun like a top and pushed Pioneer 10 to about 51,800 km/h, faster than any spacecraft before it."
       },
       "src": "https://ntrs.nasa.gov/api/citations/19730011461/downloads/19730011461.pdf"
     }
@@ -44,7 +44,7 @@
           },
           "text": {
             "es": "El Atlas-Centaur AC-10 espera en la plataforma 36A de Cabo Kennedy (hoy Cabo Cañaveral). Mide 34 metros y pesa unas 137 toneladas. Tras varios vuelos de prueba, este es su primer trabajo de verdad: llevar a Surveyor 1.",
-            "en": "Atlas-Centaur AC-10 waits on pad 36A at Cape Kennedy (now Cape Canaveral). It is 34 meters tall and weighs about 137 metric tons. After several test flights, this is its first real job: carrying Surveyor 1."
+            "en": "Atlas-Centaur AC-10 waits on pad 36A at Cape Kennedy (now Cape Canaveral). It is 34 metres tall and weighs about 137 metric tons. After several test flights, this is its first real job: carrying Surveyor 1."
           },
           "src": "https://ntrs.nasa.gov/api/citations/19680014866/downloads/19680014866.pdf"
         },
@@ -626,7 +626,7 @@
           },
           "text": {
             "es": "A los 705 segundos el Centaur se apaga. La tercera etapa empieza a girar como un trompo y, a los 778 segundos, el Centaur la suelta y se aparta soltando helio. Quedó en una órbita alargada alrededor de la Tierra.",
-            "en": "At 705 seconds the Centaur shuts down. The third stage starts spinning like a top and, at 778 seconds, the Centaur lets it go and backs away by venting helium. It was left in a stretched orbit around Earth."
+            "en": "At 705 seconds the Centaur shuts down. The third stage starts spinning like a top and, at 778 seconds, the Centaur lets it go and backs away by venting helium. The Centaur was left in a stretched orbit around Earth."
           },
           "drop": [
             "stage2"

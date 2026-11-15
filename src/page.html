@@ -610,7 +610,7 @@ function hide(c,on){c.el.classList.toggle('is-hidden',on);c.path.style.opacity=o
 function applyLang(){
   /* el sitio ya trae sus dos idiomas: se le dice al navegador cuál está en pantalla y que no ofrezca traducirlo */
   document.documentElement.lang=lang;document.documentElement.setAttribute('translate','no');
-  document.documentElement.lang=lang;
+  document.title=lang==='es'?'Siguen ahí':'Still There';
   var nodes=document.querySelectorAll('[data-i18n]');
   for(var i=0;i<nodes.length;i++)nodes[i].textContent=t(nodes[i].getAttribute('data-i18n'));
   $('#langEs').setAttribute('aria-pressed',String(lang==='es'));$('#langEn').setAttribute('aria-pressed',String(lang==='en'));

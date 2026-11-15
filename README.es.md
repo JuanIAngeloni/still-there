@@ -2,7 +2,9 @@
 
 NASA Space Apps Challenge 2026, Salta. Desafío: *Abandoned but not Forgotten: Storytelling about NASA's Discarded Equipment on the Moon and Mars*.
 
-**Siguen ahí: las misiones de NASA a través del tiempo.** Catorce máquinas que NASA dejó en la Luna, en Marte y más lejos, cada una contada como una misión completa que se recorre en 3D: el despegue, el viaje, la llegada y dónde está hoy.
+**Siguen ahí: las misiones de NASA a través del tiempo.** Catorce máquinas que NASA dejó en la Luna, en Marte y más lejos, cada una contada como una misión que se recorre en 3D. Las catorce muestran el despegue y dónde está la máquina hoy; diez muestran también el viaje y la llegada.
+
+**Sitio:** https://ginomoretta-creator.github.io/siguen-ahi/ (copia: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce).
 
 Versión en inglés: [README.md](README.md).
 
@@ -22,6 +24,7 @@ Español e inglés. El idioma se elige según el navegador; con `?lang=en` o `?l
 - **Cohetes.** El Delta II y el Atlas V son los modelos 3D de NASA (NASA VTAD), que ya vienen separados por etapa, con la cofia en dos mitades y los propulsores sueltos. El Saturn V, el Titan IIIE-Centaur y el Atlas-Centaur no tienen un modelo oficial separable por etapas: están armados en código con medidas reales.
 - **Naves.** Modelos 3D de NASA para Spirit y Opportunity, InSight, Viking 1, Ingenuity, el módulo lunar de Apollo, Pioneer 10 y 11, NEAR Shoemaker, Dawn y Kepler. Surveyor 1, Phoenix y Mars Pathfinder con Sojourner son modelos simplificados armados en código.
 - **Tiempos y destinos.** Los tiempos T+ y el destino de cada etapa salen de informes de prensa y de vuelo de NASA y de los fabricantes. Donde no encontramos el tiempo real de un paso, el reloj no se muestra.
+- **Qué falta.** Apollo 11, Viking 1, InSight e Ingenuity muestran el despegue y la máquina hoy, sin el viaje en el medio.
 - **Qué es ilustrativo.** La curva de subida del lanzamiento, la entrada en Marte y los descensos son animaciones, no telemetría. El sitio lo dice en pantalla.
 
 ## Cómo se arma
