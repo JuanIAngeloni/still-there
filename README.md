@@ -6,7 +6,9 @@ NASA Space Apps Challenge 2026, Salta (Argentina). Challenge: *Abandoned but not
 
 **Live site:** https://ginomoretta-creator.github.io/siguen-ahi/ (the language follows your browser; add `?lang=en` or `?lang=es` to force one).
 
-Mirror: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce
+**Demo video (30 s):** https://ginomoretta-creator.github.io/siguen-ahi/demo/
+
+Mirror of the site: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce
 
 Spanish version of this file: [README.es.md](README.es.md).
 

@@ -6,6 +6,8 @@ NASA Space Apps Challenge 2026, Salta. Desafío: *Abandoned but not Forgotten: S
 
 **Sitio:** https://ginomoretta-creator.github.io/siguen-ahi/ (copia: https://claude.ai/artifact/KrPXM6Gs7519FPneE5Ftce).
 
+**Video de demostración (30 s):** https://ginomoretta-creator.github.io/siguen-ahi/demo/
+
 Versión en inglés: [README.md](README.md).
 
 ## Qué se puede hacer
