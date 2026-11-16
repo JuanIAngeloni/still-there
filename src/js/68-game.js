@@ -200,7 +200,7 @@ function mgPlay(){
   var rail=add(b1,'div','mg-rail'),cur=MG_PHASES.indexOf(ev.phase);
   MG_PHASES.forEach(function(ph,k){if(!MG.evs.some(function(e){return e.phase===ph;}))return;var s=add(rail,'span','mg-ph'+(k<cur?' is-done':(k===cur?' is-on':'')));s.textContent=mgt('phase')[ph];});
   var b2=add(side,'div','mg-box');add(b2,'p','mg-k').textContent=mgt('systems');var sy=add(b2,'div','mg-sys'),seen={};
-  MG.evs.forEach(function(e){if(seen[e.sys])return;seen[e.sys]=1;var fault=e===ev&&alert;
+  MG.evs.forEach(function(e){if(seen[e.sys])return;seen[e.sys]=1;var fault=e.sys===ev.sys&&alert;
     var c=add(sy,'div','mg-chip'+(fault?' is-fault':(MG.fixed[e.sys]==='fixed'?' is-fixed':'')));add(c,'span','').textContent=mgt('sys')[e.sys];
     add(c,'b','').textContent=fault?mgt('fault'):(MG.fixed[e.sys]==='fixed'?mgt('fixed'):mgt('ok'));});
   var b3=add(side,'div','mg-box'),hv=add(b3,'div','mg-hv');add(hv,'span','mg-k').textContent=mgt('health');add(hv,'b','').textContent=MG.health+' %';
