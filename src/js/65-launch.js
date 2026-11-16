@@ -57,7 +57,12 @@ function lxTimes(steps){var T=steps.map(function(s){return typeof s.t==='number'
   return T;}
 /* curva ilustrativa de la subida: altura (m), inclinación (rad) y giro de la Tierra bajo el cohete (rad) */
 function lxSmooth(x){x=clamp(x,0,1);return x*x*(3-2*x);}
-function lxAlt(t){if(t<=0)return 0;var h=200000*(1-Math.exp(-Math.pow(t/270,2)));if(t>600)h+=Math.min(3.2e6,(t-600)*700);return h;}
+/* altura: sube a una órbita baja (~200 km) y se queda ahí hasta el encendido que saca a la nave de la Tierra (el paso anterior
+   a la separación). Desde ese momento se aleja por una trayectoria de escape, así la Tierra se ve cada vez más chica. */
+function lxAlt(t){if(t<=0)return 0;var h=200000*(1-Math.exp(-Math.pow(t/270,2))),ti=LX.tInj;
+  /* parábola de escape con perigeo en la órbita baja (ecuación de Barker): r = rp·(1+D²), D³/3 + D = √(μ/2rp³)·Δt */
+  if(ti!=null&&t>ti){var rp=LX_R+h,M=Math.sqrt(3.986e14/(2*rp*rp*rp))*(t-ti),z=Math.pow(1.5*M+Math.sqrt(2.25*M*M+1),1/3),D=z-1/z;h=rp*(1+D*D)-LX_R;}
+  return h;}
 function lxPitch(t){return 1.5*lxSmooth((t-14)/330);}
 function lxDown(t){if(t<=12)return 0;if(t<264)return 4.0e5*Math.pow((t-12)/252,2.6);return 4.0e5+7500*(t-264);}
 function lxTurn(t){return lxDown(t)/LX_R;}
@@ -159,7 +164,7 @@ function lxBuild(m){
   if(LX.R){LX.fg.remove(LX.R.root);LX.R=null;}
   lxClearDebris();
   var key=lxKey(m),glb=typeof ROCKET_GLB!=='undefined'&&ROCKET_GLB&&ROCKET_GLB[key],sync=true;
-  LX.m=m;LX.seq=LAUNCH_SEQ[m.id];LX.T=lxTimes(LX.seq.steps);LX.dropped={};LX.ready=false;LX.k=-1;LX.loading=m;
+  LX.m=m;LX.seq=LAUNCH_SEQ[m.id];LX.T=lxTimes(LX.seq.steps);LX.tInj=LX.T.length>2?LX.T[LX.T.length-2]:null;LX.dropped={};LX.ready=false;LX.k=-1;LX.loading=m;
   function go(R){if(LX.loading!==m)return;LX.loading=null;lxBuilt(m,key,R);
     if(!sync&&JR.active&&JR.m===m){var s=JR.segs[JR.si];if(s&&s.launch)lxEnter(s);}}
   if(glb){
@@ -472,6 +477,8 @@ function lxFrame(s,dt){
   if(JE.date.textContent!==txt)JE.date.textContent=txt;
   /* cámara: sigue al centro de lo que queda del cohete */
   if(!LX.user&&!reduce&&!jdrag)LX.az+=dt*0.035;
+  /* lejos de la Tierra la cámara mira desde arriba, para que el planeta quede a la vista detrás de la nave */
+  if(!LX.user&&!jdrag){var elW=0.1+1.15*lxSmooth((h-1.5e6)/1.2e7);LX.el+=(elW-LX.el)*(Math.min(1,dt*2.5)||1);}
   R.root.updateMatrixWorld(true);var c=_lxV.copy(LX.ctr).applyMatrix4(R.root.matrixWorld);
   LX.tgt.lerp(c,Math.min(1,dt*3)||1);var want=LX.rad*3.3*LX.zoom;LX.dist+=(want-LX.dist)*(Math.min(1,dt*3.5)||1);
   lxRender();
