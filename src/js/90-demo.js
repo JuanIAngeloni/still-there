@@ -67,14 +67,9 @@
     mark('cruise');var i=seg('viaje');if(i>=0)jumpTo(i);
     chain([[2000,function(){mark('today');var j=seg('hoy');if(j>=0)jumpTo(j);today();}]]);
   }
-  /* la máquina hoy: la pregunta, la respuesta, dos piezas y lo que quedó tirado */
+  /* la máquina hoy: dos piezas y lo que quedó tirado */
   function today(){
-    var box=document.querySelector('.jr-card'),L=LEARN[id],Q=L&&L.q&&L.q[lang];
-    var steps=[];
-    if(Q&&box.querySelector('.jr-opt')){
-      steps.push([1100,function(){var o=box.querySelectorAll('.jr-opt');if(o[Q.a])o[Q.a].click();}]);
-      steps.push([1300,function(){var go=box.querySelector('.jr-go');if(go)go.click();mark('card');}]);
-    }else steps.push([900,function(){mark('card');}]);
+    var box=document.querySelector('.jr-card'),steps=[[900,function(){mark('card');}]];
     steps.push([1100,function(){selectPart(0);}]);
     steps.push([1400,function(){selectPart(1);}]);
     steps.push([1400,function(){var ul=box.querySelector('.lx-left');if(ul&&ul.previousElementSibling)glideEl(box,Math.max(0,topIn(ul.previousElementSibling,box)-14),700);}]);

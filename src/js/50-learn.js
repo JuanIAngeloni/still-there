@@ -1,7 +1,7 @@
 /* ---------- aprender: elegir una máquina, adivinar antes de mirar y conocer sus piezas ---------- */
 var LS_STR={
-  es:{pick:'Elegí una máquina',since:'En silencio desde {y}',off:'Apagado en {y}',guess:'Antes de mirar, adiviná',seeIt:'Ver qué quedó →',
-      right:'¡Sí!',wrong:'No era eso.',learned:'Qué aprendimos',parts:'Tocá una pieza',more:'Más datos',nextTo:'Siguiente: {c} ›',
+  es:{pick:'Elegí una máquina',since:'En silencio desde {y}',off:'Apagado en {y}',
+      learned:'Qué aprendimos',parts:'Tocá una pieza',more:'Más datos',nextTo:'Siguiente: {c} ›',
       credits:'Créditos',close:'Cerrar',
       where:{moon:'Luna',mars:'Marte',eros:'Asteroide Eros',ceres:'Ceres',sun:'Alrededor del Sol',deep:'Espacio profundo'},
       cr:['<h2>Créditos</h2>',
@@ -16,8 +16,8 @@ var LS_STR={
           '<p><b>Biblioteca:</b> three.js (licencia MIT).</p>',
           '<p><b>Aclaración:</b> este proyecto se hizo en la hackatón NASA Space Apps. NASA no lo patrocina ni lo avala.</p>',
           '<p class="cr-f">Hecho en NASA Space Apps Challenge 2026, Salta.</p>'].join('')},
-  en:{pick:'Pick a machine',since:'Silent since {y}',off:'Switched off in {y}',guess:'Before you look, guess',seeIt:'See what was left →',
-      right:'Yes!',wrong:'Not quite.',learned:'What we learned',parts:'Tap a part',more:'More facts',nextTo:'Next: {c} ›',
+  en:{pick:'Pick a machine',since:'Silent since {y}',off:'Switched off in {y}',
+      learned:'What we learned',parts:'Tap a part',more:'More facts',nextTo:'Next: {c} ›',
       credits:'Credits',close:'Close',
       where:{moon:'Moon',mars:'Mars',eros:'Asteroid Eros',ceres:'Ceres',sun:'Around the Sun',deep:'Deep space'},
       cr:['<h2>Credits</h2>',
@@ -56,13 +56,6 @@ function lt(k){return LS_STR[lang][k];}
 '.jr-card{max-height:calc(100% - 200px);overflow:auto}'+
 '.jr-card h3{margin:6px 0 0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);font-weight:500}'+
 '.jr-card .lrn{margin:0;font-size:15px;line-height:1.45}'+
-'.jr-setup{margin:0;font-size:14.5px;line-height:1.45;color:var(--fg)}.jr-card h2.jr-qq{font-size:clamp(19px,2.2vw,23px);line-height:1.2;letter-spacing:-.01em}'+
-'.jr-opts{display:grid;gap:6px;margin-top:4px}'+
-'.jr-opt{font:inherit;font-size:14px;line-height:1.35;text-align:left;color:var(--fg);background:rgba(255,255,255,.04);border:1px solid var(--line-strong);border-radius:9px;padding:9px 12px;cursor:pointer}'+
-'.jr-opt:hover:not(:disabled){border-color:var(--fg);background:rgba(255,255,255,.08)}.jr-opt:disabled{cursor:default;opacity:.7}'+
-'.jr-opt.is-right{opacity:1;border-color:#7fd49a;background:rgba(127,212,154,.16)}.jr-opt.is-wrong{opacity:1;border-color:#e48a7a;background:rgba(228,138,122,.13)}'+
-'.jr-ans{margin:2px 0 0;font-size:14.5px;line-height:1.45}.jr-ans b{font-weight:600}'+
-'.jr-go{justify-self:start;margin-top:4px}'+
 '.jr-parts{display:flex;flex-wrap:wrap;gap:6px}'+
 '.jr-part{font:inherit;font-size:13px;color:var(--fg);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:4px 11px 4px 5px;display:inline-flex;gap:7px;align-items:center;cursor:pointer}'+
 '.jr-part b,.jr-mk{width:21px;height:21px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:700;background:var(--accent);color:var(--space);font-family:var(--font-ui)}'+
@@ -135,23 +128,11 @@ var PICK_H=0;function pickSize(){PICK_H=pickEl.offsetHeight+10;}
 learnTexts();pickSize();$('#langEs').addEventListener('click',function(){learnTexts();pickSize();});$('#langEn').addEventListener('click',function(){learnTexts();pickSize();});
 window.addEventListener('resize',pickSize);if(window.ResizeObserver)new ResizeObserver(pickSize).observe(pickEl);
 
-/* ---------- tarjeta de Hoy: primero una pregunta, después la máquina y sus piezas ---------- */
-var LQ={answered:{},step:'q',part:-1,pick:-1};
+/* ---------- tarjeta de Hoy: la máquina, qué aprendimos y sus piezas ---------- */
+var LQ={step:'card',part:-1};
 var jMarks=add(jr,'div','jr-marks');jr.insertBefore(jMarks,JE.card);
 function learnCard(){
-  var L=LEARN[JR.m.id];JE.cap.textContent='';
-  if(L&&L.q&&!LQ.answered[JR.m.id]){LQ.step='q';renderQuestion(L);}else{LQ.step='card';renderMachine(L);}
-}
-function renderQuestion(L){
-  var c=JE.card,Q=L.q[lang];c.innerHTML='';LQ.part=-1;
-  add(c,'p','k').textContent=lt('guess');if(Q.s)add(c,'p','jr-setup').textContent=Q.s;add(c,'h2','jr-qq').textContent=Q.q;
-  var ops=add(c,'div','jr-opts'),ans=add(c,'p','jr-ans'),go=add(c,'button','jr-btn is-main jr-go');ans.hidden=true;go.hidden=true;go.type='button';go.textContent=lt('seeIt');
-  var bs=Q.o.map(function(o,i){var b=add(ops,'button','jr-opt');b.type='button';b.textContent=o;
-    b.addEventListener('click',function(){LQ.pick=i;bs.forEach(function(x,j){x.disabled=true;if(j===Q.a)x.classList.add('is-right');else if(j===i)x.classList.add('is-wrong');});
-      ans.innerHTML='';add(ans,'b','').textContent=(i===Q.a?lt('right'):lt('wrong'))+' ';ans.appendChild(document.createTextNode(Q.x));ans.hidden=false;go.hidden=false;go.focus();});
-    return b;});
-  go.addEventListener('click',function(){LQ.answered[JR.m.id]=1;LQ.step='card';renderMachine(L);});
-  c.scrollTop=0;
+  var L=LEARN[JR.m.id];JE.cap.textContent='';LQ.step='card';renderMachine(L);
 }
 function renderMachine(L){
   var c=JE.card,m=JR.m,X=JR.x;c.innerHTML='';markVisited(m.id);
