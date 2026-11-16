@@ -502,7 +502,12 @@ function lxTexts(){
   JE.cap.textContent='';
   JE.day.textContent=fmtDate(m.launch,lang)+(LX.seq.pad?' · '+LX.seq.pad:'');
   JE.note.textContent=lxt('illus')+(LX.skyV?' '+lxt('sky'):'');
-  var tele=jr.querySelector('.jr-tele'),has=typeof st.alt_km==='number'||typeof st.speed_kmh==='number';tele.hidden=!has;
+  var tele=jr.querySelector('.jr-tele'),has=true;tele.hidden=false;
+  /* además de la altura y la velocidad del paso (cuando NASA las publicó): distancia al Sol en el minuto del despegue y la etapa */
+  var sk=typeof LAUNCH_SKY!=='undefined'&&LAUNCH_SKY&&LAUNCH_SKY[m.id],sd=sk&&sk.sun?Math.sqrt(sk.sun[0]*sk.sun[0]+sk.sun[1]*sk.sun[1]+sk.sun[2]*sk.sun[2]):0;
+  JE.t4.textContent=jt('fromSun');JE.v4.innerHTML=sd?fmt(Math.round(sd))+'<em>'+lxt('km')+'</em>':'';JE.t4.parentNode.hidden=!sd;
+  JE.t6.textContent=jt('phase');JE.v6.textContent=(jt('chap').lanzamiento||'')+' · '+(LX.k+1)+' / '+LX.seq.steps.length;JE.t6.parentNode.hidden=false;
+  JE.t5.parentNode.hidden=true;JE.t7.parentNode.hidden=true;
   if(has){JE.t1.textContent=lxt('alt');JE.v1.innerHTML=typeof st.alt_km==='number'?fmt(st.alt_km)+'<em>'+lxt('km')+'</em>':'';JE.t1.parentNode.hidden=typeof st.alt_km!=='number';
     JE.t2.textContent=lxt('spd');JE.v2.innerHTML=typeof st.speed_kmh==='number'?fmt(st.speed_kmh)+'<em>'+lxt('kmh')+'</em>':'';JE.t2.parentNode.hidden=typeof st.speed_kmh!=='number';JE.t3.parentNode.hidden=true;}
   lxCardFill(LX.lastNew||null);

@@ -479,7 +479,9 @@ function tickJourney(dt,now){
   updateMarks();
 }
 function hudTick(s,jd){
-  var X=JR.x,ms=msOfJd(jd),d=new Date(ms);jr.querySelector('.jr-tele').hidden=!!s.surface||s.id==='hoy';
+  var X=JR.x,ms=msOfJd(jd),d=new Date(ms);jr.querySelector('.jr-tele').hidden=s.id==='hoy';
+  /* el lanzamiento usa estas mismas filas con otros rótulos: al salir de él vuelven todas */
+  ['t1','t2','t4','t5','t6','t7'].forEach(function(k){if(JE[k].parentNode.hidden)JE[k].parentNode.hidden=false;});var l1=jt('fromEarth');if(JE.t1.textContent!==l1)JE.t1.textContent=l1;
   var nd=new Date(),ds=s.id==='hoy'?jt('today').replace('{d}',nd.getDate()+' '+STR[lang].months[nd.getMonth()]+' '+nd.getFullYear()):(d.getUTCDate()+' '+STR[lang].months[d.getUTCMonth()]+' '+d.getUTCFullYear()+' · '+two(d.getUTCHours())+':'+two(d.getUTCMinutes())+' UTC');
   if(JE.date.textContent!==ds)JE.date.textContent=ds;
   var day=Math.max(1,Math.ceil((ms-JR.m.launch)/DAY)),tot=JR.tl.length?Math.max(day,Math.ceil((msOfJd(JR.segs[JR.tl[JR.tl.length-1].i].j1)-JR.m.launch)/DAY)):day,dy=s.id==='hoy'?'':jt('day').replace('{d}',fmt(day)).replace('{t}',fmt(tot));if(JE.day.textContent!==dy)JE.day.textContent=dy;
