@@ -1,0 +1,57 @@
+{
+ "missions": [
+  {"id": "moon", "name": {"es": "Farol 1", "en": "Farol 1"}, "kind": {"es": "Módulo de aterrizaje lunar", "en": "Moon lander"},
+   "goal": {"es": "Posarse cerca del polo sur de la Luna y buscar hielo.", "en": "Land near the Moon's south pole and look for ice."}},
+  {"id": "mars", "name": {"es": "Huella 1", "en": "Huella 1"}, "kind": {"es": "Rover marciano", "en": "Mars rover"},
+   "goal": {"es": "Recorrer un cráter de Marte y buscar señales de agua antigua.", "en": "Drive across a crater on Mars and look for signs of ancient water."}},
+  {"id": "asteroid", "name": {"es": "Brújula 1", "en": "Brújula 1"}, "kind": {"es": "Sonda a un asteroide", "en": "Asteroid probe"},
+   "goal": {"es": "Entrar en órbita de un asteroide y hacer su mapa.", "en": "Go into orbit around an asteroid and map it."}}
+ ],
+ "events": [
+  {"key": "storm", "phase": "launch", "for": ["moon", "mars", "asteroid"], "sys": "weather",
+   "day": {"es": "Día 1 · Despegue", "en": "Day 1 · Launch"},
+   "alert": {"es": "ALERTA: RAYOS A MENOS DE 10 KM DE LA PLATAFORMA", "en": "WARNING: LIGHTNING WITHIN 10 KM OF THE PAD"},
+   "story": {"es": "Faltan cuatro minutos para el despegue de {name}. El radar muestra una tormenta eléctrica que se acerca a la plataforma.", "en": "{name} lifts off in four minutes. The radar shows a thunderstorm moving toward the pad."},
+   "ask": {"es": "¿Qué le decís a la sala de control?", "en": "What do you tell the control room?"},
+   "options": [
+    {"t": {"es": "Despegar ya, antes de que llegue la tormenta", "en": "Launch now, before the storm arrives"}, "ok": false,
+     "result": {"es": "Un cohete que sube puede atraer un rayo y dañar sus computadoras. La sala de control no acepta el riesgo.", "en": "A climbing rocket can draw a lightning strike that damages its computers. The control room will not take the risk."}},
+    {"t": {"es": "Frenar la cuenta regresiva y esperar a que pase", "en": "Hold the countdown and wait for it to pass"}, "ok": true,
+     "result": {"es": "La cuenta se frena. Una hora después el cielo está despejado y {name} despega sin problemas.", "en": "The countdown holds. An hour later the sky is clear and {name} lifts off without trouble."}},
+    {"t": {"es": "Cancelar la misión", "en": "Cancel the mission"}, "ok": false,
+     "result": {"es": "No hace falta tanto. Una tormenta pasa, y el cohete puede esperar en la plataforma.", "en": "That is too much. A storm passes, and the rocket can wait on the pad."}}
+   ],
+   "why": {"es": "Un cohete y su estela conducen la electricidad. Si hay rayos cerca, se espera: perder una hora cuesta mucho menos que perder la nave.", "en": "A rocket and its trail conduct electricity. With lightning nearby, you wait: losing an hour costs far less than losing the spacecraft."},
+   "real": {"id": "", "es": "", "en": "", "file": ""}},
+  {"key": "attitude", "phase": "cruise", "for": ["moon", "mars", "asteroid"], "sys": "attitude",
+   "day": {"es": "Día 12 · Viaje", "en": "Day 12 · Cruise"},
+   "alert": {"es": "ALERTA: FALLA ELÉCTRICA. CONTROL DE ORIENTACIÓN APAGADO", "en": "WARNING: ELECTRICAL FAILURE. ATTITUDE CONTROL OFFLINE"},
+   "story": {"es": "{name} dejó de mantenerse apuntada y gira despacio. Sus paneles solares se están alejando del Sol y la batería baja.", "en": "{name} has stopped holding its pointing and is slowly turning. Its solar panels are drifting away from the Sun and the battery is dropping."},
+   "ask": {"es": "¿Qué hacés primero?", "en": "What do you do first?"},
+   "options": [
+    {"t": {"es": "Encender el motor principal para frenar el giro", "en": "Fire the main engine to stop the turning"}, "ok": false,
+     "result": {"es": "El motor principal empuja, no orienta. Encenderlo sin saber hacia dónde apunta la nave la sacaría de su camino.", "en": "The main engine pushes, it does not point. Firing it without knowing where the spacecraft points would knock it off course."}},
+    {"t": {"es": "Seguir con las mediciones y revisarlo después", "en": "Keep taking measurements and look at it later"}, "ok": false,
+     "result": {"es": "Sin Sol en los paneles la batería se agota en pocas horas. Después puede ser tarde.", "en": "With no Sun on the panels the battery runs flat in a few hours. Later may be too late."}},
+    {"t": {"es": "Pasar a modo seguro con la unidad de repuesto y apuntar los paneles al Sol", "en": "Go to safe mode on the backup unit and point the panels at the Sun"}, "ok": true,
+     "result": {"es": "La unidad de repuesto toma el control, los paneles vuelven a mirar al Sol y la batería se recupera. Ahora hay tiempo para buscar la falla.", "en": "The backup unit takes over, the panels face the Sun again and the battery recovers. Now there is time to find the fault."}}
+   ],
+   "why": {"es": "Primero la energía. En modo seguro la nave apaga lo que no es esencial, apunta al Sol y espera órdenes.", "en": "Power comes first. In safe mode the spacecraft turns off what is not essential, points at the Sun and waits for orders."},
+   "real": {"id": "dawn", "es": "Se quedó sin combustible para orientarse el 31 de octubre de 2018.", "en": "On 31 October 2018 it ran out of the fuel it used to point itself.", "file": "src/js/40-journey.js"}},
+  {"key": "upload", "phase": "extended", "for": ["moon", "mars", "asteroid"], "sys": "software",
+   "day": {"es": "Día 400 · Misión extendida", "en": "Day 400 · Extended mission"},
+   "alert": {"es": "ALERTA: ACTUALIZACIÓN DE PROGRAMA SIN PROBAR", "en": "WARNING: SOFTWARE UPDATE NOT TESTED"},
+   "story": {"es": "Hay una actualización lista para enviar a {name}. Nadie la probó todavía en la copia de la nave que está en la Tierra.", "en": "An update is ready to send to {name}. Nobody has tested it yet on the copy of the spacecraft kept on Earth."},
+   "ask": {"es": "¿Qué hacés con la actualización?", "en": "What do you do with the update?"},
+   "options": [
+    {"t": {"es": "Probarla primero en la copia que está en la Tierra", "en": "Test it first on the copy kept on Earth"}, "ok": true,
+     "result": {"es": "La prueba encuentra un error que habría apagado la antena. Se corrige y la actualización llega bien.", "en": "The test finds a mistake that would have switched off the antenna. It gets fixed and the update arrives safely."}},
+    {"t": {"es": "Enviarla ya para ahorrar tiempo", "en": "Send it now to save time"}, "ok": false,
+     "result": {"es": "Una orden con un error puede dejar a la nave sin contacto, y nadie puede ir a arreglarla. El equipo frena el envío.", "en": "A command with a mistake can leave the spacecraft out of contact, and nobody can go and fix it. The team stops the upload."}},
+    {"t": {"es": "No actualizar nunca más", "en": "Never update again"}, "ok": false,
+     "result": {"es": "Las actualizaciones arreglan problemas y enseñan trucos nuevos a la nave. Lo que hace falta es probarlas.", "en": "Updates fix problems and teach the spacecraft new tricks. What they need is testing."}}
+   ],
+   "why": {"es": "A una nave lejana no se la puede reiniciar a mano. Por eso cada orden se prueba antes en una copia en la Tierra.", "en": "A faraway spacecraft cannot be restarted by hand. That is why every command is tried first on a copy on Earth."},
+   "real": {"id": "", "es": "", "en": "", "file": ""}}
+ ]
+}
