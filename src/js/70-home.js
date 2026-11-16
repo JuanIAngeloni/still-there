@@ -188,6 +188,7 @@ var hmApi=(function(){
     var top=add(wrap,'header','hm-top'),brand=add(top,'div','hm-brand');deco(brand,'span','hm-bd');N.brand=add(brand,'span','');
     N.nav=add(top,'nav','hm-nav');N.count=add(N.nav,'span','hm-count');
     N.map=btn(N.nav,'hm-map');N.map.addEventListener('click',function(){homeHide();if(typeof exBoot==='function')exBoot();});
+    if(typeof mgNavEntry==='function')mgNavEntry(N.nav);
     N.cred=btn(N.nav,'hm-link');N.cred.addEventListener('click',function(e){if(typeof openCredits==='function')openCredits(e);});
     var lg=add(N.nav,'div','hm-lang');lg.setAttribute('role','group');lg.setAttribute('aria-label','Idioma / Language');
     N.es=btn(lg,'hm-lg');N.es.textContent='ES';N.es.setAttribute('lang','es');N.es.setAttribute('aria-label','Español');
@@ -220,6 +221,8 @@ var hmApi=(function(){
       cards[d.id]={d:d,el:b,im:im,note:note,vt:vt,wt:wt,nm:nm,q:q,f:f};
     });
 
+    /* el juego de la misión ficticia, entre las tarjetas y la línea de tiempo */
+    if(typeof mgHomeEntry==='function')mgHomeEntry(wrap);
     /* línea de tiempo: una fila por vida, ordenadas por la llegada */
     var sec=add(wrap,'section','hm-sec');N.tlH=add(sec,'h2','hm-h2');N.tlP=add(sec,'p','hm-p');
     N.tlBox=add(sec,'div','hm-tlbox');N.tlBox.setAttribute('role','group');N.tlBox.tabIndex=0;
@@ -335,6 +338,7 @@ var hmApi=(function(){
     E.brand.textContent=t('brand');E.nav.setAttribute('aria-label',t('navAria'));E.map.textContent=t('map');E.cred.textContent=t('credits');
     E.es.setAttribute('aria-pressed',String(l==='es'));E.en.setAttribute('aria-pressed',String(l==='en'));
     E.eye.textContent=t('eye');E.h1a.textContent=t('h1a');E.h1b.textContent=t('h1b');E.lead.textContent=t('lead');
+    if(typeof mgTexts==='function')mgTexts();
     E.sort.setAttribute('aria-label',t('sort'));E.sPlace.textContent=t('byPlace');E.sYear.textContent=t('byYear');
     E.grid.setAttribute('aria-label',t('machines'));
     for(var id in CARDS){var c=CARDS[id],d=c.d,p=photoOf(d),nm=nameOf(id),qt=tx(d.q);
