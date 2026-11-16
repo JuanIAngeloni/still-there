@@ -29,7 +29,7 @@ rep('three.min.js"></script>',
 rep("__DAY_URI__", "assets/textures/earth_day_2048.jpg")
 rep("__NIGHT_URI__", "assets/textures/earth_night_2048.jpg")
 rep("function tick(dt,now){\n  if(renderer)applyOrbit(dt);",
-    "function tick(dt,now){\n  if(EX.active){exTick(dt,now);return;}\n  if(JR.active){tickJourney(dt,now);return;}\n  if(renderer)applyOrbit(dt);")
+    "function tick(dt,now){\n  if(MG.el&&!MG.el.hidden){mgTick(dt,now);return;}\n  if(EX.active){exTick(dt,now);return;}\n  if(JR.active){tickJourney(dt,now);return;}\n  if(renderer)applyOrbit(dt);")
 rep("lensed=(m===lensM)?(1-0.7*k):1;", "lensed=1;")
 rep("var show=renderer&&m.state!=='pre'&&m.scr.vis&&!(m===lensM&&k>0.3)", "var show=renderer&&m.state!=='pre'&&m.scr.vis")
 rep("  if(live)renderLive(dt,now);", "  stage.classList.toggle('is-picking',k>0.45&&!!lensM&&!live);\n  if(live)renderLive(dt,now);")
