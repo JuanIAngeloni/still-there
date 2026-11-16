@@ -80,8 +80,13 @@ function lxAlt(t){if(t<=0)return 0;var h=200000*(1-Math.exp(-Math.pow(t/270,2)))
     }else{h=hp;LX.realH=false;}
   }
   return h;}
-function lxPitch(t){return 1.5*lxSmooth((t-14)/330);}
-function lxDown(t){if(t<=12)return 0;if(t<264)return 4.0e5*Math.pow((t-12)/252,2.6);return 4.0e5+7500*(t-264);}
+/* distancia recorrida sobre el suelo: casi nada al principio (el cohete sube derecho) y cada vez más rápido, hasta la velocidad de órbita */
+function lxDown(t){if(t<=12)return 0;if(t<264)return 4.0e5*Math.pow((t-12)/252,3.2);
+  var v0=4.0e5*3.2/252,x=Math.min(t-264,300);return 4.0e5+v0*x+(7500-v0)*x*x/600+7500*Math.max(0,t-564);}
+/* inclinación: el cohete apunta hacia donde se mueve (giro por gravedad). Sale de la subida y del avance sobre el suelo,
+   así la nariz, el recorrido y la estela de humo quedan sobre la misma línea. */
+function lxPitch(t){if(t<=12)return 0;var e=0.5,up=lxAlt(t+e)-lxAlt(t-e),fw=(lxTurn(t+e)-lxTurn(t-e))*(LX_R+lxAlt(t));
+  return Math.atan2(Math.max(fw,0),Math.max(up,0))||0;}
 /* al alejarse, la nave deja de dar vueltas alrededor de la Tierra: el ángulo recorrido tiende a un valor fijo */
 function lxTurn(t){var ti=LX.tInj;return ti!=null&&t>ti?lxDown(ti)/LX_R+2*Math.atan(lxEscD(t)):lxDown(t)/LX_R;}
 
