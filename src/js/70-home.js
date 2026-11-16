@@ -10,7 +10,7 @@ var HOME=HOME||{};HOME.active=false;
 var hmApi=(function(){
   var SVG_NS='http://www.w3.org/2000/svg';
   var STR={
-    es:{brand:'Siguen ahí',navAria:'Portada',visited:'Visitaste {n} de {t}',map:'Ver el mapa 3D',credits:'Créditos',
+    es:{brand:'Siguen ahí',navAria:'Portada',visited:'Visitaste {n} de {t}',map:'Ver el mapa',credits:'Créditos',
         eye:'NASA Space Apps 2026 · Salta',h1a:'Siguen ahí:',h1b:'las misiones de NASA a través del tiempo',
         lead:'Catorce máquinas que quedaron en la Luna, en Marte y más lejos. Elegí una para seguir su misión, desde el despegue hasta donde está hoy.',
         sort:'Ordenar',byPlace:'Por lugar',byYear:'Por año',machines:'Máquinas',visitedWord:'visitada',art:'Ilustración',
@@ -20,7 +20,7 @@ var hmApi=(function(){
         rkH:'Los cohetes que las llevaron',rkP:'En orden, del primer despegue al último. Todos están a la misma escala y son los mismos modelos 3D que se ven en cada lanzamiento.',
         tall:'{n} m de alto',carried:'Llevó a',
         foot:'Las frases en primera persona están escritas para este sitio a partir de datos de NASA: no son citas reales. Fotos: NASA Image and Video Library. Fechas: NSSDCA y páginas de misión de NASA.'},
-    en:{brand:'Still There',navAria:'Start page',visited:'Visited {n} of {t}',map:'Open the 3D map',credits:'Credits',
+    en:{brand:'Still There',navAria:'Start page',visited:'Visited {n} of {t}',map:'Open map',credits:'Credits',
         eye:'NASA Space Apps 2026 · Salta',h1a:'Still There:',h1b:'NASA\'s missions across time',
         lead:'Fourteen machines left on the Moon, on Mars and beyond. Pick one to follow its mission, from the launch to where it is today.',
         sort:'Sort',byPlace:'By place',byYear:'By year',machines:'Machines',visitedWord:'visited',art:'Artwork',
@@ -59,9 +59,11 @@ var hmApi=(function(){
 '.hm-brand{display:flex;align-items:center;gap:10px;min-height:44px;font-weight:600;font-size:15px;white-space:nowrap}'+
 '.hm-bd{width:8px;height:8px;border-radius:50%;flex:none;background:var(--accent)}'+
 '.hm-nav{display:flex;align-items:center;gap:4px 18px;flex-wrap:wrap;font-size:13px;color:#a7b0bd}'+
-'.hm-count{white-space:nowrap;font-variant-numeric:tabular-nums}'+
-'.hm-map{min-height:44px;padding:0 16px;font-size:13px;font-weight:500;white-space:nowrap;background:none;border:1px solid rgba(232,238,248,.34);border-radius:999px}'+
+'.hm-count{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:17px;font-weight:600;color:var(--fg)}'+
+'.hm-map{min-height:48px;padding:0 24px;font-size:16px;font-weight:600;white-space:nowrap;background:none;border:1px solid rgba(232,238,248,.34);border-radius:999px}'+
 '.hm-map:hover{border-color:var(--accent);color:var(--accent)}.home .hm-map:focus-visible{border-radius:999px}'+
+'.hm-map.hm-play{background:var(--accent);border-color:var(--accent);color:#1a1305}.hm-map.hm-play:hover{background:#ffe2b5;border-color:#ffe2b5;color:#1a1305}'+
+'.hm-credb{align-self:flex-start}'+
 '.hm-link{min-height:44px;padding:0 2px;font-size:13px;white-space:nowrap;background:none;border:0;text-decoration:underline;text-underline-offset:3px}'+
 '.hm-link:hover{color:var(--accent)}'+
 '.hm-lang{display:flex;align-items:center}'+
@@ -144,7 +146,7 @@ var hmApi=(function(){
 '.hm-chip:hover{border-color:rgba(232,238,248,.62)}.home .hm-chip:focus-visible{border-radius:999px}'+
 /* pantallas angostas y movimiento reducido */
 '@media (max-width:999px){.hm-swipe{display:block}}'+
-'@media (max-width:640px){.hm-wrap{gap:24px;padding-top:8px}.hm-nav{gap:2px 14px}.hm-lead{font-size:16px}.hm-p{font-size:15px}'+
+'@media (max-width:640px){.hm-wrap{gap:24px;padding-top:8px}.hm-nav{gap:8px 12px}.hm-map{padding:0 18px;font-size:15px}.hm-count{font-size:16px;flex:1 1 100%}.hm-lead{font-size:16px}.hm-p{font-size:15px}'+
 '.hm-sort{flex:1 1 100%}.hm-sb{flex:1 1 0;padding:0 10px}.hm-tl{--hm-nc:148px}.hm-rn{font-size:14px}.hm-worlds{margin-left:0}}'+
 '@media (prefers-reduced-motion:no-preference){.hm-img{transition:transform .35s ease}.hm-card:hover .hm-img{transform:scale(1.04)}}'+
 '@media (prefers-reduced-motion:reduce){.home,.home *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}';
@@ -188,8 +190,7 @@ var hmApi=(function(){
     var top=add(wrap,'header','hm-top'),brand=add(top,'div','hm-brand');deco(brand,'span','hm-bd');N.brand=add(brand,'span','');
     N.nav=add(top,'nav','hm-nav');N.count=add(N.nav,'span','hm-count');
     N.map=btn(N.nav,'hm-map');N.map.addEventListener('click',function(){homeHide();if(typeof exBoot==='function')exBoot();});
-    if(typeof mgNavEntry==='function')mgNavEntry(N.nav);
-    N.cred=btn(N.nav,'hm-link');N.cred.addEventListener('click',function(e){if(typeof openCredits==='function')openCredits(e);});
+    if(typeof mgNavEntry==='function')mgNavEntry(N.nav).className='hm-map hm-play';
     var lg=add(N.nav,'div','hm-lang');lg.setAttribute('role','group');lg.setAttribute('aria-label','Idioma / Language');
     N.es=btn(lg,'hm-lg');N.es.textContent='ES';N.es.setAttribute('lang','es');N.es.setAttribute('aria-label','Español');
     deco(lg,'span','hm-lgs');
@@ -257,6 +258,8 @@ var hmApi=(function(){
     N.tlNote=add(sec,'p','hm-fine');N.swipe=add(sec,'p','hm-fine hm-swipe');
 
     N.foot=add(wrap,'p','hm-fine');
+    /* los créditos van al final de la portada */
+    N.cred=btn(wrap,'hm-link hm-credb');N.cred.addEventListener('click',function(e){if(typeof openCredits==='function')openCredits(e);});
 
     stage.appendChild(root);
     E=N;CARDS=cards;ROWS=rows;
