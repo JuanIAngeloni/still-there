@@ -6,10 +6,10 @@ var EX={active:false,jd:jdOf(Date.UTC(2026,10,15,12)),tgt:new THREE.Vector3(),di
   up:new THREE.Vector3(0,0,1),fly:null,keys:{},machines:[],built:false,drag:null,sel:null,cool:0};
 var EX_BODIES=['earth','moon','mars','jupiter','eros','vesta','ceres'];
 var EX_STR={
-  es:{badge:'Hoy',title:'Siguen ahí',hint:'Clic en un planeta: elegirlo · Rueda: acercarse al planeta elegido (o al centro de la pantalla) · Arrastrar: girar · Clic derecho o WASD: moverse · Clic en una máquina: ir hasta ella',
+  es:{badge:'Hoy',title:'Siguen ahí',hint:'Clic en un planeta o en el Sol: elegirlo · Rueda: acercarse al elegido (o al centro de la pantalla) · Arrastrar: girar en cualquier dirección · Clic derecho o WASD: moverse · Clic en una máquina: ir hasta ella',
       go:'Ir a',back:'Volver al inicio',lede:'Cada luz es una máquina que dejamos allá afuera. Así está todo hoy.',
       scale:'Las distancias son reales. De lejos, los planetas se dibujan más grandes para que se vean; al acercarte recuperan su tamaño real.',ua:'UA',explore:'Explorar el espacio',landing:'Bajando a {n}…',here:'Acá no quedó ninguna máquina: probá en otro lugar'},
-  en:{badge:'Today',title:'Still There',hint:'Click a planet: select it · Wheel: zoom toward the selected planet (or the centre of the screen) · Drag: turn · Right-click or WASD: move · Click a machine: go to it',
+  en:{badge:'Today',title:'Still There',hint:'Click a planet or the Sun: select it · Wheel: zoom toward it (or toward the centre of the screen) · Drag: turn in any direction · Right-click or WASD: move · Click a machine: go to it',
       go:'Go to',back:'Back to start',lede:'Every light is a machine we left out there. This is where everything is today.',
       scale:'Distances are real. From far away the planets are drawn bigger so you can see them; as you get closer they shrink to their real size.',ua:'AU',explore:'Explore space',landing:'Going down to {n}…',here:'No machine was left here: try somewhere else'}};
 function xt(k){return EX_STR[lang][k];}
@@ -172,6 +172,8 @@ function exAlt(p){var nb=exNearest(p);return {b:nb.b,alt:_xw.copy(p).sub(nb.b.po
 var EX_MINALT=0.003; /* 3 km: más abajo solo se baja junto a una máquina */
 function exUpdateUp(){
   var nb=exNearest(EX.tgt),k=clamp((4-nb.q)/2.7,0,1);k=k*k*(3-2*k);
+  /* con el centro de la vista dentro del cuerpo (se lo mira entero, no su suelo) vale el norte del sistema solar */
+  k*=clamp((nb.q-0.3)/0.4,0,1);
   _xu.copy(EX.tgt).sub(nb.b.pos).normalize();EX.up.copy(EX_Z).lerp(_xu,k);if(EX.up.lengthSq()<1e-6)EX.up.copy(EX_Z);EX.up.normalize();
 }
 function exRender(){SP.lookAbs.copy(EX.tgt);SP.camAbs.copy(EX.tgt).addScaledVector(EX.dir,EX.dist);SP.cam.up.copy(EX.up);renderSpace();}
@@ -193,6 +195,8 @@ function exZoom(f){
   var near=exMachineNear(P);
   var minD=near&&!near.site?near.X.craftM*1.6e-6:1e-6;nd=Math.max(nd,minD);nd=Math.min(nd,9e6);f=nd/EX.dist;
   var nc=P.clone().add(cam.sub(P).multiplyScalar(f)),nt=P.clone().add(EX.tgt.clone().sub(P).multiplyScalar(f));
+  /* al acercarse, el cuerpo elegido se va al centro de la pantalla: después se gira alrededor de él */
+  if(S&&f<1){nt.sub(P).multiplyScalar(Math.pow(f,1.5)).add(P);nc.copy(nt).addScaledVector(EX.dir,nd);}
   var a=exAlt(nc);if(a.alt<EX_MINALT&&!(near&&near.site)&&f<1){return;}
   EX.tgt.copy(nt);EX.dist=nd;EX.fly=null;EX.moved=true;
   /* acercarse a la Tierra con la rueda vuelve a la Tierra del inicio, mirando la misma cara */
@@ -213,16 +217,27 @@ window.addEventListener('pointermove',function(e){if(!EX.active||!EX.drag)return
   var dx=e.clientX-EX.drag.x,dy=e.clientY-EX.drag.y;EX.drag.x=e.clientX;EX.drag.y=e.clientY;
   if(EX.drag.pan)exPan(-dx/H,dy/H);else exRotate(-dx*0.006,-dy*0.005);});
 /* clic sin arrastrar: sobre un cuerpo lo elige y lo centra, sin cambiar la distancia; en el vacío suelta la elección */
-function exClick(x,y){var r=stage.getBoundingClientRect(),h=exRayHit(x-r.left,y-r.top);
-  if(!h){EX.sel=null;return;}
-  EX.sel=h.b;if(_xv.copy(EX.tgt).addScaledVector(EX.dir,EX.dist).sub(h.b.pos).length()>h.b.R*1.5)exFlyTo(h.b.pos,EX.dir,Math.max(EX.dist,h.b.R*1.6),null);}
+var EX_SUN={pos:new THREE.Vector3(0,0,0),R:696,sun:true};
+function exClick(x,y){var r=stage.getBoundingClientRect(),best=null,bd=1e9;x-=r.left;y-=r.top;
+  /* se elige el cuerpo más cercano al clic en pantalla, con margen: de lejos los planetas miden pocos píxeles */
+  EX_BODIES.map(function(k){return SP.B[k];}).concat([EX_SUN]).forEach(function(b){if(!b||b.on===false)return;
+    var q=_xw.copy(b.pos).sub(SP.camAbs),d=q.length(),pr=projectRel(q,{});if(!pr.vis)return;
+    var dd=Math.hypot(pr.x-x,pr.y-y)-Math.max(pxRadius(b.R,d)*(b.k||1),0);if(dd<26&&dd<bd){bd=dd;best=b;}});
+  EX.sel=best;}
+/* aro sobre el cuerpo elegido, para saber hacia dónde va el zoom */
+var exSelEl=add(EXE.labels,'i','ex-sel');exSelEl.style.cssText='position:absolute;display:none;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;box-shadow:0 0 10px rgba(255,200,120,.5)';
+var _exLabels0=exLabels;exLabels=function(cam){_exLabels0(cam);var S=EX.sel;if(!S||!EX.active){exSelEl.style.display='none';return;}
+  var q=_xw.copy(S.pos).sub(cam),d=q.length(),pr=projectRel(q,{});if(!pr.vis){exSelEl.style.display='none';return;}
+  var rr=Math.max(11,(S.R?pxRadius(S.R,d)*(S.k||1):0)+6);if(rr>Math.max(W,H)){exSelEl.style.display='none';return;}
+  exSelEl.style.display='block';exSelEl.style.left=(pr.x-rr)+'px';exSelEl.style.top=(pr.y-rr)+'px';exSelEl.style.width=exSelEl.style.height=(rr*2)+'px';};
 function exUp(e){var dn=EX.down;EX.down=null;if(dn&&EX.active&&EXP[e.pointerId]&&e.type==='pointerup'&&Math.hypot(e.clientX-dn.x,e.clientY-dn.y)<6)exClick(e.clientX,e.clientY);
   delete EXP[e.pointerId];var ids=Object.keys(EXP);if(ids.length){EX.drag={x:EXP[ids[0]].x,y:EXP[ids[0]].y,pan:false};return;}if(EX.drag){EX.drag=null;stage.classList.remove('is-grabbing');}}
 window.addEventListener('pointerup',exUp);window.addEventListener('pointercancel',exUp);
 function exRotate(yaw,pitch){
   _xq.setFromAxisAngle(EX.up,yaw);EX.dir.applyQuaternion(_xq);
   var right=_xv.crossVectors(EX.up,EX.dir).normalize();if(right.lengthSq()<1e-6)return;
-  var nd=EX.dir.clone().applyQuaternion(_xq.setFromAxisAngle(right,pitch)),ang=Math.acos(clamp(nd.dot(EX.up),-1,1)),nb=exNearest(EX.tgt),lim=nb.q<1.5?1.45:3.05;
+  var nd=EX.dir.clone().applyQuaternion(_xq.setFromAxisAngle(right,pitch)),ang=Math.acos(clamp(nd.dot(EX.up),-1,1)),nb=exNearest(EX.tgt),lim=nb.q<1.5&&nb.q>0.7?1.45:3.08;
+  /* el tope bajo solo vale parado sobre la superficie (para no mirar desde abajo del suelo); alrededor de un cuerpo se gira por todos lados */
   if(ang>0.06&&ang<lim)EX.dir.copy(nd).normalize();
 }
 function exPan(px,py){
@@ -241,7 +256,7 @@ function exFlyTo(tgt,dir,dist,onEnd){
   EX.fly={t:0,T:clamp(1.8+0.18*Math.abs(Math.log(dist/EX.dist))+0.35*hump,2.2,7),t0:EX.tgt.clone(),t1:tgt.clone(),d0:EX.dir.clone(),d1:dir.clone().normalize(),l0:Math.log(EX.dist),l1:Math.log(dist),hump:hump,onEnd:onEnd};
 }
 function exFlyBody(k){
-  EX.sel=k==='sun'?{pos:new THREE.Vector3(0,0,0),R:696}:SP.B[k];
+  EX.sel=k==='sun'?EX_SUN:SP.B[k];
   if(k==='sun'){exFlyTo(new THREE.Vector3(0,0,0),_xv.set(0.3,-0.8,0.5),9e5,null);return;}
   var b=SP.B[k];exFlyTo(b.pos,_xv.copy(b.pos).negate().normalize().add(_xw.set(0,0,0.35)).applyAxisAngle(EX_Z,0.5),b.R*(k==='earth'?3.2:4),null);
 }
