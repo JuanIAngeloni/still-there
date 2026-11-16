@@ -13,7 +13,8 @@ var MG_PHASES=['launch','cruise','arrival','ops','extended'];
 var MG_RED={storm:1,attitude:1,boulders:1,burn:1},MG_SECS=30;
 var MG_STR={
   es:{tag:'Misión ficticia',
-    charH:'Elegí quién sos',charP:'Este personaje te representa en la sala de control. Después elegís la misión.',charK:'Analista',change:'Cambiar personaje',
+    charH:'Elegí quién sos',charP:'Escribí tu nombre y elegí el personaje que te representa en la sala de control. Después elegís la misión.',charK:'Analista',change:'Cambiar nombre o personaje',
+    nameL:'Tu nombre',faceL:'Tu personaje',go:'Continuar',
     npc:'Nora · Directora de vuelo',who:['Lince','Cóndor','Yaguareté','Zorro'],warn:'Aviso',crit:'Crítica',sim:'Simulación: qué pasaría',noSignal:'Sin señal',
     timeUp:'Se acabó el tiempo. Necesito una respuesta ya.',hello:'{who}, te toca la consola de {name}. Yo te paso lo que llega de la nave.',more:'Seguir (Enter)',secs:'Segundos para decidir',
     homeK:'Juego',homeT:'Sé analista de una misión',homeB:'Jugar',
@@ -30,7 +31,8 @@ var MG_STR={
     open:'Ver su misión',again:'Jugar otra misión',back:'Volver al inicio',close:'Cerrar el juego',earth:'Tierra',
     dest:{moon:'Luna',mars:'Marte',asteroid:'Asteroide'}},
   en:{tag:'Fictional mission',
-    charH:'Choose who you are',charP:'This character stands for you in the control room. Next you pick the mission.',charK:'Analyst',change:'Change character',
+    charH:'Choose who you are',charP:'Type your name and pick the character that stands for you in the control room. Next you pick the mission.',charK:'Analyst',change:'Change name or character',
+    nameL:'Your name',faceL:'Your character',go:'Continue',
     npc:'Nora · Flight director',who:['Lynx','Condor','Jaguar','Fox'],warn:'Warning',crit:'Critical',sim:'Simulation: what would happen',noSignal:'No signal',
     timeUp:'Time is up. I need an answer now.',hello:'{who}, you have the {name} console. I will pass you whatever comes in from the spacecraft.',more:'Continue (Enter)',secs:'Seconds left to decide',
     homeK:'Game',homeT:'Be the mission analyst',homeB:'Play',
@@ -50,7 +52,10 @@ var MG_STR={
 function mgt(k){return MG_STR[lang][k];}
 function mgTx(o,name){var s=o?(o[lang]||o.en||''):'';return name?s.split('{name}').join(name):s;}
 function mgData(){return (typeof MG_DATA!=='undefined'&&MG_DATA)||{missions:[],events:[]};}
-try{MG.me=clamp(parseInt(localStorage.getItem('mgFace')||'0',10)||0,0,3);}catch(e){}
+/* el nombre lo escribe el lector; si lo deja vacío se usa el apodo del personaje */
+function mgClean(v){return String(v||'').replace(/\s+/g,' ').replace(/^ /,'').slice(0,16);}
+function mgWho(){return (MG.name||'').trim()||mgt('who')[MG.me];}
+try{MG.me=clamp(parseInt(localStorage.getItem('mgFace')||'0',10)||0,0,3);MG.name=mgClean(localStorage.getItem('mgName'));}catch(e){}
 
 (function(){
   var st=document.createElement('style');st.textContent=
@@ -157,9 +162,11 @@ try{MG.me=clamp(parseInt(localStorage.getItem('mgFace')||'0',10)||0,0,3);}catch(
   '.mg .mgd-opt:disabled{color:#7f8896;text-decoration:line-through;cursor:default;border-color:transparent}'+
   '.mg-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}'+
   /* elegir personaje */
+  '.mg-nm{display:flex;flex-direction:column;gap:8px;margin:0}.mg-nm input{font:inherit;font-size:20px;color:var(--fg);background:#0b0f16;border:1px solid rgba(232,238,248,.34);border-radius:10px;padding:12px 14px;width:min(360px,100%);min-height:48px;box-sizing:border-box}'+
+  '.mg-nm input::placeholder{color:#7f8896}.mg-nm input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,208,138,.22)}'+
   '.mg-chars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,45%),1fr));gap:12px}'+
   '.mg .mg-char{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;border-radius:12px;background:#0b0f16;border:1px solid rgba(232,238,248,.16);transition:transform .18s ease,border-color .18s ease}'+
-  '.mg .mg-char:hover,.mg .mg-char:focus-visible{border-color:var(--accent);transform:translateY(-4px)}.mg .mg-char[aria-pressed="true"]{border-color:rgba(255,208,138,.7)}'+
+  '.mg .mg-char:hover,.mg .mg-char:focus-visible{border-color:var(--accent);transform:translateY(-4px)}.mg .mg-char[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,208,138,.08);box-shadow:0 0 0 2px rgba(255,208,138,.35)}'+
   '.mg-char svg{width:112px;height:112px;border-radius:14px;background:#101722}.mg-char b{font-size:19px;font-weight:600}.mg-char span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#a7b0bd}'+
   '.mg .mg-link{align-self:flex-start;background:none;border:0;padding:6px 0;color:#a7b0bd;text-decoration:underline;text-underline-offset:3px}.mg .mg-link:hover{color:var(--fg)}'+
   '@media (max-width:820px){.mg-hud .mg-tag{display:none}.mg-hud .mg-name{order:0;flex:0 1 auto;font-size:16px}.mg-hud .mg-top{row-gap:0}.mg-step{order:10;flex:1 1 100%}}'+
@@ -279,7 +286,7 @@ function mgAlertUI(ev,ok){
 function mgSay(who,text,mode,next,pause){
   var u=MG.ui,me=who==='me',cls='mgd'+(me?' is-me':'');if(u.d.className.replace(' is-ask','')!==cls||me!==u.wasMe){u.wasMe=me;u.d.className=cls;u.face.innerHTML='';mgFace(me?MG.me:4,u.face);u.face.classList.remove('is-pop');void u.face.offsetWidth;u.face.classList.add('is-pop');}
   if(!u.face.firstChild)mgFace(me?MG.me:4,u.face);
-  u.d.classList.remove('is-ask');u.who.textContent=me?mgt('who')[MG.me]+' · '+mgt('charK'):mgt('npc');u.opts.hidden=true;u.opts.innerHTML='';u.more.hidden=true;u.text.textContent='';u.live.textContent=text;
+  u.d.classList.remove('is-ask');u.who.textContent=me?mgWho()+' · '+mgt('charK'):mgt('npc');u.opts.hidden=true;u.opts.innerHTML='';u.more.hidden=true;u.text.textContent='';u.live.textContent=text;
   MG.type={s:text,n:0,done:false,mode:mode,next:next,wait:0,pause:pause==null?1.3:pause};
 }
 function mgAdvance(){var T=MG.type;if(!T||MG.state!=='play')return;if(!T.done){T.n=1e9;return;}if(T.mode!=='hold'){MG.type=null;T.next();}}
@@ -308,7 +315,7 @@ function mgEvent(keep,first){
   var ev=MG.evs[MG.i],name=mgName(),run=++MG.run,u=MG.ui;if(!keep)MG.wrong={};MG.last=-1;MG.sub='calm';mgTimer(false);mgAlertUI(null);u.sim.hidden=true;u.ns.hidden=true;
   var go=function(){
     try{mgsGo(ev.phase);}catch(e){}mgHud();
-    var hi=first?mgt('hello').replace('{who}',mgt('who')[MG.me]).replace('{name}',name)+'\n':'';
+    var hi=first?mgt('hello').replace('{name}',function(){return name;}).replace('{who}',function(){return mgWho();})+'\n':'';
     mgSay('npc',hi+mgTx(ev.day)+'. '+mgt('calm'),first?'wait':'auto',function(){if(run!==MG.run)return;
       MG.sub='alert';try{mgsAlert(ev.key,ev.sys);}catch(e){}mgAlertUI(ev);mgFlash(MG_RED[ev.key]?'#ff6b5a':'#ffd08a',0.28);
       mgSay('npc',mgTx(ev.story,name),'wait',function(){if(run===MG.run)mgAsk(run);});},1.2);
@@ -375,9 +382,17 @@ function mgRender(){
   MG.scr.scrollTop=keep;
 }
 function mgChar(){
-  var b=MG.body;add(b,'h1','mg-h1').textContent=mgt('charH');add(b,'p','mg-lead').textContent=mgt('charP');var g=add(b,'div','mg-chars');
-  [0,1,2,3].forEach(function(i){var c=add(g,'button','mg-char');c.type='button';c.setAttribute('aria-pressed',String(MG.me===i));mgFace(i,c);add(c,'b','').textContent=mgt('who')[i];add(c,'span','').textContent=mgt('charK');
-    c.addEventListener('click',function(){MG.me=i;try{localStorage.setItem('mgFace',String(i));}catch(e){}MG.state='pick';mgRender();MG.scr.scrollTop=0;});});
+  var b=MG.body;add(b,'h1','mg-h1').textContent=mgt('charH');add(b,'p','mg-lead').textContent=mgt('charP');
+  var f=add(b,'form','mg-nm'),lb=add(f,'label','mg-k'),inp=add(f,'input','');lb.textContent=mgt('nameL');lb.setAttribute('for','mgName');inp.id='mgName';inp.type='text';inp.maxLength=16;
+  inp.autocomplete='off';inp.setAttribute('autocapitalize','words');inp.spellcheck=false;inp.value=MG.name||'';inp.placeholder=mgt('who')[MG.me];
+  /* las teclas del campo no llegan a los atajos de la página */
+  inp.addEventListener('keydown',function(e){e.stopPropagation();});inp.addEventListener('input',function(){MG.name=mgClean(inp.value);if(inp.value!==MG.name)inp.value=MG.name;});
+  add(b,'p','mg-k').textContent=mgt('faceL');var g=add(b,'div','mg-chars'),cards=[];g.setAttribute('role','group');g.setAttribute('aria-label',mgt('faceL'));
+  [0,1,2,3].forEach(function(i){var c=add(g,'button','mg-char');c.type='button';c.setAttribute('aria-pressed',String(MG.me===i));mgFace(i,c);add(c,'b','').textContent=mgt('who')[i];cards.push(c);
+    c.addEventListener('click',function(){MG.me=i;cards.forEach(function(q,k){q.setAttribute('aria-pressed',String(k===i));});inp.placeholder=mgt('who')[i];});});
+  var go=add(b,'button','mg-btn');go.type='button';go.textContent=mgt('go');
+  var done=function(e){if(e)e.preventDefault();MG.name=mgClean(inp.value).trim();try{localStorage.setItem('mgFace',String(MG.me));localStorage.setItem('mgName',MG.name);}catch(err){}MG.state='pick';mgRender();MG.scr.scrollTop=0;};
+  go.addEventListener('click',done);f.addEventListener('submit',done);
 }
 function mgPick(){
   var b=MG.body;add(b,'h1','mg-h1').textContent=mgt('pickH');add(b,'p','mg-lead').textContent=mgt('pickP');
