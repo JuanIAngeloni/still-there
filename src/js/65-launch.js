@@ -15,14 +15,18 @@ var LX_STR={
       where:{ocean:'cayó al mar',burned:'se quemó al volver a entrar en el aire',earthOrbit:'quedó en órbita de la Tierra',sunOrbit:'quedó en órbita del Sol',
         moonImpact:'chocó contra la Luna',onMoon:'quedó en la Luna',moonOrbit:'quedó en órbita de la Luna',marsImpact:'chocó contra Marte',onMars:'quedó en Marte',
         marsAtmosphere:'se quemó al entrar en Marte',unknown:'no se sabe dónde terminó'},
-      left:'También quedaron por ahí'},
+      left:'También quedaron por ahí',
+      sky:'El Sol, la Luna y los planetas están donde estaban en ese minuto y a su tamaño real (JPL Horizons).',mkm:'millones de km',
+      body:{earth:'Tierra',sun:'Sol',moon:'Luna',mercury:'Mercurio',venus:'Venus',mars:'Marte',jupiter:'Júpiter',saturn:'Saturno',uranus:'Urano',neptune:'Neptuno'}},
   en:{chap:'Launch',fates:'What happened to each part',rocket:'The rocket',tall:'{h} m tall',since:'First flight: {y}',
       illus:'Illustrative animation. The T+ times are real. The climb and the sizes are adjusted so you can see everything.',
       drag:'Drag to turn. Scroll to zoom.',later:'Later',tplus:'T+',alt:'Altitude',spd:'Speed',km:'km',kmh:'km/h',onpad:'On the pad',
       where:{ocean:'fell into the sea',burned:'burned up coming back into the air',earthOrbit:'stayed in orbit around Earth',sunOrbit:'stayed in orbit around the Sun',
         moonImpact:'crashed into the Moon',onMoon:'stayed on the Moon',moonOrbit:'stayed in orbit around the Moon',marsImpact:'crashed into Mars',onMars:'stayed on Mars',
         marsAtmosphere:'burned up entering Mars',unknown:'nobody knows where it ended up'},
-      left:'Also left out there'}};
+      left:'Also left out there',
+      sky:'The Sun, the Moon and the planets are where they were at that minute, at their real size (JPL Horizons).',mkm:'million km',
+      body:{earth:'Earth',sun:'Sun',moon:'Moon',mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune'}}};
 function lxt(k){return LX_STR[lang][k];}
 var LX_WCOL={ocean:'#6ea8ff',burned:'#ff9d6e',earthOrbit:'#9fe0b2',sunOrbit:'#ffcf6a',moonImpact:'#d6d6d0',onMoon:'#d6d6d0',moonOrbit:'#d6d6d0',marsImpact:'#e0895a',onMars:'#e0895a',marsAtmosphere:'#e0895a',unknown:'#a7b0bd'};
 
@@ -35,6 +39,8 @@ var LX_WCOL={ocean:'#6ea8ff',burned:'#ff9d6e',earthOrbit:'#9fe0b2',sunOrbit:'#ff
 '.lx-card li::before,.lx-left li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:50%;background:var(--wc,#a7b0bd)}'+
 '.lx-card li b,.lx-left li b{font-weight:600}.lx-card li.is-new b{color:var(--accent)}.lx-card li em,.lx-left li em{font-style:normal;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-dim)}'+
 '.lx-src{font-size:11.5px;color:var(--fg-dim);text-decoration:underline;text-underline-offset:2px;justify-self:start}.lx-src:hover{color:var(--fg)}'+
+'.lx-sky{position:absolute;left:0;top:0;font-size:11px;color:var(--fg);white-space:nowrap;text-shadow:0 1px 5px #000;will-change:transform;line-height:1.25}'+
+'.lx-sky i{position:absolute;left:-5px;top:-5px;width:8px;height:8px;border:1px solid var(--accent);border-radius:50%}.lx-sky span{position:absolute;left:9px;top:-8px}.lx-sky em{font-style:normal;opacity:.7;margin-left:5px}.lx-sky.edge i{display:none}.lx-sky.edge span{left:0;transform:translate(-50%,0);background:rgba(5,7,11,.6);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:2px 8px}.lx-sky u{text-decoration:none;display:none;margin-right:5px;color:var(--accent)}.lx-sky.edge u{display:inline-block}'+
 '.lx-labels{position:absolute;inset:0;pointer-events:none!important}.lx-lab{position:absolute;left:0;top:0;font-size:12px;color:var(--fg);white-space:nowrap;text-shadow:0 1px 6px #000;'+
 'background:rgba(5,7,11,.6);border-radius:4px;padding:1px 6px;will-change:transform}.lx-lab b{font-weight:600;color:var(--accent)}'+
 '.jr-cap b{font-weight:600;color:var(--accent);margin-right:6px}'+
@@ -58,14 +64,85 @@ function lxTimes(steps){var T=steps.map(function(s){return typeof s.t==='number'
 /* curva ilustrativa de la subida: altura (m), inclinación (rad) y giro de la Tierra bajo el cohete (rad) */
 function lxSmooth(x){x=clamp(x,0,1);return x*x*(3-2*x);}
 /* altura: sube a una órbita baja (~200 km) y se queda ahí hasta el encendido que saca a la nave de la Tierra (el paso anterior
-   a la separación). Desde ese momento se aleja por una trayectoria de escape, así la Tierra se ve cada vez más chica. */
+   a la separación). Desde ahí se usa la distancia real de JPL Horizons si la nave está en sus tablas; si no, una parábola de escape. */
+function lxEscD(t){var ti=LX.tInj;if(ti==null||t<=ti)return 0;
+  /* ecuación de Barker: r = rp·(1+D²), D³/3 + D = √(μ/2rp³)·Δt, anomalía verdadera = 2·atan(D) */
+  var rp=LX_R+2e5,M=Math.sqrt(3.986e14/(2*rp*rp*rp))*(t-ti),z=Math.pow(1.5*M+Math.sqrt(2.25*M*M+1),1/3);return z-1/z;}
+var _lxP=new THREE.Vector3();
+function lxReal(tr,t){return tr.at(jdOf(LX.m.launch)+t/86400,_lxP).length()*UNIT_KM*1000-LX_R;}
 function lxAlt(t){if(t<=0)return 0;var h=200000*(1-Math.exp(-Math.pow(t/270,2))),ti=LX.tInj;
-  /* parábola de escape con perigeo en la órbita baja (ecuación de Barker): r = rp·(1+D²), D³/3 + D = √(μ/2rp³)·Δt */
-  if(ti!=null&&t>ti){var rp=LX_R+h,M=Math.sqrt(3.986e14/(2*rp*rp*rp))*(t-ti),z=Math.pow(1.5*M+Math.sqrt(2.25*M*M+1),1/3),D=z-1/z;h=rp*(1+D*D)-LX_R;}
+  if(ti!=null&&t>ti){
+    var tr=LX.dep||(LX.dep=(typeof hzTrack==='function'&&LX.m&&hzTrack(LX.m.id+'_dep'))||null),D=lxEscD(t),hp=(LX_R+h)*(1+D*D)-LX_R;
+    if(tr){var t0=(tr.j0-jdOf(LX.m.launch))*86400;
+      if(t>=t0)h=Math.max(h,lxReal(tr,t));
+      else{var h0=Math.max(h,lxReal(tr,t0));h=h*Math.pow(h0/h,lxSmooth((t-ti)/(t0-ti)));}
+      LX.realH=true;
+    }else{h=hp;LX.realH=false;}
+  }
   return h;}
 function lxPitch(t){return 1.5*lxSmooth((t-14)/330);}
 function lxDown(t){if(t<=12)return 0;if(t<264)return 4.0e5*Math.pow((t-12)/252,2.6);return 4.0e5+7500*(t-264);}
-function lxTurn(t){return lxDown(t)/LX_R;}
+/* al alejarse, la nave deja de dar vueltas alrededor de la Tierra: el ángulo recorrido tiende a un valor fijo */
+function lxTurn(t){var ti=LX.tInj;return ti!=null&&t>ti?lxDown(ti)/LX_R+2*Math.atan(lxEscD(t)):lxDown(t)/LX_R;}
+
+/* ---------- cielo real: Sol, Luna y planetas a su distancia y tamaño verdaderos (JPL Horizons, minuto del despegue) ---------- */
+var LX_BODIES=[['sun',6.957e8,0xfff4d6],['moon',1.7374e6,0xffffff],['mercury',2.4397e6,0x9a9086],['venus',6.0518e6,0xe8d9b0],['mars',3.3895e6,0xc8683c],
+  ['jupiter',6.9911e7,0xd8b890],['saturn',5.8232e7,0xe0cc98],['uranus',2.5362e7,0xa8dce0],['neptune',2.4622e7,0x5878d8]];
+function lxSkyInit(){
+  LX.sky3=new THREE.Scene();LX.skyL=new THREE.DirectionalLight(0xffffff,1.6);LX.sky3.add(LX.skyL);LX.sky3.add(LX.skyL.target);LX.sky3.add(new THREE.AmbientLight(0xffffff,0.03));
+  LX.skyB={};LX.skyV=null;
+  LX_BODIES.forEach(function(b){
+    var mat=b[0]==='sun'?new THREE.MeshBasicMaterial({color:b[2]}):new THREE.MeshLambertMaterial(b[0]==='moon'?{map:texOf('assets/textures/moon_lroc_color_2k.jpg')}:{color:b[2]});
+    var o=new THREE.Mesh(new THREE.SphereGeometry(b[1],32,16),mat);o.visible=false;LX.sky3.add(o);LX.skyB[b[0]]={mesh:o,r:b[1]};});
+  LX.skyB.earth={mesh:null,r:LX_R};
+  for(var k in LX.skyB){var e=add(lxLabs,'div','lx-sky');add(e,'i','');var sp=add(e,'span','');LX.skyB[k].ar=add(sp,'u','');LX.skyB[k].ar.textContent='➜';LX.skyB[k].nm=add(sp,'b','');LX.skyB[k].ds=add(sp,'em','');e.style.display='none';LX.skyB[k].el=e;LX.skyB[k].txt='';}
+}
+/* de la eclíptica J2000 a los ejes de la escena: ecuatorial, giro de la Tierra en ese minuto (GMST), ejes de la malla y orientación del sitio */
+function lxSkyOrient(m){
+  var S=typeof LAUNCH_SKY!=='undefined'&&LAUNCH_SKY&&LAUNCH_SKY[m.id];LX.skyV=null;if(!S||!LX.skyB)return;
+  var g=gmst(jdOf(m.launch)),cg=Math.cos(g),sg=Math.sin(g),ce=Math.cos(EPS_J2000),se=Math.sin(EPS_J2000);LX.skyV={};
+  for(var k in S){var v=S[k],x=v[0],y=ce*v[1]-se*v[2],z=se*v[1]+ce*v[2];
+    LX.skyV[k]=new THREE.Vector3(x*cg+y*sg,z,x*sg-y*cg).multiplyScalar(1000).applyQuaternion(LX.q);}
+  LX.sunV.copy(LX.skyV.sun).normalize();
+}
+/* cuerpos que se señalan en el borde de la pantalla cuando quedan fuera de cuadro: la Tierra, la Luna y el destino de la misión */
+var LX_DEST={surveyor1:'moon',apollo11:'moon',viking1:'mars',pathfinder:'mars',spirit:'mars',opportunity:'mars',phoenix:'mars',insight:'mars',ingenuity:'mars',pioneer10:'jupiter',pioneer11:'jupiter'};
+function lxSkyHide(){if(LX.skyB)for(var k in LX.skyB)LX.skyB[k].el.style.display='none';}
+var _lxE=new THREE.Vector3(),_lxC=new THREE.Vector3(),_lxQ=new THREE.Vector3();
+function lxSkyDist(d){var km=d/1000;return km<2e6?fmt(km<1e4?km:Math.round(km/100)*100)+' km':(km/1e6).toLocaleString(lang==='es'?'es-AR':'en-US',{maximumFractionDigits:km<1e8?1:0})+' '+lxt('mkm');}
+function lxSkyDraw(cam,dark){
+  if(!LX.skyV||dark<0.6){if(LX.skyOn){LX.skyOn=false;lxSkyHide();}return;}
+  LX.skyOn=true;
+  var E=LX.earth.position,k,B,p,vis={},C=cam.position,Rk=LX_R*1.012;
+  for(k in LX.skyB){B=LX.skyB[k];p=B.pos||(B.pos=new THREE.Vector3());
+    if(k==='earth')p.copy(E);else p.copy(E).add(LX.skyV[k]);
+    /* tapado por la Tierra: el segmento cámara-cuerpo pasa por dentro del planeta */
+    var hid=false;if(k!=='earth'){_lxQ.subVectors(p,C);var u=clamp(_lxE.subVectors(E,C).dot(_lxQ)/_lxQ.lengthSq(),0,1);hid=_lxC.copy(C).addScaledVector(_lxQ,u).distanceTo(E)<Rk;}
+    vis[k]=!hid;if(B.mesh){B.mesh.visible=!hid;B.mesh.position.copy(p);}}
+  LX.skyL.position.copy(LX.skyV.sun).add(E);LX.skyL.target.position.copy(E);
+  LX.skyB.moon.mesh.lookAt(E);LX.skyB.moon.mesh.rotateY(-Math.PI/2);
+  cam.near=1e5;cam.far=2e13;cam.updateProjectionMatrix();renderer.render(LX.sky3,cam);renderer.clearDepth();
+  var cr=lxCard.hidden?null:lxCard.getBoundingClientRect(),jb=cr?jr.getBoundingClientRect():null,now=performance.now(),upd=!LX.skyT||now-LX.skyT>400;if(upd)LX.skyT=now;
+  for(k in LX.skyB){B=LX.skyB[k];p=B.pos;
+    var d=p.length(),q=_lxQ.copy(p).applyMatrix4(cam.matrixWorldInverse),cx=q.x,cy=q.y,front=q.z<0,show=vis[k]&&front,edge=false;
+    /* la Tierra solo lleva cartel cuando ya se ve entera */
+    if(k==='earth'&&LX.h<1.2e6)show=false;
+    var px=0,py=0;
+    if(show){q.applyMatrix4(cam.projectionMatrix);px=(q.x*0.5+0.5)*W;py=(-q.y*0.5+0.5)*H;if(Math.abs(q.x)>1||Math.abs(q.y)>1)show=false;}
+    if(!show&&LX.h>1.5e5&&(k==='moon'||k===LX_DEST[LX.m.id]||k==='earth')&&(vis[k]||!front||k==='earth')){
+      /* fuera de cuadro: cartel con flecha en el borde, en la dirección hacia la que hay que girar */
+      var L=Math.sqrt(cx*cx+cy*cy)||1,ux=cx/L,uy=-cy/L,hw=W/2-110,hh=H/2-150,sc=Math.min(hw/Math.abs(ux||1e-6),hh/Math.abs(uy||1e-6));
+      px=W/2+ux*sc;py=H/2+10+uy*sc;show=edge=true;B.ar.style.transform='rotate('+Math.atan2(uy,ux).toFixed(2)+'rad)';}
+    if(show&&cr&&px<cr.right-jb.left+(edge?90:10)&&px>cr.left-jb.left-130&&py>cr.top-jb.top-16&&py<cr.bottom-jb.top+8)show=false;
+    if(show){
+      /* el aro marca el cuerpo; si ya se ve como disco, el cartel se corre a su borde */
+      var off=k==='earth'||edge?0:Math.min(60,B.r/d/Math.tan(cam.fov*DEG/2)*H/2);
+      B.el.style.transform='translate('+(px+off*0.7).toFixed(1)+'px,'+(py-off*0.7).toFixed(1)+'px)';
+      if(B.edge!==edge){B.edge=edge;B.el.classList.toggle('edge',edge);}}
+    B.el.style.display=show?'':'none';
+    if(show&&upd){var tx=lxt('body')[k]+'|'+lxSkyDist(k==='earth'?LX.h:d);if(tx!==B.txt){B.txt=tx;B.nm.textContent=lxt('body')[k];B.ds.textContent=(k==='earth'&&!LX.realH?'≈ ':'')+lxSkyDist(k==='earth'?LX.h:d);}}
+  }
+}
 
 /* ---------- escena ---------- */
 function lxInit(){
@@ -133,6 +210,7 @@ function lxInit(){
   [land,sea,slab].forEach(function(o){o.material.transparent=true;});
   LX.tower=new THREE.Group();g.add(LX.tower);
   lxSmokeInit();
+  lxSkyInit();
   LX.sky=new THREE.Color();LX.q=new THREE.Quaternion();LX.sunV=new THREE.Vector3(1,0.4,0.3).normalize();LX.dayF=1;
 }
 function lxTower(h){
@@ -156,6 +234,7 @@ function lxOrient(m){
   var q2=new THREE.Quaternion().setFromAxisAngle(Y,Math.atan2(dr.z,dr.x));LX.q.copy(q2).multiply(q1);
   if(LX.clouds)LX.clouds.material.uniforms.uSite.value.set(0,1,0).applyQuaternion(LX.q.clone().invert());
   var ll=sunLL(m.launch),u=unitLL(ll[0],ll[1]);LX.sunV.set(u[0],u[1],u[2]).applyQuaternion(LX.q).normalize();
+  lxSkyOrient(m);
   var el=Math.asin(clamp(LX.sunV.y,-1,1))/DEG;LX.dayF=lxSmooth((el+6)/16);
   if(LX.sunV.y<0.12){LX.sunL=LX.sunV.clone();LX.sunL.y=0.12;LX.sunL.normalize();}else LX.sunL=LX.sunV.clone();
 }
@@ -164,7 +243,7 @@ function lxBuild(m){
   if(LX.R){LX.fg.remove(LX.R.root);LX.R=null;}
   lxClearDebris();
   var key=lxKey(m),glb=typeof ROCKET_GLB!=='undefined'&&ROCKET_GLB&&ROCKET_GLB[key],sync=true;
-  LX.m=m;LX.seq=LAUNCH_SEQ[m.id];LX.T=lxTimes(LX.seq.steps);LX.tInj=LX.T.length>2?LX.T[LX.T.length-2]:null;LX.dropped={};LX.ready=false;LX.k=-1;LX.loading=m;
+  LX.m=m;LX.seq=LAUNCH_SEQ[m.id];LX.T=lxTimes(LX.seq.steps);LX.tInj=LX.T.length>2?LX.T[LX.T.length-2]:null;LX.dep=null;LX.dropped={};LX.ready=false;LX.k=-1;LX.loading=m;
   function go(R){if(LX.loading!==m)return;LX.loading=null;lxBuilt(m,key,R);
     if(!sync&&JR.active&&JR.m===m){var s=JR.segs[JR.si];if(s&&s.launch)lxEnter(s);}}
   if(glb){
@@ -411,13 +490,13 @@ function lxEnter(s){
   lxCard.hidden=false;lxLabs.style.display='';jr.classList.add('has-lx');
   if(LX.craft){var last=s.k===steps.length-1;LX.craftGoal=last?Math.min(2.4,1/Math.max(LX.craftK||1,0.2)):1;}
 }
-function lxLeave(){LX.loading=null;if(JE.note.textContent===LX_STR.es.illus||JE.note.textContent===LX_STR.en.illus)JE.note.textContent='';lxCard.hidden=true;lxLabs.style.display='none';jr.classList.remove('has-lx');lxClearDebris();LX.k=-1;LX.ready=false;
+function lxLeave(){LX.loading=null;if(JE.note.textContent.indexOf(LX_STR.es.illus)===0||JE.note.textContent.indexOf(LX_STR.en.illus)===0)JE.note.textContent='';lxCard.hidden=true;lxLabs.style.display='none';lxSkyHide();jr.classList.remove('has-lx');lxClearDebris();LX.k=-1;LX.ready=false;
   var t=jr.querySelector('.jr-tele');if(t)t.hidden=false;}
 function lxTexts(){
   if(!LX.seq||LX.k<0)return;var st=LX.seq.steps[LX.k],m=LX.m;
   JE.cap.textContent='';
   JE.day.textContent=fmtDate(m.launch,lang)+(LX.seq.pad?' · '+LX.seq.pad:'');
-  JE.note.textContent=lxt('illus');
+  JE.note.textContent=lxt('illus')+(LX.skyV?' '+lxt('sky'):'');
   var tele=jr.querySelector('.jr-tele'),has=typeof st.alt_km==='number'||typeof st.speed_kmh==='number';tele.hidden=!has;
   if(has){JE.t1.textContent=lxt('alt');JE.v1.innerHTML=typeof st.alt_km==='number'?fmt(st.alt_km)+'<em>'+lxt('km')+'</em>':'';JE.t1.parentNode.hidden=typeof st.alt_km!=='number';
     JE.t2.textContent=lxt('spd');JE.v2.innerHTML=typeof st.speed_kmh==='number'?fmt(st.speed_kmh)+'<em>'+lxt('kmh')+'</em>':'';JE.t2.parentNode.hidden=typeof st.speed_kmh!=='number';JE.t3.parentNode.hidden=true;}
@@ -448,7 +527,7 @@ function lxLeftSection(c,m){
     add(li,'em','').textContent=lxt('where')[f.where]||'';add(li,'span','').textContent=f.fate[lang];lxSrc(li,f.src);});
 }
 function lxWheel(e){e.preventDefault();LX.zoom=clamp(LX.zoom*Math.exp(e.deltaY*0.0012),0.1,7);}
-function lxDrag(dx,dy){LX.az-=dx*0.006;LX.el=clamp(LX.el+dy*0.004,-0.35,1.35);LX.user=true;}
+function lxDrag(dx,dy){LX.az-=dx*0.006;LX.el=clamp(LX.el+dy*0.004,LX.h>1.5e5?-1.3:-0.35,1.35);LX.user=true;}
 
 /* ---------- cuadro ---------- */
 function lxFrame(s,dt){
@@ -478,7 +557,7 @@ function lxFrame(s,dt){
   /* cámara: sigue al centro de lo que queda del cohete */
   if(!LX.user&&!reduce&&!jdrag)LX.az+=dt*0.035;
   /* lejos de la Tierra la cámara mira desde arriba, para que el planeta quede a la vista detrás de la nave */
-  if(!LX.user&&!jdrag){var elW=0.1+1.15*lxSmooth((h-1.5e6)/1.2e7);LX.el+=(elW-LX.el)*(Math.min(1,dt*2.5)||1);}
+  if(!LX.user&&!jdrag){var elW=0.1+0.35*lxSmooth((h-2.5e5)/1e6)+0.8*lxSmooth((h-1.5e6)/1.2e7);LX.el+=(elW-LX.el)*(Math.min(1,dt*2.5)||1);}
   R.root.updateMatrixWorld(true);var c=_lxV.copy(LX.ctr).applyMatrix4(R.root.matrixWorld);
   LX.tgt.lerp(c,Math.min(1,dt*3)||1);var want=LX.rad*3.3*LX.zoom;LX.dist+=(want-LX.dist)*(Math.min(1,dt*3.5)||1);
   lxRender();
@@ -527,6 +606,7 @@ function lxRender(){
   renderer.autoClear=false;renderer.setClearColor(LX.sky,1);renderer.clear(true,true,true);
   cam.near=Math.max(50,h*0.2);cam.far=9e7;cam.updateProjectionMatrix();cam.updateMatrixWorld(true);renderer.render(LX.bg,cam);
   renderer.clearDepth();
+  lxSkyDraw(cam,dark);
   cam.near=Math.max(0.3,LX.dist*0.02);cam.far=Math.max(30000,LX.dist*600,LX.ground.visible?h*1.7+60000:0);cam.updateProjectionMatrix();renderer.render(LX.fg,cam);
   renderer.autoClear=true;renderer.outputEncoding=oe;renderer.toneMapping=tm;renderer.toneMappingExposure=ex;
 }
