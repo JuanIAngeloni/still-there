@@ -46,13 +46,13 @@ var JX={
 };
 var JS_STR={
   es:{chap:{lanzamiento:'Lanzamiento',salida:'Salida',viaje:'Viaje',llegada:'Llegada',entrada:'Entrada',descenso:'Descenso',hoy:'Hoy'},journey:'Viaje',goOn:'Seguir el viaje →',since:'Ahí desde el {d}',back:'Volver a la Tierra',next:'Siguiente',pause:'Pausar',play:'Seguir',
-      map:'Ver mapa',ship:'Ver nave',day:'Día {d} de viaje',fromEarth:'De la Tierra',speed:'Velocidad',toDest:'A {d}',km:'km',kms:'km/s',sunRel:'respecto del Sol',
+      map:'Ver mapa',ship:'Ver nave',day:'Día {d} de {t} de viaje',steps:'Por etapas',zin:'Acercar',zout:'Alejar',tl:'Línea de tiempo del viaje',tback:'Retroceder',tfwd:'Avanzar',rate:'Velocidad de reproducción',phase:'Etapa',fromSun:'Del Sol',signal:'Señal de radio a la Tierra',done:'Tiempo transcurrido',fromEarth:'De la Tierra',speed:'Velocidad',toDest:'A {d}',km:'km',kms:'km/s',sunRel:'respecto del Sol',
       srcH:'Trayectoria: JPL Horizons (NASA)',srcR:'Trayectoria reconstruida: esta nave no está en JPL Horizons',stillThere:'Sigue ahí',today:'Hoy, {d}',
       loading:'Cargando trayectorias…',rel:{earth:'desde la Tierra',sun:'alrededor del Sol',mars:'hacia Marte',jupiter:'junto a Júpiter'},drag:'Arrastrá para mirar alrededor',
       cap:{salida:'{n} deja la Tierra. Mirá cómo se achica atrás.',viaje:'Así se ve el viaje desde arriba: la línea es el camino real que hizo {n}.',
            llegada:'{D} se agranda adelante.',entrada:'Entra en el aire de Marte a unos {v} km/h. El escudo térmico se pone al rojo.',descenso:'Ahora hay que bajar sin romperse.',flyby:'{n} pasa junto a {d}.',orbit:'{n} se queda dando vueltas a {d}.'}},
   en:{chap:{lanzamiento:'Launch',salida:'Departure',viaje:'Cruise',llegada:'Arrival',entrada:'Entry',descenso:'Descent',hoy:'Today'},journey:'Journey',goOn:'Continue the journey →',since:'There since {d}',back:'Back to Earth',next:'Next',pause:'Pause',play:'Play',
-      map:'Show map',ship:'Show spacecraft',day:'Day {d} of the trip',fromEarth:'From Earth',speed:'Speed',toDest:'To {d}',km:'km',kms:'km/s',sunRel:'relative to the Sun',
+      map:'Show map',ship:'Show spacecraft',day:'Day {d} of {t} of the trip',steps:'Step by step',zin:'Zoom in',zout:'Zoom out',tl:'Journey timeline',tback:'Step back',tfwd:'Step forward',rate:'Playback speed',phase:'Stage',fromSun:'From the Sun',signal:'Radio signal to Earth',done:'Time elapsed',fromEarth:'From Earth',speed:'Speed',toDest:'To {d}',km:'km',kms:'km/s',sunRel:'relative to the Sun',
       srcH:'Trajectory: JPL Horizons (NASA)',srcR:'Reconstructed trajectory: this spacecraft is not in JPL Horizons',stillThere:'Still there',today:'Today, {d}',
       loading:'Loading trajectories…',rel:{earth:'from Earth',sun:'around the Sun',mars:'toward Mars',jupiter:'near Jupiter'},drag:'Drag to look around',
       cap:{salida:'{n} leaves Earth. Watch the planet shrink behind it.',viaje:'The trip seen from above: the line is the real path {n} flew.',
@@ -83,6 +83,13 @@ function bodyCap(k){return ({es:{moon:'La Luna'},en:{moon:'The Moon'}})[lang][k]
 '.jr-cap{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);width:min(92%,620px);margin:0;text-align:center;font-size:clamp(14px,1.7vw,16.5px);background:var(--veil);border-radius:10px;padding:8px 14px;text-wrap:balance;pointer-events:none}.jr-cap:empty{display:none}'+
 '.jr-bar{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none}.jr-bar>*{pointer-events:auto}'+
 '.jr-btn{font:inherit;font-size:13px;font-weight:500;color:var(--fg);background:var(--veil);border:1px solid var(--line-strong);border-radius:999px;padding:8px 14px;cursor:pointer}.jr-btn.is-main{color:var(--space);background:var(--fg);border-color:var(--fg)}'+
+'.jr-time{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:62px;display:flex;align-items:flex-start;gap:8px}.jr-time[hidden]{display:none}'+
+'.jr-track{flex:1;min-width:0;display:grid;gap:2px}.jr-range{width:100%;margin:0;height:30px;accent-color:var(--accent);cursor:pointer;background:none}'+
+'.jr-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--fg-dim);font-variant-numeric:tabular-nums;text-shadow:0 1px 6px #000;pointer-events:none}'+
+'.jr-ticks{position:relative;height:22px}.jr-ticks button{position:absolute;top:0;font:inherit;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-dim);background:none;border:0;border-left:1px solid var(--line-strong);padding:2px 0 2px 6px;cursor:pointer;white-space:nowrap;text-shadow:0 1px 6px #000}'+
+'.jr-ticks button.is-end{border-left:0;border-right:1px solid var(--line-strong);padding:2px 6px 2px 0;transform:translateX(-100%)}.jr-ticks button[aria-current="step"]{color:var(--accent)}'+
+'.jr-tb{font:inherit;font-size:13px;min-width:34px;height:30px;color:var(--fg);background:var(--veil);border:1px solid var(--line-strong);border-radius:999px;cursor:pointer;padding:0 9px;font-variant-numeric:tabular-nums}'+
+'.jr-btn[aria-pressed="true"]{color:var(--space);background:var(--accent);border-color:var(--accent)}.jr:not(.is-steps) .jr-chaps{display:none}.jr.has-time .jr-cap{bottom:150px}.jr.has-time .jr-card{bottom:150px}'+
 '.jr-note{margin-left:auto;font-size:11.5px;color:var(--fg-faint);text-align:right;max-width:24rem;pointer-events:none}'+
 '.jr-card{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:76px;width:min(420px,calc(100% - 32px));background:rgba(5,7,11,.82);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;backdrop-filter:blur(6px)}'+
 '.jr-card[hidden]{display:none}.jr-card .k{margin:0;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}.jr-card h2{margin:0;font-weight:500;font-size:clamp(22px,2.6vw,28px);letter-spacing:-.02em;line-height:1.1}'+
@@ -90,21 +97,22 @@ function bodyCap(k){return ({es:{moon:'La Luna'},en:{moon:'The Moon'}})[lang][k]
 '.sp-labels{position:absolute;inset:0;z-index:6;pointer-events:none}.sp-label{position:absolute;left:0;top:0;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-dim);white-space:nowrap;text-shadow:0 1px 6px #000}'+
 '.stage:not(.is-journey) .sp-labels{display:none}'+
 '.sp-label.is-ship{color:var(--accent)}#lvBack.is-quiet{color:var(--fg);background:none;border:1px solid var(--line-strong)}'+
-'@media (max-width:640px){.jr-read{top:auto;bottom:150px}.jr-tele{display:none}.jr-cap{bottom:96px;font-size:13.5px}.jr-note{display:none}.jr-card{bottom:70px}.jr-chaps{margin:2px 0 0}}';
+'@media (max-width:640px){.jr-ticks button{font-size:9.5px;letter-spacing:.04em}.jr-read{top:auto;bottom:150px}.jr-tele{display:none}.jr-cap{bottom:96px;font-size:13.5px}.jr-note{display:none}.jr-card{bottom:70px}.jr-chaps{margin:2px 0 0}.jr.has-time .jr-read{top:96px;bottom:auto;left:16px;right:16px;justify-items:start;text-align:left;gap:4px}.jr.has-time .jr-date{font-size:17px}.jr.has-time .jr-tele{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;justify-items:start;width:100%}.jr.has-time .jr-tele div{justify-items:start}.jr.has-time .jr-tele dt{font-size:9px;letter-spacing:.06em}.jr.has-time .jr-tele dd{font-size:13px}.jr-time{bottom:108px}.jr-ticks{display:none}.jr.has-time .jr-cap{bottom:168px}.jr.has-time .jr-card{bottom:168px}}';
 document.head.appendChild(st);})();
 
 var jr=add(stage,'div','jr');jr.hidden=true;
 jr.innerHTML='<canvas class="jr-fade"></canvas><header class="jr-top"><div class="jr-id"><span class="jr-badge"></span><strong class="jr-name"></strong><span class="jr-sub"></span></div>'+
   '<nav class="jr-chaps"></nav><button class="jr-x" type="button">×</button></header>'+
-  '<div class="jr-read"><div class="jr-date"></div><div class="jr-day"></div><dl class="jr-tele"><div><dt class="t1"></dt><dd class="v1"></dd></div><div><dt class="t2"></dt><dd class="v2"></dd></div><div><dt class="t3"></dt><dd class="v3"></dd></div></dl></div>'+
+  '<div class="jr-read"><div class="jr-date"></div><div class="jr-day"></div><dl class="jr-tele"><div><dt class="t1"></dt><dd class="v1"></dd></div><div><dt class="t2"></dt><dd class="v2"></dd></div><div><dt class="t3"></dt><dd class="v3"></dd></div><div><dt class="t4"></dt><dd class="v4"></dd></div><div><dt class="t5"></dt><dd class="v5"></dd></div><div><dt class="t6"></dt><dd class="v6"></dd></div><div><dt class="t7"></dt><dd class="v7"></dd></div></dl></div>'+
   '<p class="jr-cap" aria-live="polite"></p>'+
   '<section class="jr-card" hidden><p class="k"></p><h2></h2><p class="pl"></p><ul></ul></section>'+
-  '<footer class="jr-bar"><button class="jr-btn jr-play" type="button"></button><button class="jr-btn jr-next" type="button"></button><button class="jr-btn jr-view" type="button"></button><button class="jr-btn is-main jr-home" type="button"></button><span class="jr-note"></span></footer>';
-var JE={};['fade','name','sub','badge','chaps','x','date','day','cap','card','play','next','view','home','note'].forEach(function(n){JE[n]=jr.querySelector('.jr-'+n);});
-['t1','v1','t2','v2','t3','v3'].forEach(function(n){JE[n]=jr.querySelector('.'+n);});
+  '<div class="jr-time" hidden><button class="jr-tb jr-tback" type="button">«</button><div class="jr-track"><input class="jr-range" type="range" min="0" max="1000" step="1" value="0"><div class="jr-ends"><span class="jr-d0"></span><span class="jr-d1"></span></div><div class="jr-ticks"></div></div><button class="jr-tb jr-tfwd" type="button">»</button><button class="jr-tb jr-rate" type="button">1×</button></div>'+
+  '<footer class="jr-bar"><button class="jr-btn jr-play" type="button"></button><button class="jr-btn jr-next" type="button"></button><button class="jr-btn jr-view" type="button"></button><button class="jr-btn jr-zout" type="button">−</button><button class="jr-btn jr-zin" type="button">+</button><button class="jr-btn jr-steps" type="button" aria-pressed="false"></button><button class="jr-btn is-main jr-home" type="button"></button><span class="jr-note"></span></footer>';
+var JE={};['fade','name','sub','badge','chaps','x','date','day','cap','card','play','next','view','home','note','time','range','ticks','d0','d1','tback','tfwd','rate','zin','zout','steps'].forEach(function(n){JE[n]=jr.querySelector('.jr-'+n);});
+['t1','v1','t2','v2','t3','v3','t4','v4','t5','v5','t6','v6','t7','v7'].forEach(function(n){JE[n]=jr.querySelector('.'+n);});
 
 /* ---------- estado ---------- */
-var JR={active:false,m:null,x:null,segs:[],si:0,u:0,paused:false,jd:0,view:'auto',uAz:0,uEl:0,uZ:1,blend:1,prevShot:null,scene:'space'};
+var JR={active:false,m:null,x:null,segs:[],si:0,u:0,paused:false,jd:0,view:'auto',steps:false,rate:1,scrub:false,tl:[],tlTotal:0,uAz:0,uEl:0,uZ:1,blend:1,prevShot:null,scene:'space'};
 var P3={earth:new THREE.Vector3(),moonG:new THREE.Vector3(),dest:new THREE.Vector3(),craft:new THREE.Vector3(),vel:new THREE.Vector3(),tmp:new THREE.Vector3()};
 
 /* posición absoluta de la nave en la fecha jd (unidades de escena) */
@@ -213,6 +221,7 @@ function startJourney(m,chapter){
     X.conic=lunarConic(arrive,(X.land-X.inj)/1000,n);X.siteDir=site;
   }
   JR.segs=lxSegs(m).concat(buildSegs(m,X));JR.si=0;JR.u=0;
+  JR.tl=[];JR.tlTotal=0;JR.segs.forEach(function(sg,ix){if(!sg.launch&&sg.map!=='hold'){JR.tl.push({i:ix,o:JR.tlTotal,d:sg.dur});JR.tlTotal+=sg.dur;}});JR.rate=1;JR.scrub=false;
   if(chapter){for(var i=0;i<JR.segs.length;i++)if(JR.segs[i].id===chapter){JR.si=i;break;}}
   /* cuerpos y líneas de este viaje */
   makeBody('earth').on=true;
@@ -253,7 +262,33 @@ function endJourney(quiet){
   sim=Math.min(T1,m.legEnd+DAY);rate=0;stage.classList.add('is-running');setPlaying(true);
   if(m.c&&m.c.go)m.c.go.focus();
 }
+/* ---------- línea de tiempo: todo el viaje en una sola barra ---------- */
+function tlValue(){var s=JR.segs[JR.si];if(!s||s.launch)return 0;if(s.map==='hold')return JR.tlTotal;
+  for(var i=0;i<JR.tl.length;i++)if(JR.tl[i].i===JR.si)return JR.tl[i].o+Math.min(JR.u,JR.tl[i].d);return 0;}
+function tlSeek(v){
+  if(!JR.tl.length)return;v=clamp(v,0,JR.tlTotal-0.02);var e=JR.tl[JR.tl.length-1];
+  for(var i=0;i<JR.tl.length;i++)if(v<JR.tl[i].o+JR.tl[i].d){e=JR.tl[i];break;}
+  if(JR.si!==e.i){JR.si=e.i;JR.prevShot=false;enterSeg();}
+  JR.u=v-e.o;JR.wait=false;playTexts();
+}
+function tlTick(s){
+  var on=JR.tl.length>0&&!s.launch;if(JE.time.hidden===on){JE.time.hidden=!on;jr.classList.toggle('has-time',on);}
+  if(!on)return;
+  if(!JR.scrub){var v=Math.round(tlValue()/JR.tlTotal*1000);if(+JE.range.value!==v)JE.range.value=v;}
+}
+function tlBuild(){
+  JE.ticks.innerHTML='';if(!JR.tl.length)return;
+  JR.tl.forEach(function(e){var b=add(JE.ticks,'button','');b.type='button';b.dataset.i=e.i;b.style.left=(e.o/JR.tlTotal*100)+'%';b.addEventListener('click',function(){tlSeek(e.o);});});
+  var last=JR.segs.length-1;if(JR.segs[last].map==='hold'){var h=add(JE.ticks,'button','is-end');h.type='button';h.dataset.i=last;h.style.left='100%';h.addEventListener('click',function(){if(JR.si!==last)jumpTo(last);});}
+}
+function jZoom(f){var s=JR.segs[JR.si],back=JR.fromExplore&&s&&s.id==='hoy';
+  if(JR.scene==='launch'){LX.zoom=clamp(LX.zoom*f,0.1,7);return;}
+  if(JR.scene==='surface'&&SF){if(back&&f>1&&SF.orb.rT>=139){exReturn();return;}SF.orb.rT=clamp(SF.orb.rT*f,3,back?140:60);}
+  else{if(back&&f>1&&JR.uZ>=29){exReturn();return;}JR.uZ=clamp(JR.uZ*f,0.05,back?30:4e6);JR.userCam=true;}}
+/* toma efectiva: la automática del tramo, salvo que el lector haya pedido mapa o nave */
+function shotKind(s){var k=s.shot.k;if(JR.view==='ship'&&(k==='map'||k==='mapOut'))return 'chase';if(JR.view==='map'&&(k==='chase'||k==='descent'))return 'map';return k;}
 function buildChapters(){
+  tlBuild();
   JE.chaps.innerHTML='';var seen={};
   JR.segs.forEach(function(s,i){if(seen[s.id])return;seen[s.id]=1;var b=add(JE.chaps,'button','');b.type='button';b.dataset.i=i;b.dataset.id=s.id;
     b.addEventListener('click',function(){jumpTo(i);});});
@@ -264,13 +299,18 @@ function jTexts(){
   var bk=JR.fromExplore?(lang==='es'?'Volver al espacio':'Back to space'):(typeof homeShow==='function'?(lang==='es'?'Volver al inicio':'Back to start'):jt('back'));JE.x.setAttribute('aria-label',bk);JE.home.textContent=bk;JE.next.textContent=jt('next')+' ›';
   JE.note.textContent=X.only?'':(X.recon?jt('srcR'):jt('srcH'));
   var bs=JE.chaps.querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].textContent=jt('chap')[bs[i].dataset.id]||bs[i].dataset.id;
+  var tk=JE.ticks.querySelectorAll('button');for(i=0;i<tk.length;i++){var sg=JR.segs[+tk[i].dataset.i];tk[i].textContent=jt('chap')[sg.id]||sg.id;}
+  if(JR.tl.length){var a0=JR.segs[JR.tl[0].i],a1=JR.segs[JR.tl[JR.tl.length-1].i];JE.d0.textContent=fmtDate(msOfJd(a0.j0),lang);JE.d1.textContent=fmtDate(msOfJd(a1.j1),lang);}
+  JE.steps.textContent=jt('steps');JE.zin.setAttribute('aria-label',jt('zin'));JE.zout.setAttribute('aria-label',jt('zout'));JE.zin.title=jt('zin');JE.zout.title=jt('zout');JE.range.setAttribute('aria-label',jt('tl'));
+  JE.tback.setAttribute('aria-label',jt('tback'));JE.tfwd.setAttribute('aria-label',jt('tfwd'));JE.rate.setAttribute('aria-label',jt('rate'));JE.t4.textContent=jt('fromSun');JE.t5.textContent=jt('signal');JE.t6.textContent=jt('phase');JE.t7.textContent=jt('done');
   JE.t1.textContent=jt('fromEarth');
   playTexts();if(SP&&SP.shipLabel)SP.shipLabel.dataset.name=m.name;
   if(JR.segs[JR.si]&&JR.segs[JR.si].id==='hoy')showCard();
   if(JR.segs[JR.si]&&JR.segs[JR.si].launch)lxTexts();
 }
 function playTexts(){var hd=jr.querySelector('.jr-top');if(hd&&hd.offsetHeight)jr.style.setProperty('--jr-top',(hd.offsetHeight+24)+'px');JE.play.textContent=JR.paused?'▶ '+jt('play'):'❚❚ '+jt('pause');var s=JR.segs[JR.si];JE.play.hidden=!!(s&&s.id==='hoy');
-  JE.view.hidden=!(s&&s.shot.k==='map');JE.view.textContent=JR.view==='ship'?jt('map'):jt('ship');JE.next.hidden=!s||s.id==='hoy';
+  var sk=s?shotKind(s):'',mapish=sk==='map'||sk==='mapOut';JE.view.hidden=!(s&&JR.scene==='space'&&!JR.x.only&&(mapish||sk==='chase'||sk==='descent'));JE.view.textContent=mapish?jt('ship'):jt('map');JE.next.hidden=!s||s.id==='hoy'||(!JR.steps&&!s.launch);
+  JE.steps.hidden=!JR.tl.length;JE.steps.setAttribute('aria-pressed',JR.steps?'true':'false');jr.classList.toggle('is-steps',JR.steps);
   var nx=JR.segs[JR.si+1],w=!!(JR.wait&&nx);
   JE.next.textContent=w?lt('nextTo').replace('{c}',nx.launch?lxTitle(nx):(jt('chap')[nx.id]||nx.id)):jt('next')+' ›';
   JE.next.classList.toggle('is-main',w);JE.next.classList.toggle('is-wait',w);JE.home.classList.toggle('is-main',!w);}
@@ -287,6 +327,7 @@ function enterSeg(first){
   JR.scene=s.launch?'launch':(s.surface?'surface':'space');
   var bs=JE.chaps.querySelectorAll('button'),cur=JR.segs[JR.si].id;
   for(var i=0;i<bs.length;i++){var idx=+bs[i].dataset.i;bs[i].toggleAttribute('aria-current',false);if(bs[i].dataset.id===cur)bs[i].setAttribute('aria-current','step');bs[i].classList.toggle('is-done',idx<JR.si&&bs[i].dataset.id!==cur);}
+  var tk=JE.ticks.querySelectorAll('button');for(i=0;i<tk.length;i++){if(+tk[i].dataset.i===JR.si)tk[i].setAttribute('aria-current','step');else tk[i].removeAttribute('aria-current');}
   JE.card.hidden=s.id!=='hoy';jr.classList.toggle('has-card',s.id==='hoy');if(s.id==='hoy')showCard();
   if(s.surface)setupSurface(s);
   var X=JR.x,dn=X.dest?bodyName(X.dest):(X.type==='moon'?bodyName('moon'):bodyName('mars'));
@@ -307,8 +348,18 @@ function fadeCut(fn){
 JE.x.addEventListener('click',function(){endJourney();});JE.home.addEventListener('click',function(){endJourney();});
 JE.play.addEventListener('click',function(){JR.paused=!JR.paused;playTexts();});
 JE.next.addEventListener('click',nextSeg);
-JE.view.addEventListener('click',function(){JR.view=JR.view==='ship'?'map':'ship';JR.blend=0;playTexts();});
-document.addEventListener('keydown',function(e){if(!JR.active)return;if(e.key==='Escape')endJourney();else if(e.key===' '&&e.target===document.body){e.preventDefault();JR.paused=!JR.paused;playTexts();}});
+JE.view.addEventListener('click',function(){var s=JR.segs[JR.si];if(!s)return;var k=shotKind(s),toShip=k==='map'||k==='mapOut';
+  JR.view=toShip?'ship':'map';JR.uZ=toShip?segZoom(s):1;JR.uAz=0;JR.uEl=0;JR.blend=0;playTexts();});
+JE.range.addEventListener('pointerdown',function(){JR.scrub=true;});
+JE.range.addEventListener('input',function(){JR.scrub=true;tlSeek(+JE.range.value/1000*JR.tlTotal);});
+JE.range.addEventListener('change',function(){JR.scrub=false;});window.addEventListener('pointerup',function(){JR.scrub=false;});
+function tlStep(d){tlSeek(tlValue()+d*JR.tlTotal*0.04);}
+JE.tback.addEventListener('click',function(){tlStep(-1);});JE.tfwd.addEventListener('click',function(){tlStep(1);});
+JE.rate.addEventListener('click',function(){var R=[1,2,4,0.5,0.25],i=(R.indexOf(JR.rate)+1)%R.length;JR.rate=R[i];JE.rate.textContent=String(JR.rate).replace('.',lang==='es'?',':'.')+'×';});
+JE.zin.addEventListener('click',function(){jZoom(0.6);});JE.zout.addEventListener('click',function(){jZoom(1/0.6);});
+JE.steps.addEventListener('click',function(){JR.steps=!JR.steps;if(!JR.steps)JR.wait=false;playTexts();});
+document.addEventListener('keydown',function(e){if(!JR.active)return;if(e.key==='Escape')endJourney();else if(e.key===' '&&e.target===document.body){e.preventDefault();JR.paused=!JR.paused;playTexts();}
+  else if(e.target===document.body||e.target.tagName==='BUTTON'){if(e.key==='+'||e.key==='=')jZoom(0.7);else if(e.key==='-')jZoom(1/0.7);else if(e.key==='ArrowRight'&&JR.tl.length&&JR.scene!=='launch')tlStep(1);else if(e.key==='ArrowLeft'&&JR.tl.length&&JR.scene!=='launch')tlStep(-1);}});
 
 /* ---------- arrastrar para mirar ---------- */
 var jdrag=null;
@@ -317,9 +368,7 @@ window.addEventListener('pointermove',function(e){if(!jdrag)return;var dx=e.clie
   if(JR.scene==='launch'){lxDrag(dx,dy);return;}
   if(JR.scene==='surface'&&SF){SF.orb.azT-=dx*0.006;SF.orb.elT=clamp(SF.orb.elT+dy*0.004,0.02,1.3);}else{JR.uAz-=dx*0.006;JR.uEl=clamp(JR.uEl+dy*0.005,-1.3,1.3);if(Math.abs(dx)+Math.abs(dy)>0)JR.userCam=true;}});
 window.addEventListener('pointerup',function(){jdrag=null;if(SF)SF.dragging=false;});
-stage.addEventListener('wheel',function(e){if(!JR.active||overPanel(e))return;if(JR.scene==='launch'){lxWheel(e);return;}var f=Math.exp(e.deltaY*0.0012),s=JR.segs[JR.si],back=JR.fromExplore&&s&&s.id==='hoy';
-  if(JR.scene==='surface'&&SF){if(back&&f>1&&SF.orb.rT>=139){exReturn();return;}SF.orb.rT=clamp(SF.orb.rT*f,3,back?140:60);}
-  else{if(back&&f>1&&JR.uZ>=29){exReturn();return;}JR.uZ=clamp(JR.uZ*f,0.05,back?30:4e6);JR.userCam=true;}},{passive:true});
+stage.addEventListener('wheel',function(e){if(!JR.active||overPanel(e)||(e.target.closest&&e.target.closest('.jr-time')))return;jZoom(Math.exp(e.deltaY*0.0012));},{passive:true});
 
 /* ---------- tomas de cámara ---------- */
 var UPZ=new THREE.Vector3(0,0,1);
@@ -338,7 +387,7 @@ function newShot(){return {look:new THREE.Vector3(),dir:new THREE.Vector3(),dist
 var SHA=newShot(),SHB=newShot();
 function shotFor(s,jd,out){
   var X=JR.x,sz=X.craftM*1e-6,k2=s.shot.k,az=0.42+JR.uAz,el=0.2+JR.uEl;
-  if(k2==='map'&&JR.view==='ship')k2='chase';
+  k2=shotKind(s);
   if(k2==='chase'||k2==='final'){
     var fr=s.id==='viaje'?(X.type==='moon'||X.type==='mars'||X.dest?'dest':'earth'):s.shot.from;
     var from=fr==='earth'?P3.earth:(fr==='sun'||!fr?_v3.set(0,0,0):P3.dest),Rb=fr==='earth'?R_KM.earth/UNIT_KM:(fr==='sun'||!fr?R_KM.sun/UNIT_KM:destR());
@@ -355,7 +404,7 @@ function shotFor(s,jd,out){
   return chaseShot(P3.earth,R_KM.earth/UNIT_KM,sz*4,az,0,out);
 }
 /* distancia inicial de los planos de seguimiento: lejos, con el planeta entero a la vista; la rueda acerca hasta la nave */
-function segZoom(s){if(!s||s.shot.k!=='chase')return 1;var sz=JR.x.craftM*1e-6*4.2,Rb=s.shot.from==='earth'?R_KM.earth/UNIT_KM:destR();return Math.max(1,Rb*3.2/sz);}
+function segZoom(s){if(!s||s.shot.k!=='chase')return 1;if(s.id==='viaje')return 1;var sz=JR.x.craftM*1e-6*4.2,Rb=s.shot.from==='earth'?R_KM.earth/UNIT_KM:destR();return Math.max(1,Rb*3.2/sz);}
 function destR(){var X=JR.x,k=X.type==='moon'?'moon':(X.type==='mars'?'mars':X.dest);return k?R_KM[k]/UNIT_KM:R_KM.sun/UNIT_KM;}
 
 /* ---------- cuadro ---------- */
@@ -396,8 +445,10 @@ function tickJourney(dt,now){
   var s=JR.segs[JR.si];if(!s){endJourney();return;}
   /* la misión avanza sola: al terminar un capítulo la escena espera un momento y pasa al siguiente. «Pausar» la detiene
      y «Siguiente» la adelanta. Es un contador de cuadros, no un temporizador, para que la pausa lo congele. */
-  if(!JR.paused&&s.map!=='hold'){JR.u+=dt;if(JR.u>=s.dur){JR.u=s.dur;if(!JR.wait&&JR.si<JR.segs.length-1){JR.wait=true;JR.dwell=0;playTexts();}}}
-  if(JR.wait&&!JR.paused&&JR.auto!==false){JR.dwell=(JR.dwell||0)+dt;if(JR.dwell>=(s.launch?2.2:1.6)){JR.dwell=0;nextSeg();return;}}
+  /* el viaje corre de punta a punta sin cortes; con «Por etapas» cada tramo espera a que el lector toque «Siguiente» */
+  if(!JR.paused&&!JR.scrub&&s.map!=='hold'){JR.u+=dt*(s.launch?1:JR.rate);if(JR.u>=s.dur){JR.u=s.dur;if(!JR.wait&&JR.si<JR.segs.length-1){JR.wait=true;JR.dwell=0;if(JR.steps||s.launch)playTexts();else{nextSeg();return;}}}}
+  if(JR.wait&&!JR.paused&&!JR.scrub&&JR.auto!==false&&!(JR.steps&&!s.launch)){JR.dwell=(JR.dwell||0)+dt;if(JR.dwell>=(s.launch?2.2:1.6)){JR.dwell=0;nextSeg();return;}}
+  tlTick(s);
   if(s.launch){lxFrame(s,dt);return;}
   var jd=segJd(s,JR.u);JR.jd=jd;
   jUpdateBodies(jd);craftAt(jd,P3.craft,P3.vel);
@@ -412,7 +463,7 @@ function tickJourney(dt,now){
   /* resplandor de la entrada en la atmósfera de Marte */
   if(SP.glow){var gl=0;if(JR.x.entry&&jd>JR.x.entry.jdE){var ss=(jd-JR.x.entry.jdE)/(JR.x.entry.jdL-JR.x.entry.jdE);gl=Math.sin(Math.min(1,Math.max(0,ss/0.75))*Math.PI)*0.95;}
     SP.glow.material.opacity=gl;SP.glow.position.copy(P3.craft);if(P3.vel.lengthSq()>1e-9)SP.glow.position.addScaledVector(_v2.copy(P3.vel).normalize(),JR.x.craftM*0.6e-6);SP.glow.scale.setScalar(JR.x.craftM*1e-6*(3+3*gl));}
-  SP.showSunLabel=s.shot.k==='map'||s.shot.k==='mapOut';
+  var skk=shotKind(s);SP.showSunLabel=skk==='map'||skk==='mapOut';
   /* cámara */
   if(JR.scene==='space'){
     shotFor(s,jd,SHB);
@@ -431,13 +482,17 @@ function hudTick(s,jd){
   var X=JR.x,ms=msOfJd(jd),d=new Date(ms);jr.querySelector('.jr-tele').hidden=!!s.surface||s.id==='hoy';
   var nd=new Date(),ds=s.id==='hoy'?jt('today').replace('{d}',nd.getDate()+' '+STR[lang].months[nd.getMonth()]+' '+nd.getFullYear()):(d.getUTCDate()+' '+STR[lang].months[d.getUTCMonth()]+' '+d.getUTCFullYear()+' · '+two(d.getUTCHours())+':'+two(d.getUTCMinutes())+' UTC');
   if(JE.date.textContent!==ds)JE.date.textContent=ds;
-  var day=Math.max(1,Math.ceil((ms-JR.m.launch)/DAY)),dy=s.id==='hoy'?'':jt('day').replace('{d}',fmt(day));if(JE.day.textContent!==dy)JE.day.textContent=dy;
+  var day=Math.max(1,Math.ceil((ms-JR.m.launch)/DAY)),tot=JR.tl.length?Math.max(day,Math.ceil((msOfJd(JR.segs[JR.tl[JR.tl.length-1].i].j1)-JR.m.launch)/DAY)):day,dy=s.id==='hoy'?'':jt('day').replace('{d}',fmt(day)).replace('{t}',fmt(tot));if(JE.day.textContent!==dy)JE.day.textContent=dy;
   var de=P3.tmp.copy(P3.craft).sub(P3.earth).length()*UNIT_KM-R_KM.earth;
   JE.v1.innerHTML=fmt(Math.max(0,de))+'<em>'+jt('km')+'</em>';
   var vr=P3.vel.length(),vt=jt('speed')+' · '+jt('rel')[JR.vref||'sun'];if(JE.t2.textContent!==vt)JE.t2.textContent=vt;JE.v2.innerHTML=(vr<10?vr.toFixed(2):vr.toFixed(1)).replace('.',lang==='es'?',':'.')+'<em>'+jt('kms')+'</em>';
   var dn=X.type==='moon'?'moon':(X.type==='mars'?'mars':X.dest);
   if(dn&&s.id!=='hoy'){var dd=P3.tmp.copy(P3.craft).sub(P3.dest).length()*UNIT_KM-R_KM[dn];JE.t3.textContent=jt('toDest').replace('{d}',bodyName(dn));JE.v3.innerHTML=fmt(Math.max(0,dd))+'<em>'+jt('km')+'</em>';JE.t3.parentNode.hidden=false;}
   else JE.t3.parentNode.hidden=true;
+  JE.v4.innerHTML=fmt(P3.craft.length()*UNIT_KM)+'<em>'+jt('km')+'</em>';
+  var lt2=fmtLight(Math.max(0,de)/299792.458);if(JE.v5.textContent!==lt2)JE.v5.textContent=lt2;
+  var ph=jt('chap')[s.id]||s.id;if(JE.v6.textContent!==ph)JE.v6.textContent=ph;
+  var pc=JR.tl.length?Math.round(clamp((ms-msOfJd(JR.segs[JR.tl[0].i].j0))/Math.max(1,msOfJd(JR.segs[JR.tl[JR.tl.length-1].i].j1)-msOfJd(JR.segs[JR.tl[0].i].j0)),0,1)*100)+' %':'';if(JE.v7.textContent!==pc)JE.v7.textContent=pc;
 }
 
 /* ---------- superficie: descenso y hoy ---------- */
